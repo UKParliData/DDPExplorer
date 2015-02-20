@@ -1,0 +1,8 @@
+﻿<!-- ko if: Array.isArray(label)==true -->
+    <ul class="padding-0" data-bind="foreach: label">
+        <li><span data-bind="text: $data._value || $data"></span></li>
+    </ul>
+<!-- /ko -->
+<!-- ko if: Array.isArray(label)==false -->
+    <span data-bind="text: label"></span>
+<!-- /ko -->

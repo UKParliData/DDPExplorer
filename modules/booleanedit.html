@@ -1,0 +1,5 @@
+﻿<span class="input-group-btn">
+    <button type="button" class="btn btn-default sharp-corners active" data-bind="css:{'active': value()==null}, click: value.bind($data, null), text: noneText"></button>
+    <button type="button" class="btn btn-default sharp-corners" data-bind="css:{'active': value()==true}, click: value.bind($data, true), text: trueText"></button>
+    <button type="button" class="btn btn-default sharp-corners" data-bind="css:{'active': value()==false}, click: value.bind($data, false), text: falseText"></button>
+</span>

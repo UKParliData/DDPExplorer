@@ -1,0 +1,15 @@
+﻿<search-header params="name: 'DATASETS', comment: 'Categorized list of all data from Parliament', isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, searchText: null, showAdvancedSearch: null, isSubmitForm: false, placeholder: 'Type to search for dataset'"></search-header>
+
+<article class="container">    
+    <ul class="list-group" data-bind="foreach: filterEndpoints">
+        <li class="list-group-item margin-bottom-2">
+            <h3>
+                <text data-bind="text: ddpDatasetName"></text>
+                <small>
+                    <p data-bind="text: comment"></p>
+                </small>
+            </h3>
+            <a data-bind="attr:{ href: $parent.endpointUri()+uriTemplate.fullUri}, click: function() { return true;}, clickBubble: false">Click here to browse <text class="text-lowercase" data-bind="text: ddpDatasetName"></text> data</a>
+        </li>
+    </ul>
+</article>

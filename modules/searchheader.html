@@ -1,0 +1,38 @@
+﻿<article class="search-background margin-bottom-40">
+    <section class="container margin-bottom-40 text-title">
+        <h1>
+            <span data-bind="text: name" class="text-title text-uppercase"></span>
+            <span class="pull-right"><h5>DATA MATTER</h5></span>
+            <small>
+                <p data-bind="text: comment"></p>
+            </small>
+        </h1>        
+        <h4 data-bind="visible: ((totalItemIndex!=null) && (totalItemIndex()!=null))">Number of records: <strong data-bind="text: totalItemIndex"></strong></h4>
+    </section>
+
+    <section data-bind="visible: isSearchBoxShown">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+
+                <form class="form-horizontal" data-bind="submit: trySearchText">
+
+                    <div class="form-group-lg">
+                        <div data-bind="css: {'input-group': isSubmitForm==true}">
+                            <input type="text" class="form-control sharp-corners no-focus" data-bind="textInput: textQuery, attr: {placeholder: placeholder}" />
+                            <!-- ko if: isSubmitForm==true -->
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-lg btn-success sharp-corners"><span class="glyphicon glyphicon-search"></span></button>
+                                </span>
+                            <!-- /ko -->
+                        </div>
+                    </div>
+
+                </form>
+                <!-- ko if: showAdvancedSearch -->
+                    <button type="button" class="btn btn-sm btn-link padding-right-0 pull-right" data-bind="click: showAdvancedSearch"><strong>Advanced search</strong></button>
+                <!-- /ko -->
+            </div>
+        </div>
+    </section>
+
+</article>

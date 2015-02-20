@@ -1,0 +1,60 @@
+﻿<!-- ko if: resource().dataType=='complexresource'-->    
+    <div class="row" data-bind="style: {paddingLeft: 20*deepLevel()+'px'}">
+        <div class="col-sm-3 col-sm-padding text-title text-tooltip">
+            <h4>
+                <button type="button" class="btn btn-link btn-sm padding-0" data-bind="click: toggleResource, visible: properties().length>0">
+                    <span class="glyphicon glyphicon-upload text-info" data-bind="css:{'resource-open': resource().isVisible()==true,'resource-closed': resource().isVisible()==false}"></span>
+                </button>
+                <!-- ko if: resource().internalUri!=null -->
+                <a data-bind="text: resource().label, attr: {href: resource().internalUri}"></a>
+                <!-- /ko -->
+                <!-- ko if: resource().internalUri==null -->
+                <span data-bind="text: resource().label"></span>
+                <!-- /ko -->
+            </h4>
+            <!-- ko if: resource().description!=null -->
+                <div class="tooltip bottom" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" data-bind="text: resource().description"></div></div>
+            <!-- /ko -->
+        </div>
+        <div class="col-sm-9 col-sm-padding">
+            <h4><shortname-value params="label: resource().value"></shortname-value></h4>
+        </div>
+    </div>
+<!-- /ko -->
+
+<!-- ko if: resource().dataType=='headresource'-->
+    <h3>
+        <!-- ko if: ((isItemEndpoint()==false) && (resource().internalUri!=null))-->
+            <a data-bind="text: resource().value, attr: {href: resource().internalUri}"></a>
+        <!-- /ko -->
+        <!-- ko if: ((isItemEndpoint()==true) || (resource().internalUri==null))-->
+            <span class="text-title" data-bind="text: resource().value"></span>
+        <!-- /ko -->
+    </h3>
+<!-- /ko -->
+
+<section data-bind="foreach: properties, visible: resource().isVisible">    
+    <!-- ko if: dataType=='complexresource' -->        
+        <resource-item params="resource: resource, properties: properties, isItemEndpoint: true, deepLevel: $parent.deepLevel()+1"></resource-item>            
+    <!-- /ko -->
+    <!-- ko if: dataType!='complexresource' -->    
+        <div class="row" data-bind="style: {paddingLeft: 20*($parent.deepLevel()+1)+'px'}">
+            <div class="col-sm-3 col-sm-padding text-title text-tooltip">
+                <h4>
+                    <!-- ko if: ((dataType=='resource') && (internalUri)) -->
+                        <a data-bind="text: label, attr: {href: internalUri}"></a>
+                    <!-- /ko -->
+                    <!-- ko if: ((dataType!='resource') || (internalUri==null)) -->
+                        <span data-bind="text: label"></span>
+                    <!-- /ko -->
+                </h4>
+                <!-- ko if: description!=null -->
+                    <div class="tooltip bottom" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" data-bind="text: description"></div></div>
+                <!-- /ko -->
+            </div>
+            <div class="col-sm-9 col-sm-padding">
+                <h4><shortname-value params="label: value"></shortname-value></h4>
+            </div>
+        </div>
+    <!-- /ko -->
+</section>

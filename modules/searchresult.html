@@ -1,0 +1,81 @@
+﻿<search-header params="name: endpoint().name, comment: endpoint().comment, isSearchBoxShown: endpoint().textQueryProperty!=null, totalItemIndex: totalItemIndex, textQuery: textQuery, searchText: searchText, showAdvancedSearch: showAdvancedSearch, isSubmitForm: true, placeholder: 'Search dataset'"></search-header>
+
+<article class="container">
+
+    <section class="margin-bottom-40" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
+
+        <div class="btn-group" data-bind="visible: endpoint().endpointType=='ListEndpoint'">
+            <button type="button" class="btn btn-default sharp-corners" data-bind="click: showMenu">
+                Sort by <strong data-bind="text: sortByProperty()==null?'None':sortByProperty().shortname.label"></strong>
+                <!-- ko if: sortByProperty()!=null -->
+                    <span class="glyphicon" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
+                <!-- /ko -->
+                <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu sharp-corners min-width-350">
+                <ul class="list-unstyled" data-bind="foreach: shortnames">
+                    <li data-bind="css: {'margin-bottom-10': $parent.shortnames().length-1>$index()}">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm sharp-corners no-background-color padding-0 margin-right-5" data-bind="click: function(){ $parent.sortBy($data, true); }">
+                                        <h4><span class="glyphicon glyphicon-arrow-up text-primary"></span></h4>
+                                    </button>
+                                    <button type="button" class="btn btn-sm sharp-corners no-background-color padding-0" data-bind="click: function(){ $parent.sortBy($data, false); }">
+                                        <h4><span class=" glyphicon glyphicon-arrow-down text-primary"></span></h4>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <!-- ko if: Array.isArray($data)==false -->
+                                    <span data-bind="text: label"></span>
+                                <!-- /ko -->
+                                <!-- ko if: Array.isArray($data)==true -->
+                                    <ul class="list-unstyled" data-bind="foreach: $data">
+                                        <li><span data-bind="text: label, style: {marginLeft: 5*$index()+'px'}"></span></li>
+                                    </ul>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-default sharp-corners" data-bind="click: showMenu">
+                Output to <strong data-bind="text: outputToName"></strong>
+                <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu sharp-corners">
+                <ul class="list-unstyled">
+                    <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('JSON'); }">JSON</button></li>
+                    <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('XML'); }">XML</button></li>
+                    <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('CSV'); }">CSV</button></li>
+                </ul>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="margin-bottom-40">
+        <ul class="list-group" data-bind="foreach: resultItems">
+            <li class="list-group-item sharp-corners">
+                <resource-item params="resource: resource, properties: properties, isItemEndpoint: $parent.endpoint().endpointType=='ItemEndpoint', deepLevel: 0"></resource-item>
+            </li>
+        </ul>
+    </section>
+
+    <div class="text-center">
+        <!-- ko if: isLoadingMore()==true -->
+            <busy-indicator></busy-indicator>
+        <!-- /ko -->
+        <!-- ko if: ((isLoadingMore()==false) && (endpoint().endpointType=='ListEndpoint') && (firstItemIndex()!=null) && (firstItemIndex()<lastItemIndex())) -->
+            <button type="button" class="btn btn-lg btn-default sharp-corners" data-bind="click: loadMore">Load more</button>
+        <!-- /ko -->
+        <!-- ko if: (endpoint().endpointType=='ItemEndpoint') -->
+            <a class="btn btn-lg btn-default sharp-corners" data-bind="attr: {href: endpointUri()+endpoint().listEndpointUri.fullUri}">Go to full list</a>
+        <!-- /ko -->
+    </div>
+
+</article>

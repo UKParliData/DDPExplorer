@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html class="full-height">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>DDP Explorer</title>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="Content/spinkit.css" />
+    <link rel="stylesheet" type="text/css" href="Content/DDPExplorer.css" />
+</head>
+<body class="full-height" data-bind="click: genericClass.closeAllPopups">
+    <div class="wrap">
+        <nav class="navbar navbar-default padding-10 border-bottom margin-bottom-0 white-background-color">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-bind="click: toggleNavbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="http://data.parliament.uk"><img src="Content/images/ddp-logo.png" alt="Data.Parliament Logo" title="Data.Parliament Logo" /></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <div class="navbar-right">
+                        <ul class="nav navbar-nav">
+                            <li><a href="http://data.parliament.uk/dataset">Datasets</a></li>
+                            <li><a href="http://lda.data.parliament.uk">Developer</a></li>
+                            <li><a href="http://data.parliament.uk/about">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- ko if: hasError() -->
+        <div class="container">
+            <!-- ko foreach: errorText -->
+            <div class="alert alert-danger" data-bind="text: $data"></div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko if: hasInfo() -->
+        <div class="container">
+            <!-- ko foreach: infoText -->
+            <div class="alert alert-info" data-bind="text: infoText"></div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <main>
+            <!-- ko if: isAppBusy() -->
+            <div class="modal fade in show">
+                <div class="modal-backdrop fade in full-height"></div>
+                <div class="modal-dialog vertical-center">
+                    <busy-indicator></busy-indicator>
+                </div>
+            </div>
+            <!-- /ko -->
+            <!-- ko if: selectedComponent()!=null -->
+            <div data-bind="component: { name: selectedComponent, params: parameters }"></div>
+            <!-- /ko -->
+        </main>
+    </div>
+    <footer class="footer-wrapper white-background-color">
+        <div class="navbar-default margin-bottom-0">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a class="navbar-brand" href="http://www.parliament.uk/">
+                                <img src="Content/images/portcullis_black.png" alt="www.parliament.uk" height="40px" />
+                            </a>
+                        </li>
+                        <li class="navbar-text">
+                            <h4>&copy; 2014 Houses of Parliament. All rights reserved.</h4>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="http://blog.data.parliament.uk/" title="Visit the data.parliament.uk blog">
+                            <img src="Content/images/blog-logo.png" alt="Visit the data.parliament.uk blog" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/UKParliData" title="data.parliament.uk (@UKParliData) on Twitter">
+                            <img src="Content/images/twitter-logo.png" alt="data.parliament.uk (@UKParliData) on Twitter" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/UKParliData" title="data.parliament.uk (@UKParliData) on GitHub">
+                            <img src="Content/images/github-logo.png" alt="data.parliament.uk (@UKParliData) on GitHub" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script data-main="Scripts/modules/main" src="Scripts/require.js"></script>
+</body>
+</html>
