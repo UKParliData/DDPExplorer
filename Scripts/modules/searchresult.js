@@ -8,6 +8,8 @@
             self.endpoint = ko.observable(ko.unwrap(params.endpoint));
             self.shortnames = ko.observable(ko.unwrap(params.shortnames));
             self.viewerName = ko.unwrap(params.viewerName);
+            self.shortnameProperties = params.shortnameProperties || ko.observableArray([]);
+            self.filters = ko.observableArray(ko.utils.arrayFilter(self.shortnameProperties(), function (item) { return item.hasFilter() == true; }));
             self.firstItemIndex = ko.observable(null);
             self.lastItemIndex = ko.observable(null);
             self.totalItemIndex = ko.observable(null);
@@ -38,8 +40,7 @@
                 self.querystring._sort = (isAscending ? "" : "-") + sorting;
                 self.currentPage(0);
                 self.resultItems([]);
-                window.conductorVM.isAppBusy(true);
-                self.load();                
+                self.load();
             };
 
             self.outputTo = function (format) {
@@ -52,6 +53,15 @@
                     url += "&" + $.param(self.querystring);
                 window.open(url, "formatOutput");
             };
+
+            self.clearFilter = function () {
+                self.shortnameProperties([]);
+                self.filters([]);
+                self.currentPage(0);
+                self.resultItems([]);
+                self.querystring = {};
+                self.load();
+            }
 
             self.showMenu = function (vm, e) {
                 var hasClass = $(e.target).parent(".btn-group").hasClass("open");
@@ -74,7 +84,6 @@
                     self.currentPage(0);
                     self.querystring._search = self.textQuery();
                     self.resultItems([]);
-                    window.conductorVM.isAppBusy(true);
                     self.load();
                 }
             };
@@ -86,7 +95,8 @@
                     endpoint: self.endpoint,
                     shortnames: self.shortnames,
                     textQuery: self.textQuery,
-                    querystring: self.querystring
+                    querystring: self.querystring,
+                    shortnameProperties: self.shortnameProperties
                 });
                 window.conductorVM.selectedComponent("advanced-search");
             };
@@ -149,18 +159,25 @@
                     window.conductorVM.showInfo("No data available");
                 window.conductorVM.isAppBusy(false);
                 self.isLoadingMore(false);
-            };
+            };            
 
             self.load = function () {
                 self.totalItemIndex(null);
                 self.querystring._page = self.currentPage();
-                self.querystring._view = self.viewerName;
+                self.init();
+            };
+
+            self.init = function () {
+                if (self.isLoadingMore() == false)
+                    window.conductorVM.isAppBusy(true);
+                if ((self.querystring._properties != null) && (self.querystring._properties != ""))
+                    self.querystring._view = "basic";
+                else
+                    self.querystring._view = self.viewerName;
                 self.genericClass.getDataFromOwlim(self.endpointUrl, self.querystring, self.doneLoad, self.errorOnLoad);
             };
 
-            window.conductorVM.isAppBusy(true);
-            self.querystring._view = self.viewerName;
-            self.genericClass.getDataFromOwlim(self.endpointUrl, self.querystring, self.doneLoad, self.errorOnLoad);
+            self.init();
 
         },
         template: htmlText

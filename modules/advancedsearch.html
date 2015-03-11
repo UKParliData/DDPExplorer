@@ -6,18 +6,18 @@
 
     <section class="margin-bottom-40">
         <div class="btn-group">
-            <button class="btn btn-default sharp-corners" data-bind="click: toggleSelect">
+            <button class="btn btn-default" data-bind="click: toggleSelect">
                 <text data-bind="text: isAllSelected()==false?'Include all':'Exclude all'"></text>
                 <span class="glyphicon glyphicon-star" data-bind="css: {'text-muted': isAllSelected()==false, 'text-primary': isAllSelected()==true}"></span>
             </button>
         </div>
 
         <div class="btn-group">
-            <button type="button" class="btn btn-default sharp-corners" data-bind="click: showMenu">
+            <button type="button" class="btn btn-default" data-bind="click: showMenu">
                 List of properties from <strong data-bind="text: selectedView"></strong>
                 <span class="caret"></span>
             </button>
-            <div class="dropdown-menu sharp-corners min-width-350">
+            <div class="dropdown-menu min-width-350">
                 <ul class="list-unstyled" data-bind="foreach: endpoint().viewers">
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ $parent.selectViewer($data); }, text: name"></button></li>
                 </ul>
@@ -28,7 +28,7 @@
     <section class="margin-bottom-40 clearfix">
         <div class="list-group" data-bind="foreach: shortnameProperties">
             <div data-bind="css: {clearfix: $index()%2==1}">
-                <div class="list-group-item sharp-corners padding-5 col-md-6">
+                <div class="list-group-item padding-5 col-md-6">
                     <div class="list-group-item-heading">
                         <ul class="list-inline">
                             <li>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="list-group-item-text">
                         <h4><small data-bind="text: description"></small></h4>
-                        <button type="button" class="btn btn-default btn-sm btn-link sharp-corners padding-0" data-bind="click: $parent.showFilter, visible: isFilterOpen()==false">show filter</button>
+                        <button type="button" class="btn btn-default btn-sm btn-link padding-0" data-bind="click: $parent.showFilter, visible: isFilterOpen()==false">show filter</button>
                     </div>
                     <section data-bind="visible: isFilterOpen()==true">
                         <div class="row margin-bottom-2">
@@ -74,7 +74,7 @@
                                 <span>less than</span>
                             </div>
                             <div data-bind="css:{'col-sm-9': (dataType=='datetime'), 'col-sm-4': (dataType=='date'), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: minValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
+                                <filter-edit params="value: minExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
                             </div>
                         </div>
                         <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
@@ -90,7 +90,7 @@
                                 <span>more than</span>
                             </div>
                             <div data-bind="css:{'col-sm-9': (dataType=='datetime'), 'col-sm-4': (dataType=='date'), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: minValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
+                                <filter-edit params="value: maxValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
                             </div>
                         </div>
                         <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
@@ -98,7 +98,7 @@
                                 <span>more than or equal</span>
                             </div>
                             <div data-bind="css:{'col-sm-9': (dataType=='datetime'), 'col-sm-4': (dataType=='date'), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: minValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
+                                <filter-edit params="value: maxExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
                             </div>
                         </div>
                         <div class="row">
@@ -109,7 +109,7 @@
                                 <boolean-edit params="value: existsValue, noneText: 'Any', trueText:'Yes', falseText: 'No'"></boolean-edit>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-default btn-sm btn-link sharp-corners padding-0" data-bind="click: $parent.hideFilter">hide filter</button>
+                        <button type="button" class="btn btn-default btn-sm btn-link padding-0" data-bind="click: $parent.hideFilter">hide filter</button>
                     </section>
                 </div>
             </div>
@@ -118,7 +118,7 @@
    
 
     <section>
-        <button type="button" class="btn btn-primary sharp-corners" data-bind="click: submit">Apply search options</button>
-        <button type="button" class="btn btn-default sharp-corners pull-right" data-bind="click: cancel">Cancel</button>
+        <button type="button" class="btn btn-primary" data-bind="click: submit">Apply search options</button>
+        <button type="button" class="btn btn-default pull-right" data-bind="click: cancel">Cancel</button>
     </section>
 </div>

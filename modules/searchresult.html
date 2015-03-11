@@ -5,23 +5,23 @@
     <section class="margin-bottom-40" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
 
         <div class="btn-group" data-bind="visible: endpoint().endpointType=='ListEndpoint'">
-            <button type="button" class="btn btn-default sharp-corners" data-bind="click: showMenu">
+            <button type="button" class="btn btn-default" data-bind="click: showMenu">
                 Sort by <strong data-bind="text: sortByProperty()==null?'None':sortByProperty().shortname.label"></strong>
                 <!-- ko if: sortByProperty()!=null -->
                     <span class="glyphicon" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
                 <!-- /ko -->
                 <span class="caret"></span>
             </button>
-            <div class="dropdown-menu sharp-corners min-width-350">
+            <div class="dropdown-menu min-width-350">
                 <ul class="list-unstyled" data-bind="foreach: shortnames">
                     <li data-bind="css: {'margin-bottom-10': $parent.shortnames().length-1>$index()}">
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm sharp-corners no-background-color padding-0 margin-right-5" data-bind="click: function(){ $parent.sortBy($data, true); }">
+                                    <button type="button" class="btn btn-sm no-background-color padding-0 margin-right-5" data-bind="click: function(){ $parent.sortBy($data, true); }">
                                         <h4><span class="glyphicon glyphicon-arrow-up text-primary"></span></h4>
                                     </button>
-                                    <button type="button" class="btn btn-sm sharp-corners no-background-color padding-0" data-bind="click: function(){ $parent.sortBy($data, false); }">
+                                    <button type="button" class="btn btn-sm no-background-color padding-0" data-bind="click: function(){ $parent.sortBy($data, false); }">
                                         <h4><span class=" glyphicon glyphicon-arrow-down text-primary"></span></h4>
                                     </button>
                                 </div>
@@ -41,13 +41,44 @@
                 </ul>
             </div>
         </div>
+            
+        <div class="btn-group" data-bind="visible: endpoint().endpointType=='ListEndpoint'">
+            <button type="button" class="btn btn-default" data-bind="visible: filters().length>0, click: showMenu">
+                <span class="glyphicon glyphicon-filter"></span> Filter <span class="caret"></span>
+            </button>
+
+            <div class="dropdown-menu min-width-350 padding-10">
+                <ul class="list-unstyled margin-bottom-10" data-bind="foreach: filters">
+                    <li>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <!-- ko if: Array.isArray(label)==false -->
+                                <p class="padding-left-5 margin-top-0 margin-bottom-10">
+                                    <span data-bind="text: label"></span>
+                                </p>
+                                <!-- /ko -->
+                                <!-- ko if: Array.isArray(label)==true -->
+                                <ul class="list-unstyled padding-left-5 margin-top-0 margin-bottom-10" data-bind="foreach: label">
+                                    <li><span data-bind="text: $data, style: {marginLeft: 10*$index()+'px'}"></span></li>
+                                </ul>
+                                <!-- /ko -->
+                            </div>
+                            <div class="col-sm-8">
+                                <h4 class="margin-top-0 margin-bottom-10"><small data-bind="text: filterDescription"></small></h4>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <button type="button" class="btn btn-default margin-left-5" data-bind="click: clearFilter">Clear</button>
+            </div>
+        </div>
 
         <div class="btn-group">
-            <button type="button" class="btn btn-default sharp-corners" data-bind="click: showMenu">
+            <button type="button" class="btn btn-default" data-bind="click: showMenu">
                 Output to <strong data-bind="text: outputToName"></strong>
                 <span class="caret"></span>
             </button>
-            <div class="dropdown-menu sharp-corners">
+            <div class="dropdown-menu">
                 <ul class="list-unstyled">
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('JSON'); }">JSON</button></li>
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('XML'); }">XML</button></li>
@@ -60,7 +91,7 @@
 
     <section class="margin-bottom-40">
         <ul class="list-group" data-bind="foreach: resultItems">
-            <li class="list-group-item sharp-corners">
+            <li class="list-group-item">
                 <resource-item params="resource: resource, properties: properties, isItemEndpoint: $parent.endpoint().endpointType=='ItemEndpoint', deepLevel: 0"></resource-item>
             </li>
         </ul>
@@ -71,10 +102,10 @@
             <busy-indicator></busy-indicator>
         <!-- /ko -->
         <!-- ko if: ((isLoadingMore()==false) && (endpoint().endpointType=='ListEndpoint') && (firstItemIndex()!=null) && (firstItemIndex()<lastItemIndex())) -->
-            <button type="button" class="btn btn-lg btn-default sharp-corners" data-bind="click: loadMore">Load more</button>
+            <button type="button" class="btn btn-lg btn-default" data-bind="click: loadMore">Load more</button>
         <!-- /ko -->
         <!-- ko if: (endpoint().endpointType=='ItemEndpoint') -->
-            <a class="btn btn-lg btn-default sharp-corners" data-bind="attr: {href: endpointUri()+endpoint().listEndpointUri.fullUri}">Go to full list</a>
+            <a class="btn btn-lg btn-default" data-bind="attr: {href: endpointUri()+endpoint().listEndpointUri.fullUri}">Go to full list</a>
         <!-- /ko -->
     </div>
 

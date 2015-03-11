@@ -2,7 +2,7 @@
     <date-edit params="value: value"></date-edit>
 <!-- /ko -->
 <!-- ko if: (dataType=='datetime') -->
-    <datetime-edit params="value: value"></datetime-edit>
+    <date-edit params="value: value"></date-edit>
 <!-- /ko -->
 <!-- ko if: ((dataType=='integer') || (dataType=='decimal')) -->
     <number-edit params="value: value, dataType: dataType"></number-edit>
@@ -11,5 +11,5 @@
     <boolean-edit params="value: value, noneText: noneText, trueText: trueText, falseText: falseText"></boolean-edit>
 <!-- /ko -->
 <!-- ko if: (dataType==null) -->
-    <input type="text" class="form-control sharp-corners no-focus" data-bind="value: value" maxlength="512" />
+    <input type="text" class="form-control no-focus" data-bind="value: value" maxlength="512" />
 <!-- /ko -->

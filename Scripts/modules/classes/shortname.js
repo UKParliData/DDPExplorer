@@ -28,7 +28,8 @@
                 isStructured: isStructured,
                 dataType: dt,
                 itemEndpoint: itemEndpoint,
-                description: null
+                description: null,
+                valuePattern: null
             }
         };
 
@@ -42,14 +43,16 @@
             return null;
         }
 
-        self.findDescriptionForShortname = function (shortname, descriptions, shortnameFullPath) {
+        self.findLegendForShortname = function (shortname, legends, shortnameFullPath) {
             var result = {};
 
             $.extend(result, shortname);
-            if (descriptions != null) {
-                var found = ko.utils.arrayFirst(descriptions, function (item) { return (item.label._value || item.label) == shortnameFullPath; });
-                if (found != null)
+            if (legends != null) {
+                var found = ko.utils.arrayFirst(legends, function (item) { return (item.label._value || item.label) == shortnameFullPath; });
+                if (found != null) {
                     result.description = found.comment;
+                    result.valuePattern = found.valuePattern;
+                }
             }
             return result;
         };
@@ -77,7 +80,7 @@
                             shortnameFullPath = complexPropertyArr.slice(0, j + 1).join(".");
                             found = ko.utils.arrayFirst(shortnames, function (item) { return item.name == complexPropertyArr[j]; });                            
                             if (found != null) {
-                                found = self.findDescriptionForShortname(found, viewer.descriptions, shortnameFullPath);
+                                found = self.findLegendForShortname(found, viewer.legends, shortnameFullPath);
                                 complexShortname.push(found);
                             }
                             else
@@ -87,15 +90,18 @@
                             result.push(complexShortname);
                     }
                     else {
-                        found = ko.utils.arrayFirst(shortnames, function (item) { return item.name == viewer.properties[i]; });
-                        if (found != null) {
-                            found = self.findDescriptionForShortname(found, viewer.descriptions, found.name);
-                            result.push(found);
+                        found = ko.utils.arrayFirst(viewer.properties, function (item) { return item.indexOf(viewer.properties[i] + ".") == 0; });
+                        if (found == null) {
+                            found = ko.utils.arrayFirst(shortnames, function (item) { return item.name == viewer.properties[i]; });
+                            if (found != null) {
+                                found = self.findLegendForShortname(found, viewer.legends, found.name);
+                                result.push(found);
+                            }
                         }
                     }
                 }
                 if (result.length == 0)
-                    result = null;                
+                    result = null;
             }
 
             return result;

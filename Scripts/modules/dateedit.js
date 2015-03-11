@@ -42,7 +42,7 @@
                 }
             });
 
-            self.init = function () {
+            self.init = ko.computed(function () {
                 if ((self.value() != null) && (self.value() != "")) {
                     var arr = self.value().split("-");
                     if (arr.length == 3) {
@@ -51,10 +51,16 @@
                         self.yearValue(arr[0] * 1);
                     }
                 }
-            };
+                else {
+                    self.dayValue(null);
+                    self.monthValue(null);
+                    self.yearValue(null);
+                }
+            });
 
             self.dispose = function () {
                 self.checkDate.dispose();
+                self.init.dispose();
             };
 
             self.init();

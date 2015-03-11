@@ -24,11 +24,11 @@
             }
         };
 
-        self.viewerItem = function (name, properties, descriptions) {
+        self.viewerItem = function (name, properties, legends) {
             return {
                 name: name,
                 properties: properties,
-                descriptions: descriptions
+                legends: legends
             }
         };
 

@@ -9,29 +9,34 @@
             return result;
         }
 
-        self.propertyItem = function (label, value, shortname, uri) {
-            var internalUri = uri;
-            var itemValue = value._value == "" ? "" : value._value || value;
-            
-            if ((shortname.dataType == 'resource') && (typeof itemValue == "object") && (Array.isArray(itemValue)==false))
-                itemValue = itemValue._about;
-
-            if ((internalUri != null) && (internalUri.indexOf("http://data.parliament.uk/") == 0)) {
-                internalUri = internalUri.replace("http://data.parliament.uk/", "");
-                if (internalUri.indexOf("resources/") == 0) {
+        self.parseUri = function (shortname, uri) {
+            if ((uri != null) && (uri.indexOf("http://data.parliament.uk/") == 0)) {
+                uri = uri.replace("http://data.parliament.uk/", "");
+                if (uri.indexOf("resources/") == 0) {
                     if ((shortname.itemEndpoint != null) &&
                         (shortname.itemEndpoint.uriTemplate != null) &&
                         (shortname.itemEndpoint.uriTemplate.restUri != null) &&
                         (shortname.itemEndpoint.uriTemplate.restUri.length > 1))
-                        internalUri = self.genericClass.endpointUri + internalUri.replace("resources", self.giveMeItemEndpoint(shortname.itemEndpoint.uriTemplate.restUri));
+                        uri = self.genericClass.endpointUri + uri.replace("resources", self.giveMeItemEndpoint(shortname.itemEndpoint.uriTemplate.restUri));
                     else
                         if ((shortname.dataType == "headresource") && (resourceEndpoint.itemEndpointUri != null))
-                            internalUri = self.genericClass.endpointUri + internalUri.replace("resources", self.giveMeItemEndpoint(resourceEndpoint.itemEndpointUri.restUri));
+                            uri = self.genericClass.endpointUri + uri.replace("resources", self.giveMeItemEndpoint(resourceEndpoint.itemEndpointUri.restUri));
                 }
                 else
-                    if ((internalUri.indexOf("members/") == 0) || (internalUri.indexOf("terms/") == 0))
-                        internalUri = self.genericClass.endpointUri + internalUri;
+                    if ((uri.indexOf("members/") == 0) || (uri.indexOf("terms/") == 0))
+                        uri = self.genericClass.endpointUri + uri;
             }
+            return uri;
+        };
+
+        self.propertyItem = function (label, value, shortname, uri) {
+            var internalUri = uri;
+            var itemValue = value._value == "" ? "" : value._value || value;
+            
+            if ((shortname.dataType == "resource") && (typeof itemValue == "object") && (Array.isArray(itemValue)==false))
+                itemValue = itemValue._about;
+
+            internalUri = self.parseUri(shortname, internalUri);
             
             return {
                 label: label,
@@ -98,11 +103,14 @@
             var matchingProperties = [];
             var value = null;
             var singleProperty = {};
-            
+
             for (var i = 0; i < properties.length; i++) {
                 singleProperty = {};
                 $.extend(singleProperty, properties[i]);
-                if ((singleProperty.resource) && (singleProperty.resource.fullUri.indexOf("http://data.parliament.uk/resources/") == 0)) {
+                if ((singleProperty.resource) && 
+                    ((singleProperty.resource.fullUri.indexOf("http://data.parliament.uk/resources/") == 0) ||
+                    (singleProperty.resource.fullUri.indexOf("http://data.parliament.uk/members/") == 0) ||
+                    (singleProperty.resource.fullUri.indexOf("http://data.parliament.uk/terms/") == 0))) {
                     var siblings = ko.utils.arrayFilter(properties, function (item) { return ((item.resource) && (item.resource.fullUri == singleProperty.resource.fullUri)); });
                     if (siblings != null) {
                         matchingProperties = [];
@@ -115,7 +123,7 @@
                         });
                         singleProperty.properties = matchingProperties;
                     }
-                }
+                }                
                 result.push(singleProperty);
             }
 

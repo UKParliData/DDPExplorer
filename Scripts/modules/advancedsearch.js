@@ -8,7 +8,7 @@
             self.shortnames = params.shortnames;
             self.textQuery = params.textQuery;
             self.querystring = ko.unwrap(params.querystring);
-            self.shortnameProperties = ko.observableArray([]);
+            self.shortnameProperties = ko.observableArray(ko.unwrap(params.shortnameProperties) || []);
             self.isAllSelected = ko.observable(null);
             self.selectedView = ko.observable(params.viewerName);
 
@@ -66,7 +66,8 @@
                     querystring: self.querystring,
                     endpoint: self.endpoint,
                     viewerName: params.viewerName,
-                    shortnames: params.shortnames
+                    shortnames: params.shortnames,
+                    shortnameProperties: params.shortnameProperties
                 });
                 window.conductorVM.selectedComponent("search-result");
             };
@@ -78,15 +79,26 @@
                     querystring: querystring,
                     endpoint: self.endpoint,
                     viewerName: self.selectedView(),
-                    shortnames: self.shortnames
+                    shortnames: self.shortnames,
+                    shortnameProperties: self.shortnameProperties
                 });
                 window.conductorVM.selectedComponent("search-result");
-            };            
+            };
+
+            self.assignFilter = function (shortnameProperty, valueName) {
+                if ((shortnameProperty.dataType == "date") || (shortnameProperty.dataType == "datetime")) {
+                    dateValue = new Date(Date.UTC(shortnameProperty[valueName]().split("-")[0] * 1, (shortnameProperty[valueName]().split("-")[1] * 1) - 1, shortnameProperty[valueName]().split("-")[2] * 1));
+                    return self.genericClass.formatDate(shortnameProperty.valuePattern, dateValue);
+                }
+                else
+                    return shortnameProperty[valueName]();
+            }
 
             self.buildQueryString = function () {
                 var querystring = {};
                 var includedPropertiesInView = [];
                 var shortnameProperties = self.shortnameProperties();
+                var dateValue;
 
                 includedPropertiesInView = ko.utils.arrayFilter(shortnameProperties, function (item) { return item.isSelected() == true; });
                 if (includedPropertiesInView.length < shortnameProperties.length) {
@@ -94,16 +106,24 @@
                     querystring._properties = ko.utils.arrayMap(includedPropertiesInView, function(item){ return item.name; }).join(",");
                 }
                 for (var i = 0; i < shortnameProperties.length; i++) {
-                    if ((shortnameProperties[i].searchValue() != null) && (shortnameProperties[i].searchValue() != ""))
-                        querystring[shortnameProperties[i].name] = shortnameProperties[i].searchValue();
+                    if ((shortnameProperties[i].searchValue() != null) && (shortnameProperties[i].searchValue() != "")) {
+                        if (shortnameProperties[i].dataType == "datetime") {
+                            dateValue = new Date(Date.UTC(shortnameProperties[i].searchValue().split("-")[0] * 1, (shortnameProperties[i].searchValue().split("-")[1] * 1) - 1, shortnameProperties[i].searchValue().split("-")[2] * 1));
+                            querystring["min-" + shortnameProperties[i].name] = self.genericClass.formatDate(shortnameProperties[i].valuePattern, dateValue);
+                            dateValue.setUTCDate(dateValue.getUTCDate() + 1);
+                            querystring["maxEx-" + shortnameProperties[i].name] = self.genericClass.formatDate(shortnameProperties[i].valuePattern, dateValue);
+                        }
+                        else
+                            querystring[shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "searchValue");
+                    }
                     if ((shortnameProperties[i].minValue() != null) && (shortnameProperties[i].minValue() != ""))
-                        querystring["min-" + shortnameProperties[i].name] = shortnameProperties[i].minValue();
+                        querystring["min-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "minValue");
                     if ((shortnameProperties[i].maxValue() != null) && (shortnameProperties[i].maxValue() != ""))
-                        querystring["max-" + shortnameProperties[i].name] = shortnameProperties[i].maxValue();
+                        querystring["max-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "maxValue");
                     if ((shortnameProperties[i].minExclusiveValue() != null) && (shortnameProperties[i].minExclusiveValue() != ""))
-                        querystring["minEx-" + shortnameProperties[i].name] = shortnameProperties[i].minExclusiveValue();
+                        querystring["minEx-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "minExclusiveValue");
                     if ((shortnameProperties[i].maxExclusiveValue() != null) && (shortnameProperties[i].maxExclusiveValue() != ""))
-                        querystring["maxEx-" + shortnameProperties[i].name] = shortnameProperties[i].maxExclusiveValue();
+                        querystring["maxEx-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "maxExclusiveValue");
                     if (shortnameProperties[i].existsValue() != null)
                         querystring["exists-" + shortnameProperties[i].name] = shortnameProperties[i].existsValue();
                 }
@@ -113,9 +133,9 @@
             };            
 
             self.shortnameProperty = function (index, name, label, dataType, description,
-                isSelected, searchValue, minValue, maxValue, minExclusiveValue,
+                valuePattern, isSelected, searchValue, minValue, maxValue, minExclusiveValue,
                 maxExclusiveValue, existsValue) {
-
+                
                 var isSelectedKo= ko.observable(isSelected);
                 var searchValueKo = ko.observable(searchValue);
                 var minValueKo = ko.observable(minValue);
@@ -135,7 +155,7 @@
                     if ((maxValueKo() != null) && (maxValueKo() != ""))
                         arr.push("more or equal than " + maxValueKo());
                     if ((minExclusiveValueKo() != null) && (minExclusiveValueKo() != ""))
-                        arr.push("less than " + minExclusiveValue());
+                        arr.push("less than " + minExclusiveValueKo());
                     if ((maxExclusiveValueKo() != null) && (maxExclusiveValueKo() != ""))
                         arr.push("more than " + maxExclusiveValueKo());
                     if (existsValueKo() == true)
@@ -163,6 +183,7 @@
                     label: label,
                     dataType: dataType,
                     description: description,
+                    valuePattern: valuePattern,
                     isSelected: isSelectedKo,
                     searchValue: searchValueKo,
                     minValue: minValueKo,
@@ -182,6 +203,7 @@
                 var label;
                 var dataType;
                 var description;
+                var valuePattern;
                 var shortnames = self.shortnames();
 
                 for (var i = 0; i < shortnames.length; i++) {
@@ -190,12 +212,14 @@
                         label = ko.utils.arrayMap(shortnames[i], function (item) { return item.label; });
                         dataType = shortnames[i][shortnames[i].length - 1].dataType;
                         description = shortnames[i][shortnames[i].length - 1].description;
+                        valuePattern = shortnames[i][shortnames[i].length - 1].valuePattern
                     }
                     else {
                         name = shortnames[i].name;
                         label = shortnames[i].label;
                         dataType = shortnames[i].dataType;
                         description = shortnames[i].description;
+                        valuePattern = shortnames[i].valuePattern;
                     }
                     arr.push(self.shortnameProperty(
                         i,
@@ -203,6 +227,7 @@
                         label,
                         dataType,
                         description,
+                        valuePattern,
                         ko.utils.arrayFirst(selectedArr, function (item) { return item == name; }) != null,
                         self.querystring[name],
                         self.querystring["min-" + name],
@@ -248,7 +273,7 @@
                 var dataType;
                 var arr;
                 var shortnames = self.shortnames();
-
+                
                 if (self.querystring._view == "basic") {
                     if (self.querystring._properties != null)
                         selectedArr = self.querystring._properties.split(",");
@@ -260,9 +285,13 @@
                         else
                             return item.name;
                     });
-                arr = self.createShortnameProperty(selectedArr);
-                arr = self.createFilters(arr);
-                self.shortnameProperties(arr);
+                if (self.shortnameProperties().length == 0) {
+                    arr = self.createShortnameProperty(selectedArr);
+                    arr = self.createFilters(arr);
+                    self.shortnameProperties(arr);
+                }
+                else
+                    arr = self.shortnameProperties();
                 self.isAllSelected(selectedArr.length == arr.length);
             };
 
