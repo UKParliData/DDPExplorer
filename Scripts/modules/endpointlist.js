@@ -4,7 +4,7 @@
             var self = this;
 
             self.textQuery = ko.observable(null);           
-            self.endpoints = ko.utils.arrayFilter(params.endpoints, function (item) { return item.endpointType == "ListEndpoint"; });
+            self.endpoints = ko.utils.arrayFilter(params.endpoints, function (item) { return (item.ddpDatasetName != null) && (item.endpointType == "ListEndpoint"); });
             self.filterEndpoints = ko.observableArray(ko.unwrap(self.endpoints));
             self.sizeList = [];
 

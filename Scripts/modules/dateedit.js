@@ -13,7 +13,7 @@
 
             self.genericClass = new genericClass;
 
-            self.checkDate = ko.computed(function () {
+            self.checkDate = ko.computed(function () {                
                 if (self.dayValue() != null)
                     self.isValueValid((self.genericClass.isIntegerAndGreaterThanZero(self.dayValue()) == true) && (self.dayValue() <= 31));
                 else
@@ -39,7 +39,7 @@
                                 self.value(date);
                         }
                     }
-                }
+                }                
             });
 
             self.init = ko.computed(function () {
@@ -58,7 +58,7 @@
                 }
             });
 
-            self.dispose = function () {
+            self.dispose = function () {                
                 self.checkDate.dispose();
                 self.init.dispose();
             };

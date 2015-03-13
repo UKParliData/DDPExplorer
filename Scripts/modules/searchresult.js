@@ -115,6 +115,7 @@
                 }
                 else {
                     resource = self.resourceClass.resourceItem(result.primaryTopic, self.shortnames(), null, "");
+                    console.log(ko.toJSON(resource.properties));
                     resource.properties = self.resourceClass.mergeProperties(resource.properties);
                     arr.push(resource);
                 }

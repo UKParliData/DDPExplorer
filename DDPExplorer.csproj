@@ -107,8 +107,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\knockout-3.2.0.debug.js" />
-    <Content Include="Scripts\knockout-3.2.0.js" />
+    <Content Include="Scripts\knockout-3.3.0.debug.js" />
+    <Content Include="Scripts\knockout-3.3.0.js" />
     <Content Include="Scripts\modules\advancedsearch.js" />
     <Content Include="Scripts\modules\booleanedit.js" />
     <Content Include="Scripts\modules\classes\endpoint.js" />

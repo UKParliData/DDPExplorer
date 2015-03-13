@@ -3,7 +3,7 @@
     urlArgs: "bust=v1",
     paths: {
         "jquery": "Scripts/jquery-2.1.3.min",
-        "knockout": "Scripts/knockout-3.2.0"
+        "knockout": "Scripts/knockout-3.3.0"
     },
     waitSeconds: 30
 });

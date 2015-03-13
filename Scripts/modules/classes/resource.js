@@ -5,7 +5,12 @@
         self.genericClass = new genericClass;
 
         self.giveMeItemEndpoint = function (restUri) {
-            var result = restUri.slice(0, restUri.length - 1).join("/");
+            var result = null;
+
+            if (restUri.indexOf("¬")==restUri.length-1)
+                result = restUri.slice(0, restUri.length - 1).join("/");
+            else
+                result = "resources";
             return result;
         }
 
@@ -33,9 +38,9 @@
             var internalUri = uri;
             var itemValue = value._value == "" ? "" : value._value || value;
             
-            if ((shortname.dataType == "resource") && (typeof itemValue == "object") && (Array.isArray(itemValue)==false))
-                itemValue = itemValue._about;
-
+            if ((shortname.dataType == "resource") && (typeof itemValue == "object") && (Array.isArray(itemValue) == false))
+                itemValue = self.giveMeResourceDescription(value);
+            
             internalUri = self.parseUri(shortname, internalUri);
             
             return {
@@ -49,16 +54,23 @@
             }
         };
 
-        self.giveMeLabelForResource = function (properties, shortname) {
-            var label = self.propertyItem(shortname.label, properties._about, shortname, properties._about);
-            if (properties.label)
-                label.value = properties.label._value || properties.label;
+        self.giveMeResourceDescription = function (property) {
+            if (property.label)
+                return property.label._value || property.label;
             else
-                if (properties.prefLabel)
-                    label.value = properties.prefLabel._value || properties.prefLabel;
+                if (property.prefLabel)
+                    return property.prefLabel._value || property.prefLabel;
                 else
-                    if (properties.title)
-                        label.value = properties.title._value || properties.title;
+                    if (property.title)
+                        return property.title._value || property.title;
+                    else
+                        return property._about || property;
+        };
+
+        self.giveMeLabelForResource = function (property, shortname) {            
+            var value = property._about ? property : { _about: property._value || property };
+            var label = self.propertyItem(shortname.label, value._about, shortname, value._about);
+            label.value = self.giveMeResourceDescription(value);
 
             return label;
         };
@@ -70,7 +82,7 @@
                     properties.splice(i, 1);
                 else
                     if (properties[i].resource) {
-                        index = [-1, -1, -1];
+                        index = [-1, -1, -1, -1];
                         for (var j = 0; j < properties[i].properties.length; j++) {
                             if (properties[i].properties[j].label == "label") {
                                 index[0] = j;
@@ -84,15 +96,14 @@
                                 index[2] = j;
                                 continue;
                             }
+                            if (properties[i].properties[j].label == "_about") {
+                                index[3] = j;
+                                continue;
+                            }
                         }
-                        if (index[0] >= 0)
-                            properties[i].properties.splice(index[0], 1);
-                        else
-                            if (index[1] >= 0)
-                                properties[i].properties.splice(index[1], 1);
-                            else
-                                if (index[2] >= 0)
-                                    properties[i].properties.splice(index[2], 1);
+                        for (var j = 0; j < index.length; j++)
+                            if (index[j] >= 0)
+                                properties[i].properties.splice(index[j], 1);
                     }
             }
             return properties;
@@ -101,9 +112,9 @@
         self.mergeProperties = function (properties) {
             var result = [];
             var matchingProperties = [];
-            var value = null;
+            var found = null;
             var singleProperty = {};
-
+            
             for (var i = 0; i < properties.length; i++) {
                 singleProperty = {};
                 $.extend(singleProperty, properties[i]);
@@ -115,8 +126,13 @@
                     if (siblings != null) {
                         matchingProperties = [];
                         for (var j = 0; j < siblings.length; j++)
-                            if (siblings[j].properties.length == 1)
-                                matchingProperties.push(siblings[j].properties[0]);
+                            if (siblings[j].properties.length == 1) {
+                                found = ko.utils.arrayFirst(matchingProperties, function (item) {
+                                    return (item.label == siblings[j].properties[0].label) && (item.value == siblings[j].properties[0].value);
+                                });
+                                if (found == null)
+                                    matchingProperties.push(siblings[j].properties[0]);
+                            }
                         ko.utils.arrayForEach(properties, function (item) {
                             if ((item.resource) && (item.resource.fullUri == singleProperty.resource.fullUri))
                                 item.properties = [];
@@ -140,47 +156,55 @@
             var label = null;
             var value = null;
             var headShortname = {};
+            var shortnameArr;
+            var topShortname;
             
             if (resourceShortname == null)
                 headShortname = { dataType: "headresource" };
             else
                 $.extend(headShortname, resourceShortname, { dataType: "complexresource" });
             label = self.giveMeLabelForResource(properties, headShortname);
-
-            for (var i = 0; i < shortnames.length; i++) {
-                if ((Array.isArray(shortnames[i])) && (properties[shortnames[i][0].name]) && (shortnames[i].length > 1)) {
-                    if ((Array.isArray(properties[shortnames[i][0].name]) == false) && (properties[shortnames[i][0].name]._about != null)) {
-                        var shortnameArr = shortnames[i].slice(1);
-                        value = self.resourceItem(properties[shortnames[i][0].name], shortnameArr.length == 1 ? shortnameArr : [shortnameArr], shortnames[i][0]);
-                        if (value != null) {
-                            value.dataType = value.resource.dataType;
-                            arr.push(value);
-                        }
-                    }
-                    else
-                        for (var j = 0; j < properties[shortnames[i][0].name].length; j++) {
-                            if (properties[shortnames[i][0].name][j]._about != null) {
-                                value = self.resourceItem(properties[shortnames[i][0].name][j], shortnames[i].slice(1), shortnames[i][0]);
-                                if (value != null) {
-                                    value.dataType = value.resource.dataType;
-                                    arr.push(value);
-                                }
+            if ((shortnames.length == 0) && (resourceShortname.dataType == "resource")) {
+                value = self.propertyItem("_about", properties, resourceShortname, properties._about || null);
+                arr.push(value);
+            }
+            else
+                for (var i = 0; i < shortnames.length; i++) {
+                    topShortname = shortnames[i].length > 1 ? shortnames[i][0] : shortnames[i];
+                    shortnameArr = shortnames[i].length > 1 ? shortnames[i].slice(1) : [];
+                    if ((properties[topShortname.name]) &&
+                        (((Array.isArray(shortnames[i])) && (shortnames[i].length > 1)) || (shortnames[i].dataType == "resource"))) {
+                        if (Array.isArray(properties[topShortname.name]) == false) {                            
+                            value = self.resourceItem(properties[topShortname.name], shortnameArr, topShortname);
+                            if (value != null) {
+                                value.dataType = value.resource.dataType;
+                                arr.push(value);
                             }
                         }
-                }
-                else
-                    if (Array.isArray(shortnames[i]) == false) {
-                        if (properties[shortnames[i].name] != null) {
-                            value = self.propertyItem(shortnames[i].label, properties[shortnames[i].name], shortnames[i], properties[shortnames[i].name]._about || null);
-                            arr.push(value);
-                            if (headShortname.name != null)
-                                properties = properties[shortnames[i].name];
-                        }
                         else
-                            if (headShortname.name != null)
-                                return null;
+                            for (var j = 0; j < properties[topShortname.name].length; j++) {
+                                if (properties[topShortname.name][j]._about != null) {
+                                    value = self.resourceItem(properties[topShortname.name][j], shortnameArr, topShortname);
+                                    if (value != null) {
+                                        value.dataType = value.resource.dataType;
+                                        arr.push(value);
+                                    }
+                                }
+                            }
                     }
-            }
+                    else
+                        if (Array.isArray(shortnames[i]) == false) {
+                            if (properties[shortnames[i].name] != null) {
+                                value = self.propertyItem(shortnames[i].label, properties[shortnames[i].name], shortnames[i], properties[shortnames[i].name]._about || null);
+                                arr.push(value);
+                                if (headShortname.name != null)
+                                    properties = properties[shortnames[i].name];
+                            }
+                            else
+                                if (headShortname.name != null)
+                                    return null;
+                        }
+                }
 
             return {
                 resource: label,

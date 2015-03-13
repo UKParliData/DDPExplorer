@@ -131,11 +131,11 @@
 
         self.readEndpoints = function (data) {
             var arr = [];
-
+            
             if ((data != null) && (data.result != null) && (data.result.items != null)) {
                 var items = data.result.items;
                 for (var i = 0; i < items.length; i++)
-                    if ((items[i].defaultViewer) && (items[i].ddpDatasetName))
+                    if (items[i].defaultViewer)
                         arr.push(self.endpointItem(
                             items[i].moniker || items[i].name,
                             items[i].note || items[i].comment,

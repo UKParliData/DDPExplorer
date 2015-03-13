@@ -1,24 +1,55 @@
-﻿input, button, a, .dropdown-menu, .list-group-item{
+﻿html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 70px !important;
+  background-color: #fff !important;
+}
+
+input, button, a, .dropdown-menu, .list-group-item, .navbar{
     border-radius: 0px !important;
 }
 
-.border-bottom{
-  border-bottom: 1px solid #e7e7e7 !important;
-}
-
-.wrap{
-    min-height:100%;
-    height:auto;
-    margin-bottom:-60px;    
+main{
+    background-color: #EFEFF1 !important;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+    min-height: 100%;
+    height: auto;
+    margin-bottom: -60px;
     padding-bottom: 70px;
-    background-color: #f8f8f8;
 }
 
-.footer-wrapper{  
-  width: 100%;
-  height: 70px;
-  border-top: 1px solid #e7e7e7;
-  background-color: #f8f8f8;
+@media (min-width: 768px) {
+  .container {
+    width: 705px!important;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 880px!important;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1100px!important;
+  }
+}
+
+.border-bottom-header{
+    border-left:0px none !important;
+    border-right:0px none !important;
+    border-bottom: 5px solid #000 !important;
+}
+
+.footer-wrapper{          
+    height: 70px;
+    bottom:0px;
+    border-top: 5px solid #000 !important;
+    background-color: #fff !important;
+    position:absolute;
 }
 
 .margin-0{
@@ -108,6 +139,11 @@
     margin-top: 25%;
 }
 
+.text-header {
+    color: #dedede;
+    text-shadow: 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
 .text-title {
     color: #665656;
 }
@@ -121,14 +157,9 @@
     box-shadow: none !important;
 }
 
-.white-background-color{
-    background-color: #fff !important;
-}
-
 .no-background-color{
     background-color: transparent !important;
 }
-
 
 .min-width-350{
     min-width: 350px !important;
@@ -139,10 +170,10 @@
 }
 
 .search-background{
-    background: url("/Content/images/search-background.jpg") no-repeat center center fixed;
-    background-size: cover;
-    min-height: 320px;
-    max-height: 429px;
+    background: url("/Content/images/search-background.jpg") no-repeat fixed center center / cover rgba(0, 0, 0, 0);
+    height: 350px;
+    margin-left: -40px;
+    margin-right: -40px;
 }
 
 .cursor-pointer{

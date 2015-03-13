@@ -51,9 +51,9 @@
             zuluTime:10
         };
 
-        self.formatDate = function (textFormat, date) {
+        self.formatDate = function (textFormat, date) {            
             var year = date.getUTCFullYear();
-            var month = date.getUTCMonth();
+            var month = date.getUTCMonth() + 1
             var day = date.getUTCDate();
             var result = "";
             var dateSplit = "";
@@ -61,6 +61,8 @@
             var fractionSplit = "";
             var sequence = [];
             var len = 0;
+
+            textFormat = textFormat || "yyyy-MM-dd";
 
             while (len < textFormat.length) {
                 if (textFormat.substring(len, len + 4) == "yyyy") {
@@ -145,6 +147,8 @@
                             result += dateSplit + year;
                         break;
                     case self.dateFormatType.month:
+                        if (month < 10)
+                            month = "0" + month.toString();
                         if (i == 0)
                             result += month;
                         else
