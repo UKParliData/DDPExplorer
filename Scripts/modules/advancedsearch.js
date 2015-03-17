@@ -107,7 +107,7 @@
                 }
                 for (var i = 0; i < shortnameProperties.length; i++) {
                     if ((shortnameProperties[i].searchValue() != null) && (shortnameProperties[i].searchValue() != "")) {
-                        if ((shortnameProperties[i].dataType == "datetime") && (shortnameProperties[i].valuePattern.length>10)) {
+                        if ((shortnameProperties[i].dataType == "datetime") && ((shortnameProperties[i].valuePattern==null)||(shortnameProperties[i].valuePattern.length > 10))) {
                             dateValue = new Date(Date.UTC(shortnameProperties[i].searchValue().split("-")[0] * 1, (shortnameProperties[i].searchValue().split("-")[1] * 1) - 1, shortnameProperties[i].searchValue().split("-")[2] * 1));
                             querystring["min-" + shortnameProperties[i].name] = self.genericClass.formatDate(shortnameProperties[i].valuePattern, dateValue);
                             dateValue.setUTCDate(dateValue.getUTCDate() + 1);
@@ -121,7 +121,7 @@
                     if ((shortnameProperties[i].minExclusiveValue() != null) && (shortnameProperties[i].minExclusiveValue() != ""))
                         querystring["minEx-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "minExclusiveValue");
                     if ((shortnameProperties[i].maxValue() != null) && (shortnameProperties[i].maxValue() != "")) {
-                        if ((shortnameProperties[i].dataType == "datetime") && (shortnameProperties[i].valuePattern.length>10)) {
+                        if ((shortnameProperties[i].dataType == "datetime") && ((shortnameProperties[i].valuePattern==null)||(shortnameProperties[i].valuePattern.length>10))) {
                             dateValue = new Date(Date.UTC(shortnameProperties[i].maxValue().split("-")[0] * 1, (shortnameProperties[i].maxValue().split("-")[1] * 1) - 1, shortnameProperties[i].maxValue().split("-")[2] * 1));
                             dateValue.setUTCDate(dateValue.getUTCDate() + 1);
                             querystring["max-" + shortnameProperties[i].name] = self.genericClass.formatDate(shortnameProperties[i].valuePattern, dateValue);
@@ -130,7 +130,7 @@
                             querystring["max-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "maxValue");
                     }
                     if ((shortnameProperties[i].minValue() != null) && (shortnameProperties[i].minValue() != "")) {
-                        if ((shortnameProperties[i].dataType == "datetime") && (shortnameProperties[i].valuePattern.length>10)) {
+                        if ((shortnameProperties[i].dataType == "datetime") && ((shortnameProperties[i].valuePattern==null)||(shortnameProperties[i].valuePattern.length>10))) {
                             dateValue = new Date(Date.UTC(shortnameProperties[i].minValue().split("-")[0] * 1, (shortnameProperties[i].minValue().split("-")[1] * 1) - 1, shortnameProperties[i].minValue().split("-")[2] * 1));
                             dateValue.setUTCDate(dateValue.getUTCDate() - 1);
                             querystring["min-" + shortnameProperties[i].name] = self.genericClass.formatDate(shortnameProperties[i].valuePattern, dateValue);
@@ -306,6 +306,8 @@
                 }
                 else
                     arr = self.shortnameProperties();
+                for (var i = 0; i < arr.length; i++)
+                    arr[i].isFilterOpen(false);
                 self.isAllSelected(selectedArr.length == arr.length);
             };
 
