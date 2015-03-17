@@ -58,7 +58,7 @@
                     querystring._pageSize = self.pageSize() * (self.currentPage() + 1);
                     querystring._page = 0;
                     if (querystring != null)
-                        url += "&" + $.param(querystring);
+                        url += "?" + $.param(querystring);
                 }
                 else
                     url += self.endpointUrl;
