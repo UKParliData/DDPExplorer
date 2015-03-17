@@ -1,14 +1,20 @@
-﻿<search-header params="name: endpoint().name, comment: endpoint().comment, isSearchBoxShown: endpoint().textQueryProperty!=null, totalItemIndex: totalItemIndex, textQuery: textQuery, searchText: searchText, showAdvancedSearch: showAdvancedSearch, isSubmitForm: true, placeholder: 'Search dataset'"></search-header>
+﻿<search-header params="name: endpoint().name, comment: endpoint().comment, isSearchBoxShown: endpoint().textQueryProperty!=null, totalItemIndex: totalItemIndex, textQuery: textQuery, searchText: searchText, isSubmitForm: true, placeholder: 'Search dataset'"></search-header>
 
 <article>
 
-    <section class="margin-bottom-40" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
+    <section class="margin-bottom-40">
+        
+        <div class="btn-group">
+            <button type="button" class="btn btn-default" data-bind="click: function(){window.history.back();}">
+                <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back
+            </button>
+        </div>
 
-        <div class="btn-group" data-bind="visible: endpoint().endpointType=='ListEndpoint'">
+        <div class="btn-group" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
             <button type="button" class="btn btn-default" data-bind="click: showMenu">
                 Sort by <strong data-bind="text: sortByProperty()==null?'None':sortByProperty().shortname.label"></strong>
                 <!-- ko if: sortByProperty()!=null -->
-                    <span class="glyphicon" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
+                <span class="glyphicon" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
                 <!-- /ko -->
                 <span class="caret"></span>
             </button>
@@ -28,12 +34,12 @@
                             </div>
                             <div class="col-sm-9">
                                 <!-- ko if: Array.isArray($data)==false -->
-                                    <span data-bind="text: label"></span>
+                                <span data-bind="text: label"></span>
                                 <!-- /ko -->
                                 <!-- ko if: Array.isArray($data)==true -->
-                                    <ul class="list-unstyled" data-bind="foreach: $data">
-                                        <li><span data-bind="text: label, style: {marginLeft: 5*$index()+'px'}"></span></li>
-                                    </ul>
+                                <ul class="list-unstyled" data-bind="foreach: $data">
+                                    <li><span data-bind="text: label, style: {marginLeft: 5*$index()+'px'}"></span></li>
+                                </ul>
                                 <!-- /ko -->
                             </div>
                         </div>
@@ -41,8 +47,8 @@
                 </ul>
             </div>
         </div>
-            
-        <div class="btn-group" data-bind="visible: endpoint().endpointType=='ListEndpoint'">
+
+        <div class="btn-group" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
             <button type="button" class="btn btn-default" data-bind="visible: filters().length>0, click: showMenu">
                 <span class="glyphicon glyphicon-filter"></span> Filter <span class="caret"></span>
             </button>
@@ -73,19 +79,43 @@
             </div>
         </div>
 
-        <div class="btn-group">
+        <div class="btn-group" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
+            <button type="button" class="btn btn-default" data-bind="click: showMenu">
+                Page size of <strong data-bind="text: pageSize"></strong>
+                <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu">
+                <ul class="list-unstyled">
+                    <li><button type="button" class="btn btn-link" data-bind="click: function(){ changePageSize(10); }">10</button></li>
+                    <li data-bind="visible: endpoint().maxPageSize>=20"><button type="button" class="btn btn-link" data-bind="click: function(){ changePageSize(20); }">20</button></li>
+                    <li data-bind="visible: endpoint().maxPageSize>=50"><button type="button" class="btn btn-link" data-bind="click: function(){ changePageSize(50); }">50</button></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="btn-group" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
             <button type="button" class="btn btn-default" data-bind="click: showMenu">
                 Output to <strong data-bind="text: outputToName"></strong>
                 <span class="caret"></span>
             </button>
             <div class="dropdown-menu">
                 <ul class="list-unstyled">
+                    <li data-bind="visible: (totalItemIndex()>endpoint().maxPageSize)" class="padding-10"><span class="text-info glyphicon glyphicon-info-sign"></span><span data-bind="text: ' '+endpoint().maxPageSize+' of '+totalItemIndex()+' resources'"></span></li>
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('JSON'); }">JSON</button></li>
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('XML'); }">XML</button></li>
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('CSV'); }">CSV</button></li>
                 </ul>
             </div>
         </div>
+
+        <div class="btn-group" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
+            <button type="button" class="btn btn-default" data-bind="click: showAdvancedSearch"><span class="glyphicon glyphicon-tasks"></span> Advanced search</button>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-default" data-bind="click: showApiUrl"><span class="glyphicon glyphicon-globe"></span> API Url</button>
+        </div>
+        <div class="well well-sm margin-top-10" data-bind="visible: canApiUrlShow"><code data-bind="text: apiUrl"></code></div>
 
     </section>
 
@@ -101,10 +131,10 @@
         <!-- ko if: isLoadingMore()==true -->
             <busy-indicator></busy-indicator>
         <!-- /ko -->
-        <!-- ko if: ((isLoadingMore()==false) && (endpoint().endpointType=='ListEndpoint') && (firstItemIndex()!=null) && (firstItemIndex()<lastItemIndex())) -->
+        <!-- ko if: ((isLoadingMore()==false) && (endpoint().endpointType=='ListEndpoint') && (firstItemIndex()!=null) && (firstItemIndex()<lastItemIndex()) && (lastItemIndex()<endpoint().maxPageSize)) -->
             <button type="button" class="btn btn-lg btn-default" data-bind="click: loadMore">Load more</button>
         <!-- /ko -->
-        <!-- ko if: (endpoint().endpointType=='ItemEndpoint') -->
+        <!-- ko if: (endpoint().endpointType=='ItemEndpoint') && (endpoint().listEndpointUri!=null) -->
             <a class="btn btn-lg btn-default" data-bind="attr: {href: endpointUri()+endpoint().listEndpointUri.fullUri}">Go to full list</a>
         <!-- /ko -->
     </div>

@@ -3,7 +3,7 @@
         viewModel: function (params) {
             var self = this;
 
-            self.querystring = ko.unwrap(params.querystring || {});
+            self.querystring = ko.observable(ko.unwrap(params.querystring || {}));
             self.endpointUrl = ko.unwrap(params.endpointUrl);
             self.endpoint = ko.observable(ko.unwrap(params.endpoint));
             self.shortnames = ko.observable(ko.unwrap(params.shortnames));
@@ -18,8 +18,9 @@
             self.isLoadingMore = ko.observable(false);
             self.sortByProperty = ko.observable(null);
             self.outputToName = ko.observable("HTML");
-            self.textQuery = ko.observable(self.querystring._search);
-
+            self.pageSize = ko.observable(10);
+            self.textQuery = ko.observable(self.querystring()._search);
+            self.canApiUrlShow = ko.observable(false);            
             self.genericClass = new genericClass;
             self.resourceClass = null;
 
@@ -27,7 +28,9 @@
 
             self.sortBy = function (shortname, isAscending) {                
                 var sorting = "";
+                var querystring = {};
 
+                $.extend(querystring, self.querystring());
                 $(".btn-group").removeClass("open");
                 if (Array.isArray(shortname)) {
                     sorting = shortname[0].name;
@@ -37,29 +40,74 @@
                 }
                 else
                     sorting = shortname.name;
-                self.querystring._sort = (isAscending ? "" : "-") + sorting;
+                querystring._sort = (isAscending ? "" : "-") + sorting;
+                self.querystring(querystring);
                 self.currentPage(0);
                 self.resultItems([]);
                 self.load();
             };
 
+            self.getUrl = function () {
+                var url = self.genericClass.host
+                var querystring = {};
+
+                if (self.endpoint().endpointType == "ListEndpoint") {
+                    $.extend(querystring, self.querystring());
+                    url += self.endpoint().uriTemplate.fullUri;
+                    url += "{0}";
+                    querystring._pageSize = self.pageSize() * (self.currentPage() + 1);
+                    querystring._page = 0;
+                    if (querystring != null)
+                        url += "&" + $.param(querystring);
+                }
+                else
+                    url += self.endpointUrl;
+                return url;
+            }
+
+            self.apiUrl = ko.computed(function () {
+                var url = self.getUrl();
+
+                url = url.replace("{0}", "");                
+                return url;
+            });
+
+            self.showApiUrl = function () {
+                self.canApiUrlShow(!self.canApiUrlShow());
+            };
+
             self.outputTo = function (format) {
-                var url = self.genericClass.host + self.endpoint().uriTemplate.fullUri;
+                var url = self.getUrl();
 
                 $(".btn-group").removeClass("open");
-                url += "." + format.toLowerCase();
-                url += "?_pageSize=" + self.lastItemIndex();
-                if (self.querystring != null)
-                    url += "&" + $.param(self.querystring);
+                url = url.replace("{0}","." + format.toLowerCase());                
                 window.open(url, "formatOutput");
             };
 
+            self.changePageSize = function (pageSize) {
+                var querystring = {};
+                $.extend(querystring, self.querystring());
+                
+                self.pageSize(pageSize * 1);
+                querystring._pageSize = self.pageSize();
+                self.querystring(querystring);
+                self.currentPage(0);
+                self.resultItems([]);
+                self.load();
+            };
+
             self.clearFilter = function () {
+                var querystring = {};
+                $.extend(querystring, self.querystring());
+
                 self.shortnameProperties([]);
                 self.filters([]);
                 self.currentPage(0);
                 self.resultItems([]);
-                self.querystring = {};
+                querystring._properties = {};
+                querystring._view = self.viewerName;
+                querystring._search = null;
+                self.querystring(querystring);
                 self.load();
             }
 
@@ -80,9 +128,12 @@
 
             self.searchText = function () {
                 if (((self.textQuery() != null) && (self.textQuery() != "")) ||
-                    ((self.textQuery() == "") && (self.querystring._search != ""))) {
+                    ((self.textQuery() == "") && (self.querystring()._search != ""))) {
+                    var querystring=self.querystring();
+
                     self.currentPage(0);
-                    self.querystring._search = self.textQuery();
+                    querystring._search = self.textQuery();
+                    self.querystring(querystring);
                     self.resultItems([]);
                     self.load();
                 }
@@ -95,7 +146,7 @@
                     endpoint: self.endpoint,
                     shortnames: self.shortnames,
                     textQuery: self.textQuery,
-                    querystring: self.querystring,
+                    querystring: self.querystring(),
                     shortnameProperties: self.shortnameProperties
                 });
                 window.conductorVM.selectedComponent("advanced-search");
@@ -113,10 +164,9 @@
                         arr.push(resource);
                     }
                 }
-                else {
-                    resource = self.resourceClass.resourceItem(result.primaryTopic, self.shortnames(), null, "");
-                    console.log(ko.toJSON(resource.properties));
-                    resource.properties = self.resourceClass.mergeProperties(resource.properties);
+                else {                    
+                    resource = self.resourceClass.resourceItem(result.primaryTopic, self.shortnames(), null, "");                    
+                    resource.properties = self.resourceClass.mergeProperties(resource.properties);                    
                     arr.push(resource);
                 }
                 if (self.endpoint().endpointType == "ListEndpoint") {
@@ -142,8 +192,8 @@
                     self.readResult(data.result);
                     if (self.isLoadingMore() == false) {
                         var sortField = self.endpoint().sparqlSort;
-                        if (self.querystring._sort)
-                            sortField = self.querystring._sort;
+                        if (self.querystring()._sort)
+                            sortField = self.querystring()._sort;
                         if (sortField != null) {
                             if (sortField.indexOf(",") > 0)
                                 sortField = sortField.split(",")[0];
@@ -163,22 +213,37 @@
             };            
 
             self.load = function () {
+                var querystring = {};
+                $.extend(querystring, self.querystring());
+
                 self.totalItemIndex(null);
-                self.querystring._page = self.currentPage();
+                querystring._page = self.currentPage();
+                querystring._pageSize = self.pageSize();
+                self.querystring(querystring);
                 self.init();
             };
 
             self.init = function () {
+                var querystring = {};
+
+                $.extend(querystring, self.querystring());
                 if (self.isLoadingMore() == false)
                     window.conductorVM.isAppBusy(true);
-                if ((self.querystring._properties != null) && (self.querystring._properties != ""))
-                    self.querystring._view = "basic";
+                if ((self.querystring()._properties != null) && (self.querystring()._properties != ""))
+                    querystring._view = "basic";
                 else
-                    self.querystring._view = self.viewerName;
-                self.genericClass.getDataFromOwlim(self.endpointUrl, self.querystring, self.doneLoad, self.errorOnLoad);
+                    querystring._view = self.viewerName;
+                if ((querystring._pageSize == null) && (self.endpoint().endpointType == "ListEndpoint"))
+                    querystring._pageSize = self.pageSize();
+                self.querystring(querystring);
+                self.genericClass.getDataFromOwlim(self.endpointUrl, self.querystring(), self.doneLoad, self.errorOnLoad);                
             };
 
             self.init();
+
+            self.dispose = function () {
+                self.apiUrl.dispose();
+            };
 
         },
         template: htmlText

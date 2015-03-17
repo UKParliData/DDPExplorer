@@ -8,7 +8,7 @@ body {
   background-color: #fff !important;
 }
 
-input, button, a, .dropdown-menu, .list-group-item, .navbar{
+input, button, a, .dropdown-menu, .list-group-item, .navbar, .well{
     border-radius: 0px !important;
 }
 

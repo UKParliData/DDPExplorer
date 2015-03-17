@@ -9,7 +9,6 @@
             self.totalItemIndex = params.totalItemIndex;
             self.textQuery = params.textQuery;
             self.searchText = params.searchText;
-            self.showAdvancedSearch = params.showAdvancedSearch;
             self.isSubmitForm = params.isSubmitForm;
             self.placeholder = params.placeholder;
 

@@ -82,32 +82,39 @@
                     properties.splice(i, 1);
                 else
                     if (properties[i].resource) {
-                        index = [-1, -1, -1, -1];
-                        for (var j = 0; j < properties[i].properties.length; j++) {
-                            if (properties[i].properties[j].label == "label") {
-                                index[0] = j;
-                                break;
-                            }
-                            if (properties[i].properties[j].label == "pref label") {
-                                index[1] = j;
-                                continue;
-                            }
-                            if (properties[i].properties[j].label == "title") {
-                                index[2] = j;
-                                continue;
-                            }
-                            if (properties[i].properties[j].label == "_about") {
-                                index[3] = j;
-                                continue;
-                            }
+                        index = ko.utils.arrayFilter(properties[i].properties, function (item) {
+                            return item.label != "_about";
+                        });
+                        if (index.length < properties[i].properties.length)
+                            properties[i].properties = index;
+                        index = ko.utils.arrayFilter(properties[i].properties, function (item) {
+                            return item.label != "label";
+                        });
+                        if (index.length < properties[i].properties.length)
+                            properties[i].properties = index;
+                        else {
+                            index = ko.utils.arrayFilter(properties[i].properties, function (item) {
+                                return item.label != "pref label";
+                            });
+                            if (index.length < properties[i].properties.length)
+                                properties[i].properties = index;
+                            index = ko.utils.arrayFilter(properties[i].properties, function (item) {
+                                return item.label != "title";
+                            });
+                            if (index.length < properties[i].properties.length)
+                                properties[i].properties = index;                            
                         }
-                        for (var j = 0; j < index.length; j++)
-                            if (index[j] >= 0)
-                                properties[i].properties.splice(index[j], 1);
                     }
             }
             return properties;
         };
+
+        /*self.giveMeLastProperty = function (property) {
+            if (property.dataType != "complexresource")
+                return property;
+            else
+                return self.giveMeLastProperty(property.properties[0]);
+        };*/
 
         self.mergeProperties = function (properties) {
             var result = [];
@@ -127,10 +134,12 @@
                         matchingProperties = [];
                         for (var j = 0; j < siblings.length; j++)
                             if (siblings[j].properties.length == 1) {
+                                /*var lastProperty = self.giveMeLastProperty(siblings[j].properties[0]);
                                 found = ko.utils.arrayFirst(matchingProperties, function (item) {
-                                    return (item.label == siblings[j].properties[0].label) && (item.value == siblings[j].properties[0].value);
+                                    var lastPropertyItem = self.giveMeLastProperty(item);
+                                    return (lastPropertyItem.label == lastProperty.label) && (lastPropertyItem.value == lastProperty.value);
                                 });
-                                if (found == null)
+                                if (found == null)*/
                                     matchingProperties.push(siblings[j].properties[0]);
                             }
                         ko.utils.arrayForEach(properties, function (item) {
@@ -158,6 +167,7 @@
             var headShortname = {};
             var shortnameArr;
             var topShortname;
+            var i;
             
             if (resourceShortname == null)
                 headShortname = { dataType: "headresource" };
@@ -168,13 +178,14 @@
                 value = self.propertyItem("_about", properties, resourceShortname, properties._about || null);
                 arr.push(value);
             }
-            else
-                for (var i = 0; i < shortnames.length; i++) {
-                    topShortname = shortnames[i].length > 1 ? shortnames[i][0] : shortnames[i];
-                    shortnameArr = shortnames[i].length > 1 ? shortnames[i].slice(1) : [];
+            else {
+                i = 0;
+                while(i < shortnames.length) {
+                    topShortname = Array.isArray(shortnames[i]) ? shortnames[i][0] : shortnames[i];
+                    shortnameArr = Array.isArray(shortnames[i]) ? shortnames[i].slice(1) : ((shortnames.length > 1) && (headShortname.dataType != "headresource")) ? shortnames.slice(1) : [];
                     if ((properties[topShortname.name]) &&
                         (((Array.isArray(shortnames[i])) && (shortnames[i].length > 1)) || (shortnames[i].dataType == "resource"))) {
-                        if (Array.isArray(properties[topShortname.name]) == false) {                            
+                        if (Array.isArray(properties[topShortname.name]) == false) {
                             value = self.resourceItem(properties[topShortname.name], shortnameArr, topShortname);
                             if (value != null) {
                                 value.dataType = value.resource.dataType;
@@ -191,8 +202,12 @@
                                     }
                                 }
                             }
+                        if (Array.isArray(shortnames[i]))
+                            i++;
+                        else
+                            i = i + (shortnameArr.length > 0 ? shortnameArr.length + 1 : 1);
                     }
-                    else
+                    else {
                         if (Array.isArray(shortnames[i]) == false) {
                             if (properties[shortnames[i].name] != null) {
                                 value = self.propertyItem(shortnames[i].label, properties[shortnames[i].name], shortnames[i], properties[shortnames[i].name]._about || null);
@@ -204,7 +219,10 @@
                                 if (headShortname.name != null)
                                     return null;
                         }
+                        i++;
+                    }
                 }
+            }
 
             return {
                 resource: label,

@@ -60,8 +60,8 @@
             }
         };
 
-        self.endpointItem = function (name, comment, ddpDatasetName, ddpShortnameResources,
-            uriTemplate, uriExample, endpointType, textQueryProperty, defaultViewer, viewers, selector) {
+        self.endpointItem = function (name, comment, ddpDatasetName, ddpShortnameResources, uriTemplate,
+            uriExample, endpointType, textQueryProperty, maxPageSize, defaultViewer, viewers, selector) {
             var arr = [];
 
             if ((viewers != null) && (viewers.length > 0))
@@ -81,6 +81,7 @@
                 uriExample: uriExample,
                 endpointType: endpointType.substring(endpointType.indexOf("#") + 1),
                 textQueryProperty: textQueryProperty,
+                maxPageSize: maxPageSize || 500,
                 defaultViewer: self.viewerItem(defaultViewer.moniker || defaultViewer.name, defaultViewer.propertyNames || defaultViewer.properties, defaultViewer.ddpPropertyLegends),
                 viewers: arr,
                 sparqlWhere: selector.sparqlWhere || selector.where,
@@ -145,16 +146,17 @@
                             items[i].exampleUri || items[i].exampleRequestPath,
                             items[i].type,
                             items[i].textQueryProperty,
+                            items[i].maxPageSize,
                             items[i].endpointDefaultViewer || items[i].defaultViewer,
                             items[i].endpointViewers || items[i].viewer,
                             items[i].sparqlSelector || items[i].selector));
 
                 var endpointSibling;
                 for (var i = 0; i < arr.length; i++) {
-                    endpointSibling = ko.utils.arrayFirst(arr, function (item) { return (item.endpointType == "ItemEndpoint") && (item.ddpDatasetName == arr[i].ddpDatasetName); });
+                    endpointSibling = ko.utils.arrayFirst(arr, function (item) { return (item.endpointType == "ItemEndpoint") && (item.ddpDatasetName == arr[i].ddpDatasetName) && (item.ddpDatasetName != null); });
                     if (endpointSibling != null)
                         arr[i].itemEndpointUri = endpointSibling.uriTemplate;
-                    endpointSibling = ko.utils.arrayFirst(arr, function (item) { return (item.endpointType == "ListEndpoint") && (item.ddpDatasetName == arr[i].ddpDatasetName); });
+                    endpointSibling = ko.utils.arrayFirst(arr, function (item) { return (item.endpointType == "ListEndpoint") && (item.ddpDatasetName == arr[i].ddpDatasetName) && (item.ddpDatasetName != null); });
                     if (endpointSibling != null)
                         arr[i].listEndpointUri = endpointSibling.uriTemplate;
                 }
