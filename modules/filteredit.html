@@ -1,7 +1,4 @@
-﻿<!-- ko if: (dataType=='date') -->
-    <date-edit params="value: value"></date-edit>
-<!-- /ko -->
-<!-- ko if: (dataType=='datetime') -->
+﻿<!-- ko if: ((dataType=='date') || (dataType=='datetime')) -->
     <date-edit params="value: value"></date-edit>
 <!-- /ko -->
 <!-- ko if: ((dataType=='integer') || (dataType=='decimal')) -->
@@ -10,6 +7,6 @@
 <!-- ko if: (dataType=='boolean') -->
     <boolean-edit params="value: value, noneText: noneText, trueText: trueText, falseText: falseText"></boolean-edit>
 <!-- /ko -->
-<!-- ko if: (dataType==null) -->
+<!-- ko if: ((dataType==null) || (dataType=='resource')) -->
     <input type="text" class="form-control no-focus" data-bind="value: value" maxlength="512" />
 <!-- /ko -->

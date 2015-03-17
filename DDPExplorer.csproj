@@ -84,7 +84,6 @@
     <Content Include="modules\advancedsearch.html" />
     <Content Include="modules\booleanedit.html" />
     <Content Include="modules\busyindicator.html" />
-    <Content Include="modules\datetimeedit.html" />
     <Content Include="modules\dateedit.html" />
     <Content Include="modules\endpointlist.html" />
     <Content Include="modules\filteredit.html" />
@@ -116,7 +115,6 @@
     <Content Include="Scripts\modules\classes\resource.js" />
     <Content Include="Scripts\modules\classes\shortname.js" />
     <Content Include="Scripts\modules\conductor.js" />
-    <Content Include="Scripts\modules\datetimeedit.js" />
     <Content Include="Scripts\modules\dateedit.js" />
     <Content Include="Scripts\modules\endpointlist.js" />
     <Content Include="Scripts\modules\filteredit.js" />

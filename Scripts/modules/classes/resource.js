@@ -40,7 +40,14 @@
             
             if ((shortname.dataType == "resource") && (typeof itemValue == "object") && (Array.isArray(itemValue) == false))
                 itemValue = self.giveMeResourceDescription(value);
-            
+            else {
+                if ((itemValue.indexOf("&lt;") >= 0) && (itemValue.indexOf("&gt;") >= 0)) {
+                    itemValue = itemValue.replace(/&lt;/g, "<")
+                    itemValue = itemValue.replace(/&gt;/g, ">")
+                }
+                if ((itemValue.indexOf("<") >= 0) && (itemValue.indexOf(">") >= 0))
+                    itemValue = $(itemValue).text();
+            }
             internalUri = self.parseUri(shortname, internalUri);
             
             return {
@@ -109,13 +116,6 @@
             return properties;
         };
 
-        /*self.giveMeLastProperty = function (property) {
-            if (property.dataType != "complexresource")
-                return property;
-            else
-                return self.giveMeLastProperty(property.properties[0]);
-        };*/
-
         self.mergeProperties = function (properties) {
             var result = [];
             var matchingProperties = [];
@@ -133,15 +133,8 @@
                     if (siblings != null) {
                         matchingProperties = [];
                         for (var j = 0; j < siblings.length; j++)
-                            if (siblings[j].properties.length == 1) {
-                                /*var lastProperty = self.giveMeLastProperty(siblings[j].properties[0]);
-                                found = ko.utils.arrayFirst(matchingProperties, function (item) {
-                                    var lastPropertyItem = self.giveMeLastProperty(item);
-                                    return (lastPropertyItem.label == lastProperty.label) && (lastPropertyItem.value == lastProperty.value);
-                                });
-                                if (found == null)*/
-                                    matchingProperties.push(siblings[j].properties[0]);
-                            }
+                            if (siblings[j].properties.length == 1)
+                                matchingProperties.push(siblings[j].properties[0]);
                         ko.utils.arrayForEach(properties, function (item) {
                             if ((item.resource) && (item.resource.fullUri == singleProperty.resource.fullUri))
                                 item.properties = [];

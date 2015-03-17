@@ -18,7 +18,6 @@ define(["knockout", "jquery", "Scripts/modules/conductor"], function (ko, $, con
     ko.components.register("advanced-search", { require: 'Scripts/modules/advancedsearch.js' });
     ko.components.register("filter-edit", { require: 'Scripts/modules/filteredit.js' });
     ko.components.register("date-edit", { require: 'Scripts/modules/dateedit.js' });
-    ko.components.register("datetime-edit", { require: 'Scripts/modules/datetimeedit.js' });
     ko.components.register("number-edit", { require: 'Scripts/modules/numberedit.js' });
     ko.components.register("boolean-edit", { require: 'Scripts/modules/booleanedit.js' });
 
