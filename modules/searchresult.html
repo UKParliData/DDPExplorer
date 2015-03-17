@@ -48,8 +48,8 @@
             </div>
         </div>
 
-        <div class="btn-group" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
-            <button type="button" class="btn btn-default" data-bind="visible: filters().length>0, click: showMenu">
+        <div class="btn-group" data-bind="visible: filters().length>0">
+            <button type="button" class="btn btn-default" data-bind="click: showMenu">
                 <span class="glyphicon glyphicon-filter"></span> Filter <span class="caret"></span>
             </button>
 
@@ -108,7 +108,7 @@
             </div>
         </div>
 
-        <div class="btn-group" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
+        <div class="btn-group" data-bind="visible: (endpoint().endpointType=='ListEndpoint')">
             <button type="button" class="btn btn-default" data-bind="click: showAdvancedSearch"><span class="glyphicon glyphicon-tasks"></span> Advanced search</button>
         </div>
 
@@ -131,7 +131,7 @@
         <!-- ko if: isLoadingMore()==true -->
             <busy-indicator></busy-indicator>
         <!-- /ko -->
-        <!-- ko if: ((isLoadingMore()==false) && (endpoint().endpointType=='ListEndpoint') && (firstItemIndex()!=null) && (firstItemIndex()<lastItemIndex()) && (lastItemIndex()<endpoint().maxPageSize)) -->
+        <!-- ko if: ((isLoadingMore()==false) && (endpoint().endpointType=='ListEndpoint') && (firstItemIndex()!=null) && (firstItemIndex()<lastItemIndex()) && (totalItemIndex()>lastItemIndex())) -->
             <button type="button" class="btn btn-lg btn-default" data-bind="click: loadMore">Load more</button>
         <!-- /ko -->
         <!-- ko if: (endpoint().endpointType=='ItemEndpoint') && (endpoint().listEndpointUri!=null) -->

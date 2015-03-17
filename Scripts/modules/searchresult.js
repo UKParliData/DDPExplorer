@@ -97,17 +97,11 @@
             };
 
             self.clearFilter = function () {
-                var querystring = {};
-                $.extend(querystring, self.querystring());
-
                 self.shortnameProperties([]);
                 self.filters([]);
                 self.currentPage(0);
                 self.resultItems([]);
-                querystring._properties = {};
-                querystring._view = self.viewerName;
-                querystring._search = null;
-                self.querystring(querystring);
+                self.querystring({});
                 self.load();
             }
 
@@ -218,7 +212,6 @@
 
                 self.totalItemIndex(null);
                 querystring._page = self.currentPage();
-                querystring._pageSize = self.pageSize();
                 self.querystring(querystring);
                 self.init();
             };

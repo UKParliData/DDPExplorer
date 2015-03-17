@@ -116,14 +116,14 @@
                         else
                             querystring[shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "searchValue");
                     }
-                    if ((shortnameProperties[i].minValue() != null) && (shortnameProperties[i].minValue() != ""))
-                        querystring["min-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "minValue");
-                    if ((shortnameProperties[i].maxValue() != null) && (shortnameProperties[i].maxValue() != ""))
-                        querystring["max-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "maxValue");
-                    if ((shortnameProperties[i].minExclusiveValue() != null) && (shortnameProperties[i].minExclusiveValue() != ""))
-                        querystring["minEx-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "minExclusiveValue");
                     if ((shortnameProperties[i].maxExclusiveValue() != null) && (shortnameProperties[i].maxExclusiveValue() != ""))
                         querystring["maxEx-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "maxExclusiveValue");
+                    if ((shortnameProperties[i].minExclusiveValue() != null) && (shortnameProperties[i].minExclusiveValue() != ""))
+                        querystring["minEx-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "minExclusiveValue");
+                    if ((shortnameProperties[i].maxValue() != null) && (shortnameProperties[i].maxValue() != ""))
+                        querystring["max-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "maxValue");
+                    if ((shortnameProperties[i].minValue() != null) && (shortnameProperties[i].minValue() != ""))
+                        querystring["min-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "minValue");
                     if (shortnameProperties[i].existsValue() != null)
                         querystring["exists-" + shortnameProperties[i].name] = shortnameProperties[i].existsValue();
                 }
@@ -150,14 +150,14 @@
                     
                     if ((searchValueKo() != null) && (searchValueKo() != ""))
                         arr.push("equals " + searchValueKo());
-                    if ((minValueKo() != null) && (minValueKo() != ""))
-                        arr.push("less or equal than " + minValueKo());
                     if ((maxValueKo() != null) && (maxValueKo() != ""))
-                        arr.push("more or equal than " + maxValueKo());
-                    if ((minExclusiveValueKo() != null) && (minExclusiveValueKo() != ""))
-                        arr.push("less than " + minExclusiveValueKo());
+                        arr.push("less or equal than " + maxValueKo());
+                    if ((minValueKo() != null) && (minValueKo() != ""))
+                        arr.push("more or equal than " + minValueKo());
                     if ((maxExclusiveValueKo() != null) && (maxExclusiveValueKo() != ""))
-                        arr.push("more than " + maxExclusiveValueKo());
+                        arr.push("less than " + maxExclusiveValueKo());
+                    if ((minExclusiveValueKo() != null) && (minExclusiveValueKo() != ""))
+                        arr.push("more than " + minExclusiveValueKo());
                     if (existsValueKo() == true)
                         arr.push("is present");
                     if (existsValueKo() == false)
