@@ -7,16 +7,19 @@
             self.dataType = params.dataType;
             self.value = ko.observable();
             self.isValueValid = ko.observable(null);
-            
+            self.isDisabled = params.isDisabled;
+
             self.genericClass = new genericClass;
 
             self.checkValue = ko.computed(function () {
-                if (self.value() != null){
-                    if (self.dataType=="integer")
+                if (self.value() != null) {
+                    if (self.dataType == "integer")
                         self.isValueValid(self.genericClass.isInteger(self.value()) == true);
-                    if (self.dataType=="decimal")
+                    if (self.dataType == "decimal")
                         self.isValueValid(self.genericClass.isDecimal(self.value()) == true);
                 }
+                else
+                    self.number(null);
                 if (self.isValueValid() == true)
                     self.number(self.value());
             });

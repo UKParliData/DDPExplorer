@@ -7,7 +7,18 @@
             self.trueText = params.trueText;
             self.falseText = params.falseText;
             self.value = params.value;
+            self.isDisabled = params.isDisabled;
+            
+            self.isDisabledChanged = ko.computed(function () {
+                if (self.isDisabled() == true)
+                    self.value(true);
+                else
+                    self.value(null);
+            });
 
+            self.dispose = function () {
+                self.isDisabledChanged.dispose();
+            };
         },
         template: htmlText
     }

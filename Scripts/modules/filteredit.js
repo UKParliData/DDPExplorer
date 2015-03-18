@@ -8,6 +8,7 @@
             self.falseText = params.falseText;
             self.dataType = params.dataType;
             self.value = params.value;
+            self.isDisabled = params.isDisabled;
 
         },
         template: htmlText

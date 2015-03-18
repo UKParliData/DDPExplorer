@@ -34,6 +34,20 @@
             return uri;
         };
 
+        self.convertHtmlToText = function (html) {
+            var text = html;
+
+            if ((text != null) && (typeof text =="string")) {
+                if ((text.indexOf("&lt;") >= 0) && (text.indexOf("&gt;") >= 0)) {
+                    text = text.replace(/&lt;/g, "<")
+                    text = text.replace(/&gt;/g, ">")
+                }
+                if ((text.indexOf("<") >= 0) && (text.indexOf(">") >= 0))
+                    text = $(text).text();
+            }
+            return text;
+        }
+
         self.propertyItem = function (label, value, shortname, uri) {
             var internalUri = uri;
             var itemValue = value._value == "" ? "" : value._value || value;
@@ -41,12 +55,12 @@
             if ((shortname.dataType == "resource") && (typeof itemValue == "object") && (Array.isArray(itemValue) == false))
                 itemValue = self.giveMeResourceDescription(value);
             else {
-                if ((itemValue.indexOf("&lt;") >= 0) && (itemValue.indexOf("&gt;") >= 0)) {
-                    itemValue = itemValue.replace(/&lt;/g, "<")
-                    itemValue = itemValue.replace(/&gt;/g, ">")
+                if (Array.isArray(itemValue)) {
+                    for (var i = 0; i < itemValue.length; i++)
+                        itemValue[i] = self.convertHtmlToText(itemValue[i]);
                 }
-                if ((itemValue.indexOf("<") >= 0) && (itemValue.indexOf(">") >= 0))
-                    itemValue = $(itemValue).text();
+                else
+                    itemValue = self.convertHtmlToText(itemValue);
             }
             internalUri = self.parseUri(shortname, internalUri);
             

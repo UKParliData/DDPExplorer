@@ -4,6 +4,7 @@
             var self = this;
 
             self.value = params.value;
+            self.isDisabled = params.isDisabled;
             self.dayValue = ko.observable();
             self.monthValue = ko.observable();
             self.yearValue = ko.observable();
@@ -39,7 +40,9 @@
                                 self.value(date);
                         }
                     }
-                }                
+                }
+                if (((self.dayValue() == null) || (self.dayValue() == "")) && ((self.monthValue() == null) || (self.monthValue() == "")) && ((self.yearValue() == null) || (self.yearValue() == "")))
+                    self.value(null);
             });
 
             self.init = ko.computed(function () {

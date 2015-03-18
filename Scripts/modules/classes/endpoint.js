@@ -94,7 +94,7 @@
         self.isEndpointUrlMatching = function (endpoint, template) {
             if (endpoint == template.fullUri)
                 return true;
-
+            
             var paramIndex = endpoint.indexOf("?");
 
             if (template.restUri != null) {

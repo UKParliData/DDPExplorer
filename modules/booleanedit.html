@@ -1,5 +1,5 @@
 ﻿<span class="input-group-btn">
-    <button type="button" class="btn btn-default active" data-bind="css:{'active': value()==null}, click: value.bind($data, null), text: noneText"></button>
+    <button type="button" class="btn btn-default active" data-bind="css:{'active': value()==null}, click: value.bind($data, null), text: noneText, disable: isDisabled"></button>
     <button type="button" class="btn btn-default" data-bind="css:{'active': value()==true}, click: value.bind($data, true), text: trueText"></button>
-    <button type="button" class="btn btn-default" data-bind="css:{'active': value()==false}, click: value.bind($data, false), text: falseText"></button>
+    <button type="button" class="btn btn-default" data-bind="css:{'active': value()==false}, click: value.bind($data, false), text: falseText, disable: isDisabled"></button>
 </span>

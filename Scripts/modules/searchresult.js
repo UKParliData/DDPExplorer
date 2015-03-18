@@ -68,7 +68,7 @@
             self.apiUrl = ko.computed(function () {
                 var url = self.getUrl();
 
-                url = url.replace("{0}", "");                
+                url = url.replace("{0}", ".json");
                 return url;
             });
 

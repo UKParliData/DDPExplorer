@@ -66,15 +66,15 @@
                                 <span>equals</span>
                             </div>
                             <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: searchValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
+                                <filter-edit params="value: searchValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (maxExclusiveValue()!=null) || (maxValue()!=null) || (minExclusiveValue()!=null) || (minValue()!=null)"></filter-edit>
                             </div>
                         </div>
                         <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
                             <div class="col-sm-4">
                                 <span>less than</span>
-                            </div>
+                            </div>                            
                             <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: maxExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
+                                <filter-edit params="value: maxExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null)"></filter-edit>
                             </div>
                         </div>
                         <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
@@ -82,7 +82,7 @@
                                 <span>less than or equal</span>
                             </div>
                             <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: maxValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
+                                <filter-edit params="value: maxValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null)"></filter-edit>
                             </div>
                         </div>
                         <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
@@ -90,7 +90,7 @@
                                 <span>more than</span>
                             </div>
                             <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: minExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
+                                <filter-edit params="value: minExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null)"></filter-edit>
                             </div>
                         </div>
                         <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
@@ -98,7 +98,7 @@
                                 <span>more than or equal</span>
                             </div>
                             <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: minValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False'"></filter-edit>
+                                <filter-edit params="value: minValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null)"></filter-edit>
                             </div>
                         </div>
                         <div class="row">
@@ -106,7 +106,7 @@
                                 <span>present</span>
                             </div>
                             <div class="col-md-5 margin-left-1">
-                                <boolean-edit params="value: existsValue, noneText: 'Any', trueText:'Yes', falseText: 'No'"></boolean-edit>
+                                <boolean-edit params="value: existsValue, noneText: 'Any', trueText:'Yes', falseText: 'No', isDisabled: (searchValue()!=null)"></boolean-edit>
                             </div>
                         </div>
                         <button type="button" class="btn btn-default btn-sm btn-link padding-0" data-bind="click: $parent.hideFilter">hide filter</button>

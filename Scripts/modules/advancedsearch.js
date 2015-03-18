@@ -243,12 +243,12 @@
                         description,
                         valuePattern,
                         ko.utils.arrayFirst(selectedArr, function (item) { return item == name; }) != null,
-                        self.querystring[name],
-                        self.querystring["min-" + name],
-                        self.querystring["max-" + name],
-                        self.querystring["minEx-" + name],
-                        self.querystring["maxEx-" + name],
-                        self.querystring["exists-" + name]
+                        self.querystring[name] || null,
+                        self.querystring["min-" + name] || null,
+                        self.querystring["max-" + name] || null,
+                        self.querystring["minEx-" + name] || null,
+                        self.querystring["maxEx-" + name] || null,
+                        self.querystring["exists-" + name] || null
                     ));
                 }
                 arr.sort(function (left, right) {

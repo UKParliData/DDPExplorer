@@ -55,10 +55,16 @@
                     var endpoints = self.endpoints();
 
                     for (var i = 0; i < endpoints.length; i++)
-                        if (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate)) {
+                        if ((endpoints[i].ddpDatasetName!=null) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
                             endpoint = endpoints[i];
                             break;
                         }
+                    if (endpoint == null)
+                        for (var i = 0; i < endpoints.length; i++)
+                            if ((endpoints[i].ddpDatasetName == null) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
+                                endpoint = endpoints[i];
+                                break;
+                            }
                     if (endpoint != null) {
                         var viewer = endpoint.defaultViewer;
 
