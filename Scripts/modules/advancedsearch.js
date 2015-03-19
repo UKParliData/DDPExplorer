@@ -11,10 +11,26 @@
             self.shortnameProperties = ko.observableArray(ko.unwrap(params.shortnameProperties) || []);
             self.isAllSelected = ko.observable(null);
             self.selectedView = ko.observable(params.viewerName);
+            self.isFiltersShown = ko.observable(true);
+            self.isFieldsShown = ko.observable(false);
+            self.isAddFilterShown=ko.observable(false);
+            self.filterSearchText = ko.observable(null);
+            self.isFilterSearchFocused = ko.observable(false);
+            self.matchingFilters = ko.observableArray([]);
 
             self.genericClass = new genericClass;
             self.endpointClass = new endpointClass;
             self.shortnameClass = new shortnameClass(self.endpointClass.getAllEndpoints());
+
+            self.showFiltersTab = function () {
+                self.isFiltersShown(true);
+                self.isFieldsShown(false);
+            };
+
+            self.showFieldsTab = function () {
+                self.isFiltersShown(false);
+                self.isFieldsShown(true);
+            };
             
             self.showMenu = function (vm, e) {
                 var hasClass = $(e.target).parent(".btn-group").hasClass("open");
@@ -28,6 +44,7 @@
             self.selectViewer = function (viewer) {
                 self.selectedView(viewer.name);
                 self.shortnames(self.shortnameClass.findShortnamesForViewer(viewer));
+                self.shortnameProperties([]);
                 self.init();
             };
 
@@ -42,6 +59,29 @@
                 var found = ko.utils.arrayFirst(self.shortnameProperties(), function (item) { return item.isSelected() == false; });
                 self.isAllSelected(found == null);
             };
+
+            self.addFilter = function (vm) {
+                self.isAddFilterShown(false);
+                vm.isFilterOpen(true);
+            };
+
+            self.showAddFilter = function () {
+                self.isAddFilterShown(true);
+            };
+
+            self.searchFilters = ko.computed(function () {
+                if (self.isFilterSearchFocused() == true) {
+                    var arr = [];
+                    var textSearch = (self.filterSearchText() || "").toUpperCase();
+
+                    arr = ko.utils.arrayFilter(self.shortnameProperties(), function (item) {
+                        return (textSearch == "") ||
+                            ((Array.isArray(item.label) == true) && (item.label.join(" ").toUpperCase().indexOf(textSearch) >= 0)) ||
+                            (item.label.toUpperCase().indexOf(textSearch) >= 0);
+                    });
+                    self.matchingFilters(arr);
+                }
+            });
 
             self.showFilter = function (vm, e) {
                 vm.isFilterOpen(true);
@@ -84,6 +124,12 @@
                 });
                 window.conductorVM.selectedComponent("search-result");
             };
+
+            self.filterCount = ko.computed(function () {
+                return ko.utils.arrayFilter(self.shortnameProperties(), function (item) {
+                    return item.hasFilter() == true;
+                }).length;
+            });
 
             self.assignFilter = function (shortnameProperty, valueName) {
                 if ((shortnameProperty.dataType == "date") || (shortnameProperty.dataType == "datetime")) {
@@ -278,7 +324,7 @@
                     arr.push(filter);
                 }
                 return arr;
-            };
+            };            
 
             self.init = function () {
                 var selectedArr = [];
@@ -312,6 +358,11 @@
             };
 
             self.init();
+
+            self.dispose = function () {
+                self.searchFilters.dispose();
+                self.filterCount.dispose();
+            };
 
         },
         template: htmlText

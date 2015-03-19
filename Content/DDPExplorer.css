@@ -224,3 +224,24 @@ input::-webkit-inner-spin-button {
     -o-transform: rotate(140deg);
     transform: rotate(140deg);
 }
+
+.tab-menu{
+    padding-bottom: 2px;
+    border-bottom: 1px solid #dedede;
+    cursor: pointer;
+}
+
+.tab-menu:hover{
+    padding-bottom: 0px;
+    border-bottom: 3px solid #ababab;
+}
+
+.tab-menu.active{
+    padding-bottom: 0px;
+    border-bottom: 3px solid #333;
+}
+
+.tab-menu.active a{
+    color: #333 !important;
+    background-color: transparent !important;
+}

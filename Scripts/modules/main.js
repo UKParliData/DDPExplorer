@@ -12,6 +12,7 @@ define(["knockout", "jquery", "Scripts/modules/conductor"], function (ko, $, con
     ko.components.register("busy-indicator", { template: { require: "Scripts/text!modules/busyindicator.html" } });
     ko.components.register("search-header", { require: 'Scripts/modules/searchheader.js' });
     ko.components.register("search-result", { require: 'Scripts/modules/searchresult.js' });
+    ko.components.register("shortname-name", { require: 'Scripts/modules/shortnamename.js' });
     ko.components.register("shortname-value", { require: 'Scripts/modules/shortnamevalue.js' });
     ko.components.register("resource-item", { require: 'Scripts/modules/resourceitem.js' });
     ko.components.register("endpoint-list", { require: 'Scripts/modules/endpointlist.js' });

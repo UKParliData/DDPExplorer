@@ -91,6 +91,7 @@
     <Content Include="modules\resourceitem.html" />
     <Content Include="modules\searchheader.html" />
     <Content Include="modules\searchresult.html" />
+    <Content Include="modules\shortnamename.html" />
     <Content Include="modules\shortnamevalue.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -123,6 +124,7 @@
     <Content Include="Scripts\modules\resourceitem.js" />
     <Content Include="Scripts\modules\searchheader.js" />
     <Content Include="Scripts\modules\searchresult.js" />
+    <Content Include="Scripts\modules\shortnamename.js" />
     <Content Include="Scripts\modules\shortnamevalue.js" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\r.js" />

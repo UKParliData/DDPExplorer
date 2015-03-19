@@ -2,123 +2,156 @@
 
 <article>
     
-    <h3>Advanced Search Options</h3>
+    <h2>Advanced Search Options</h2>
 
-    <section class="margin-bottom-40">
-        <div class="btn-group">
-            <button class="btn btn-default" data-bind="click: toggleSelect">
-                <text data-bind="text: isAllSelected()==false?'Include all':'Exclude all'"></text>
-                <span class="glyphicon glyphicon-star" data-bind="css: {'text-muted': isAllSelected()==false, 'text-primary': isAllSelected()==true}"></span>
-            </button>
-        </div>
-
-        <div class="btn-group">
-            <button type="button" class="btn btn-default" data-bind="click: showMenu">
-                List of properties from <strong data-bind="text: selectedView"></strong>
-                <span class="caret"></span>
-            </button>
-            <div class="dropdown-menu min-width-350">
-                <ul class="list-unstyled" data-bind="foreach: endpoint().viewers">
-                    <li><button type="button" class="btn btn-link" data-bind="click: function(){ $parent.selectViewer($data); }, text: name"></button></li>
-                </ul>
-            </div>
-        </div>
+    <section class="margin-bottom-10">
+        <ul class="nav nav-pills nav-justified">
+            <li class="tab-menu" data-bind="css: {'active': isFiltersShown()==true}"><a data-bind="click: showFiltersTab"><h3>Filters</h3></a></li>
+            <li class="tab-menu" data-bind="css: {'active': isFieldsShown()==true}"><a data-bind="click: showFieldsTab"><h3>Fields</h3></a></li>
+        </ul>            
     </section>
 
-    <section class="margin-bottom-40 clearfix">
-        <div class="list-group" data-bind="foreach: shortnameProperties">
-            <div data-bind="css: {clearfix: $index()%2==1}">
-                <div class="list-group-item padding-5 col-md-6">
-                    <div class="list-group-item-heading">
-                        <ul class="list-inline">
-                            <li>
-                                <button class="btn no-background-color padding-0" data-bind="click: function(){ $parent.selectPropertyForView($data) }">
-                                    <span class="glyphicon glyphicon-star" data-bind="css: {'text-muted': isSelected()==false, 'text-primary': isSelected()==true}"></span>
-                                </button>
-                            </li>
-                            <li>
-                                <h4 class="margin-0">
-                                    <!-- ko if: Array.isArray(label)==false -->
-                                    <span data-bind="text: label"></span>
-                                    <!-- /ko -->
-                                    <!-- ko if: Array.isArray(label)==true -->
-                                    <ul class="list-unstyled" data-bind="foreach: label">
-                                        <li><span data-bind="text: $data, style: {marginLeft: 10*$index()+'px'}"></span></li>
-                                    </ul>
-                                    <!-- /ko -->
-                                </h4>
-                            </li>
-                            <li>
-                                <h4 data-bind="visible: isFilterOpen()==false" class="margin-0">
-                                    <small data-bind="text: filterDescription"></small>
-                                    <button class="btn btn-sm no-background-color text-danger padding-0" data-bind="visible: hasFilter, click: $parent.clearFilter"><span class="glyphicon glyphicon-remove"></span></button>
-                                </h4>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="list-group-item-text">
-                        <h4><small data-bind="text: description"></small></h4>
-                        <button type="button" class="btn btn-default btn-sm btn-link padding-0" data-bind="click: $parent.showFilter, visible: isFilterOpen()==false">show filter</button>
-                    </div>
-                    <section data-bind="visible: isFilterOpen()==true">
-                        <div class="row margin-bottom-2">
-                            <div class="col-sm-4">
-                                <span>equals</span>
-                            </div>
-                            <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: searchValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (maxExclusiveValue()!=null) || (maxValue()!=null) || (minExclusiveValue()!=null) || (minValue()!=null)"></filter-edit>
-                            </div>
-                        </div>
-                        <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
-                            <div class="col-sm-4">
-                                <span>less than</span>
-                            </div>                            
-                            <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: maxExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (maxValue()!=null)"></filter-edit>
-                            </div>
-                        </div>
-                        <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
-                            <div class="col-sm-4">
-                                <span>less than or equal</span>
-                            </div>
-                            <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: maxValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (maxExclusiveValue()!=null)"></filter-edit>
-                            </div>
-                        </div>
-                        <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
-                            <div class="col-sm-4">
-                                <span>more than</span>
-                            </div>
-                            <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: minExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (minValue()!=null)"></filter-edit>
-                            </div>
-                        </div>
-                        <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource'))">
-                            <div class="col-sm-4">
-                                <span>more than or equal</span>
-                            </div>
-                            <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                                <filter-edit params="value: minValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (minExclusiveValue()!=null)"></filter-edit>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <span>present</span>
-                            </div>
-                            <div class="col-md-5 margin-left-1">
-                                <boolean-edit params="value: existsValue, noneText: 'Any', trueText:'Yes', falseText: 'No', isDisabled: ((searchValue()!='') && (searchValue()!=null)) || (maxExclusiveValue()!=null) || (maxValue()!=null) || (minExclusiveValue()!=null) || (minValue()!=null)"></boolean-edit>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-default btn-sm btn-link padding-0" data-bind="click: $parent.hideFilter">hide filter</button>
-                    </section>
+    <section class="margin-bottom-40" data-bind="visible: isFieldsShown">
+
+        <div class="margin-bottom-10">
+            <div class="btn-group">
+                <button class="btn btn-default" data-bind="click: toggleSelect">
+                    <text data-bind="text: isAllSelected()==false?'Include all':'Exclude all'"></text>
+                    <span class="glyphicon glyphicon-star" data-bind="css: {'text-muted': isAllSelected()==false, 'text-primary': isAllSelected()==true}"></span>
+                </button>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" data-bind="click: showMenu">
+                    List of properties from <strong data-bind="text: selectedView"></strong>
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu min-width-350">
+                    <ul class="list-unstyled" data-bind="foreach: endpoint().viewers">
+                        <li><button type="button" class="btn btn-link" data-bind="click: function(){ $parent.selectViewer($data); }, text: name"></button></li>
+                    </ul>
                 </div>
             </div>
         </div>
+
+        <div class="list-group" data-bind="foreach: shortnameProperties">
+            <div class="list-group-item padding-5">
+                <div class="list-group-item-text">
+                    <ul class="list-inline margin-0">
+                        <li>
+                            <button class="btn no-background-color padding-0" data-bind="click: function(){ $parent.selectPropertyForView($data) }">
+                                <span class="glyphicon glyphicon-star" data-bind="css: {'text-muted': isSelected()==false, 'text-primary': isSelected()==true}"></span>
+                            </button>
+                        </li>
+                        <li>
+                            <h4 class="margin-0">
+                                <shortname-name params="label: label"></shortname-name>
+                            </h4>
+                        </li>
+                    </ul>
+                </div>                    
+            </div>
+        </div>
+    </section>
+    
+
+    <section class="margin-bottom-40 clearfix" data-bind="visible: isFiltersShown">
+        <div class="list-group" data-bind="foreach: shortnameProperties">
+            <div class="list-group-item padding-5" data-bind="visible: (hasFilter()==true) || (isFilterOpen()==true)">
+                <div class="list-group-item-text">
+                    <ul class="list-inline margin-0">
+                        <li>
+                            <h4 class="margin-0">
+                                <shortname-name params="label: label"></shortname-name>
+                            </h4>
+                        </li>                            
+                        <li>
+                            <h4 data-bind="visible: isFilterOpen()==false" class="margin-0">
+                                <small data-bind="text: filterDescription"></small>
+                                <button class="btn btn-sm no-background-color text-danger padding-0" data-bind="visible: hasFilter, click: $parent.clearFilter"><span class="glyphicon glyphicon-remove"></span></button>
+                            </h4>
+                        </li>
+                    </ul>
+                </div>
+                <div class="list-group-item-text">
+                    <h4><small data-bind="text: description"></small></h4>
+                    <button type="button" class="btn btn-default btn-sm btn-link padding-0" data-bind="click: $parent.showFilter, visible: isFilterOpen()==false">show filter</button>
+                </div>
+                <section data-bind="visible: isFilterOpen()==true">
+                    <div class="row margin-bottom-2">
+                        <div class="col-sm-4">
+                            <span>equals</span>
+                        </div>
+                        <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
+                            <filter-edit params="value: searchValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (maxExclusiveValue()!=null) || (maxValue()!=null) || (minExclusiveValue()!=null) || (minValue()!=null)"></filter-edit>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource') && (dataType!='boolean'))">
+                        <div class="col-sm-4">
+                            <span>less than</span>
+                        </div>
+                        <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
+                            <filter-edit params="value: maxExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (maxValue()!=null)"></filter-edit>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource') && (dataType!='boolean'))">
+                        <div class="col-sm-4">
+                            <span>less than or equal</span>
+                        </div>
+                        <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
+                            <filter-edit params="value: maxValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (maxExclusiveValue()!=null)"></filter-edit>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource') && (dataType!='boolean'))">
+                        <div class="col-sm-4">
+                            <span>more than</span>
+                        </div>
+                        <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
+                            <filter-edit params="value: minExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (minValue()!=null)"></filter-edit>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource') && (dataType!='boolean'))">
+                        <div class="col-sm-4">
+                            <span>more than or equal</span>
+                        </div>
+                        <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
+                            <filter-edit params="value: minValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (minExclusiveValue()!=null)"></filter-edit>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <span>present</span>
+                        </div>
+                        <div class="col-md-5 margin-left-1">
+                            <boolean-edit params="value: existsValue, noneText: 'Any', trueText:'Yes', falseText: 'No', isDisabled: ((searchValue()!='') && (searchValue()!=null)) || (maxExclusiveValue()!=null) || (maxValue()!=null) || (minExclusiveValue()!=null) || (minValue()!=null)"></boolean-edit>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default btn-sm btn-link padding-0" data-bind="click: $parent.hideFilter">hide filter</button>
+                </section>
+            </div>
+        </div>
+
+        <div data-bind="visible: (filterCount()==0) && (isAddFilterShown()==false)">No filters added</div>
+        <div data-bind="visible: isAddFilterShown">
+            <div class="input-group margin-bottom-10" data-bind="css: {'open': matchingFilters().length>0}">
+                <input type="text" class="form-control min-width-350" data-bind="value: filterSearchText, valueUpdate: 'afterkeydown', hasFocus: isFilterSearchFocused, click: function() { return true; }, clickBubble: false" />
+                <div class="dropdown-menu min-width-350">
+                    <ul class="list-unstyled" data-bind="foreach: matchingFilters">
+                        <li>
+                            <button type="button" class="btn btn-link" data-bind="click: function(){ $parent.addFilter($data); }">
+                                <shortname-name params="label: label"></shortname-name>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-default" data-bind="visible: filterCount()<shortnameProperties().length, click: showAddFilter">Add</button>
     </section>
    
 
     <section>
         <button type="button" class="btn btn-primary" data-bind="click: submit">Apply search options</button>
-        <button type="button" class="btn btn-default pull-right" data-bind="click: cancel">Cancel</button>
+        <button type="button" class="btn btn-default pull-right hidden" data-bind="click: cancel">Cancel</button>
     </section>
 </article>

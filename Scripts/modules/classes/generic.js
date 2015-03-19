@@ -19,6 +19,7 @@
 
         self.closeAllPopups = function () {
             $(".btn-group").removeClass("open");
+            $(".input-group").removeClass("open");
             return true;
         };
 

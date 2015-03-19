@@ -3,7 +3,7 @@
         viewModel: function (params) {
             var self = this;
 
-            self.label = ko.unwrap(params.label);
+            self.value = ko.unwrap(params.value);
           
         },
         template: htmlText
