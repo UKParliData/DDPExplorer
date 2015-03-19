@@ -18,10 +18,10 @@
                     if (self.dataType == "decimal")
                         self.isValueValid(self.genericClass.isDecimal(self.value()) == true);
                 }
-                else
-                    self.number(null);
-                if (self.isValueValid() == true)
+                if ((self.isValueValid() == true) && (self.value()!=null) && (self.value()!=""))
                     self.number(self.value());
+                if ((self.value() == null) || (self.value() == ""))
+                    self.number(null);
             });
 
             self.init = function () {

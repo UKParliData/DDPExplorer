@@ -1,11 +1,11 @@
 ﻿<!-- ko if: isDisabled()==true -->
     <div class="col-xs-12 padding-0">
-        <input type="text" class="form-control" disabled="disabled" value="Not applicable" />
+        <input type="text" class="form-control text-center" disabled="disabled" value="N/A" />
     </div>
 <!-- /ko -->
 <!-- ko if: isDisabled()==false -->
     <div data-bind="css: {'has-error': isValueValid()==false}" class="col-xs-12 padding-0">
-        <input type="number" class="form-control no-focus" data-bind="value: value" maxlength="16" />
+        <input type="number" class="form-control no-focus text-right" data-bind="value: value" maxlength="16" />
         <span class="glyphicon glyphicon-warning-sign form-control-feedback text-danger" data-bind="visible: isValueValid()==false"></span>
     </div>
 <!-- /ko -->
