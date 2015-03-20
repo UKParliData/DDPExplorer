@@ -10,16 +10,19 @@
             self.yearValue = ko.observable();
             self.isValueValid = ko.observable(null);
             self.isMonthFocused = ko.observable(false);
-            self.isYearFocused = ko.observable(false);
+            self.isDayFocused = ko.observable(false);
+            self.isReadyToCheck = ko.observable(false);
 
             self.genericClass = new genericClass;
 
-            self.checkDate = ko.computed(function () {                
-                if (self.dayValue() != null)
-                    self.isValueValid((self.genericClass.isIntegerAndGreaterThanZero(self.dayValue()) == true) && (self.dayValue() <= 31));
+            self.checkDate = ko.computed(function () {
+                if (self.isReadyToCheck() == false)
+                    return;
+                if (self.yearValue() != null)
+                    self.isValueValid((self.genericClass.isIntegerAndGreaterThanZero(self.yearValue()) == true) && (self.yearValue() <= 2099));
                 else
-                    self.isValueValid(null);
-                if ((self.isValueValid() == true) && (self.dayValue().length == 2))
+                    self.isValueValid(null);                
+                if ((self.isValueValid() == true) && (self.yearValue().length == 4))
                     self.isMonthFocused(true);
                 if (self.isValueValid() == true) {
                     if (self.monthValue() != null)
@@ -27,10 +30,10 @@
                     else
                         self.isValueValid(null);
                     if ((self.isValueValid() == true) && (self.monthValue().length == 2))
-                        self.isYearFocused(true);
+                        self.isDayFocused(true);
                     if (self.isValueValid() == true) {
-                        if (self.yearValue() != null)
-                            self.isValueValid((self.genericClass.isIntegerAndGreaterThanZero(self.yearValue()) == true) && (self.yearValue() <= 2099));
+                        if (self.dayValue() != null)
+                            self.isValueValid((self.genericClass.isIntegerAndGreaterThanZero(self.dayValue()) == true) && (self.dayValue() <= 31));
                         else
                             self.isValueValid(null);
                         if (self.isValueValid() == true) {
@@ -59,6 +62,7 @@
                     self.monthValue(null);
                     self.yearValue(null);
                 }
+                self.isReadyToCheck(true);
             });
 
             self.dispose = function () {                

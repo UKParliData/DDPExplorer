@@ -37,13 +37,14 @@
         self.convertHtmlToText = function (html) {
             var text = html;
 
-            if ((text != null) && (typeof text =="string")) {
+            if ((text != null) && (typeof text == "string")) {
                 if ((text.indexOf("&lt;") >= 0) && (text.indexOf("&gt;") >= 0)) {
-                    text = text.replace(/&lt;/g, "<")
-                    text = text.replace(/&gt;/g, ">")
+                    text = text.replace(/&nbsp;/g, " ");
+                    text = text.replace(/&lt;/g, "<");
+                    text = text.replace(/&gt;/g, ">");
                 }
                 if ((text.indexOf("<") >= 0) && (text.indexOf(">") >= 0))
-                    text = $(text).text();
+                    text = text.replace(/<[^>]*>?/g, "");
             }
             return text;
         }

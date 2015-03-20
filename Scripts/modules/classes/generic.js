@@ -156,6 +156,8 @@
                             result += dateSplit + month;
                         break;
                     case self.dateFormatType.day:
+                        if (day < 10)
+                            day = "0" + day.toString();
                         if (i == 0)
                             result += day;
                         else

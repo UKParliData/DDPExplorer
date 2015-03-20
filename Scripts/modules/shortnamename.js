@@ -3,7 +3,10 @@
         viewModel: function (params) {
             var self = this;
 
-            self.label = ko.unwrap(params.label);
+            if (ko.isComputed(params.label))
+                self.label = params.label;
+            else
+                self.label = ko.observable(params.label);
 
         },
         template: htmlText

@@ -1,9 +1,11 @@
-﻿<!-- ko if: Array.isArray(label)==false -->
-    <span data-bind="text: label"></span>
+﻿<!-- ko if: Array.isArray(label())==false -->
+    <span data-bind="text: label().label || label"></span>
 <!-- /ko -->
-<!-- ko if: Array.isArray(label)==true -->
-    <ul class="list-inline" data-bind="foreach: label">
-        <li><span data-bind="text: $data"></span></li>
-        <li data-bind="visible: $index()<($parent.label.length-1)"><span class="text-muted">&gt;</span></li>
-    </ul>
+<!-- ko if: Array.isArray(label())==true -->
+    <span data-bind="foreach: label()">
+        <span data-bind="text: $data.label || $data"></span>
+        <!-- ko if: $index()<($parent.label().length-1)-->
+            <span class="text-muted">&gt;</span>
+        <!-- /ko -->
+    </span>
 <!-- /ko -->

@@ -26,7 +26,7 @@
                     List of properties from <strong data-bind="text: selectedView"></strong>
                     <span class="caret"></span>
                 </button>
-                <div class="dropdown-menu min-width-350">
+                <div class="dropdown-menu dropdown-width-auto">
                     <ul class="list-unstyled" data-bind="foreach: endpoint().viewers">
                         <li><button type="button" class="btn btn-link" data-bind="click: function(){ $parent.selectViewer($data); }, text: name"></button></li>
                     </ul>
@@ -83,10 +83,10 @@
                             <span>equals</span>
                         </div>
                         <div data-bind="css:{'col-sm-6': ((dataType==null) || (dataType=='resource')), 'col-sm-4': ((dataType=='date') || (dataType=='datetime')), 'col-sm-2': ((dataType=='integer') || (dataType=='decimal')), 'col-sm-5 margin-left-1': (dataType=='boolean')}">
-                            <filter-edit params="value: searchValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (maxExclusiveValue()!=null) || (maxValue()!=null) || (minExclusiveValue()!=null) || (minValue()!=null)"></filter-edit>
+                            <filter-edit params="value: searchValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (canMultipleFilters()==true) && ((maxExclusiveValue()!=null) || (maxValue()!=null) || (minExclusiveValue()!=null) || (minValue()!=null))"></filter-edit>
                         </div>
                     </div>
-                    <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource') && (dataType!='boolean'))">
+                    <div class="row margin-bottom-2" data-bind="visible: canMultipleFilters">
                         <div class="col-sm-4">
                             <span>less than</span>
                         </div>
@@ -94,7 +94,7 @@
                             <filter-edit params="value: maxExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (maxValue()!=null)"></filter-edit>
                         </div>
                     </div>
-                    <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource') && (dataType!='boolean'))">
+                    <div class="row margin-bottom-2" data-bind="visible: canMultipleFilters">
                         <div class="col-sm-4">
                             <span>less than or equal</span>
                         </div>
@@ -102,7 +102,7 @@
                             <filter-edit params="value: maxValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (maxExclusiveValue()!=null)"></filter-edit>
                         </div>
                     </div>
-                    <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource') && (dataType!='boolean'))">
+                    <div class="row margin-bottom-2" data-bind="visible: canMultipleFilters">
                         <div class="col-sm-4">
                             <span>more than</span>
                         </div>
@@ -110,7 +110,7 @@
                             <filter-edit params="value: minExclusiveValue, dataType: dataType, noneText: 'Any', trueText:'True', falseText: 'False', isDisabled: (searchValue()!=null) || (minValue()!=null)"></filter-edit>
                         </div>
                     </div>
-                    <div class="row margin-bottom-2" data-bind="visible: ((dataType!=null) && (dataType!='resource') && (dataType!='boolean'))">
+                    <div class="row margin-bottom-2" data-bind="visible: canMultipleFilters">
                         <div class="col-sm-4">
                             <span>more than or equal</span>
                         </div>
@@ -131,22 +131,19 @@
             </div>
         </div>
 
-        <div data-bind="visible: (filterCount()==0) && (isAddFilterShown()==false)">No filters added</div>
-        <div data-bind="visible: isAddFilterShown">
-            <div class="input-group margin-bottom-10" data-bind="css: {'open': matchingFilters().length>0}">
-                <input type="text" class="form-control min-width-350" data-bind="value: filterSearchText, valueUpdate: 'afterkeydown', hasFocus: isFilterSearchFocused, click: function() { return true; }, clickBubble: false" />
-                <div class="dropdown-menu min-width-350">
-                    <ul class="list-unstyled" data-bind="foreach: matchingFilters">
-                        <li>
-                            <button type="button" class="btn btn-link" data-bind="click: function(){ $parent.addFilter($data); }">
-                                <shortname-name params="label: label"></shortname-name>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+        <div data-bind="visible: (filterCount()==0)">No filters added</div>
+        <div class="input-group margin-bottom-10" data-bind="css: {'open': matchingFilters().length>0}">
+            <input type="text" class="form-control min-width-350" placeholder="Type to find field to filter" data-bind="value: filterSearchText, valueUpdate: 'afterkeydown', hasFocus: isFilterSearchFocused, click: function() { return true; }, clickBubble: false" />
+            <div class="dropdown-menu dropdown-width-auto">
+                <ul class="list-unstyled" data-bind="foreach: matchingFilters">
+                    <li>
+                        <button type="button" class="btn btn-link" data-bind="click: function(){ $parent.addFilter($data); }">
+                            <shortname-name params="label: label"></shortname-name>
+                        </button>
+                    </li>
+                </ul>
             </div>
         </div>
-        <button type="button" class="btn btn-default" data-bind="visible: filterCount()<shortnameProperties().length, click: showAddFilter">Add</button>
     </section>
    
 

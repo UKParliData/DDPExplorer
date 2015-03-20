@@ -13,9 +13,8 @@
             self.selectedView = ko.observable(params.viewerName);
             self.isFiltersShown = ko.observable(true);
             self.isFieldsShown = ko.observable(false);
-            self.isAddFilterShown=ko.observable(false);
             self.filterSearchText = ko.observable(null);
-            self.isFilterSearchFocused = ko.observable(false);
+            self.isFilterSearchFocused = ko.observable(true);
             self.matchingFilters = ko.observableArray([]);
 
             self.genericClass = new genericClass;
@@ -41,7 +40,7 @@
                 e.stopPropagation();
             };
 
-            self.selectViewer = function (viewer) {
+            self.selectViewer = function (viewer) {                
                 self.selectedView(viewer.name);
                 self.shortnames(self.shortnameClass.findShortnamesForViewer(viewer));
                 self.shortnameProperties([]);
@@ -60,24 +59,19 @@
                 self.isAllSelected(found == null);
             };
 
-            self.addFilter = function (vm) {
-                self.isAddFilterShown(false);
+            self.addFilter = function (vm) {                
                 vm.isFilterOpen(true);
-            };
-
-            self.showAddFilter = function () {
-                self.isAddFilterShown(true);
-            };
+            };            
 
             self.searchFilters = ko.computed(function () {
-                if (self.isFilterSearchFocused() == true) {
+                if ((self.isFilterSearchFocused() == true) && (self.shortnameProperties().length>0)) {
                     var arr = [];
                     var textSearch = (self.filterSearchText() || "").toUpperCase();
 
                     arr = ko.utils.arrayFilter(self.shortnameProperties(), function (item) {
                         return (textSearch == "") ||
                             ((Array.isArray(item.label) == true) && (item.label.join(" ").toUpperCase().indexOf(textSearch) >= 0)) ||
-                            (item.label.toUpperCase().indexOf(textSearch) >= 0);
+                            ((Array.isArray(item.label) == false) && (item.label.toUpperCase().indexOf(textSearch) >= 0));
                     });
                     self.matchingFilters(arr);
                 }
@@ -153,7 +147,7 @@
                 }
                 for (var i = 0; i < shortnameProperties.length; i++) {
                     if ((shortnameProperties[i].searchValue() != null) && (shortnameProperties[i].searchValue() != "")) {
-                        if ((shortnameProperties[i].dataType == "datetime") && ((shortnameProperties[i].valuePattern==null)||(shortnameProperties[i].valuePattern.length > 10))) {
+                        if ((shortnameProperties[i].dataType == "datetime") && (shortnameProperties[i].valuePattern!=null) && (shortnameProperties[i].valuePattern.length > 10)) {
                             dateValue = new Date(Date.UTC(shortnameProperties[i].searchValue().split("-")[0] * 1, (shortnameProperties[i].searchValue().split("-")[1] * 1) - 1, shortnameProperties[i].searchValue().split("-")[2] * 1));
                             querystring["min-" + shortnameProperties[i].name] = self.genericClass.formatDate(shortnameProperties[i].valuePattern, dateValue);
                             dateValue.setUTCDate(dateValue.getUTCDate() + 1);
@@ -167,7 +161,7 @@
                     if ((shortnameProperties[i].minExclusiveValue() != null) && (shortnameProperties[i].minExclusiveValue() != ""))
                         querystring["minEx-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "minExclusiveValue");
                     if ((shortnameProperties[i].maxValue() != null) && (shortnameProperties[i].maxValue() != "")) {
-                        if ((shortnameProperties[i].dataType == "datetime") && ((shortnameProperties[i].valuePattern==null)||(shortnameProperties[i].valuePattern.length>10))) {
+                        if ((shortnameProperties[i].dataType == "datetime") && (shortnameProperties[i].valuePattern != null) && (shortnameProperties[i].valuePattern.length > 10)) {
                             dateValue = new Date(Date.UTC(shortnameProperties[i].maxValue().split("-")[0] * 1, (shortnameProperties[i].maxValue().split("-")[1] * 1) - 1, shortnameProperties[i].maxValue().split("-")[2] * 1));
                             dateValue.setUTCDate(dateValue.getUTCDate() + 1);
                             querystring["max-" + shortnameProperties[i].name] = self.genericClass.formatDate(shortnameProperties[i].valuePattern, dateValue);
@@ -176,7 +170,7 @@
                             querystring["max-" + shortnameProperties[i].name] = self.assignFilter(shortnameProperties[i], "maxValue");
                     }
                     if ((shortnameProperties[i].minValue() != null) && (shortnameProperties[i].minValue() != "")) {
-                        if ((shortnameProperties[i].dataType == "datetime") && ((shortnameProperties[i].valuePattern==null)||(shortnameProperties[i].valuePattern.length>10))) {
+                        if ((shortnameProperties[i].dataType == "datetime") && (shortnameProperties[i].valuePattern != null) && (shortnameProperties[i].valuePattern.length > 10)) {
                             dateValue = new Date(Date.UTC(shortnameProperties[i].minValue().split("-")[0] * 1, (shortnameProperties[i].minValue().split("-")[1] * 1) - 1, shortnameProperties[i].minValue().split("-")[2] * 1));
                             dateValue.setUTCDate(dateValue.getUTCDate() - 1);
                             querystring["min-" + shortnameProperties[i].name] = self.genericClass.formatDate(shortnameProperties[i].valuePattern, dateValue);
@@ -209,15 +203,15 @@
                     var arr = [];
                     
                     if ((searchValueKo() != null) && (searchValueKo() != ""))
-                        arr.push("equals " + searchValueKo());
+                        arr.push("equals '" + searchValueKo()+"'");
                     if ((maxValueKo() != null) && (maxValueKo() != ""))
-                        arr.push("less than or equal " + maxValueKo());
+                        arr.push("less than or equal '" + maxValueKo()+"'");
                     if ((minValueKo() != null) && (minValueKo() != ""))
-                        arr.push("more than or equal " + minValueKo());
+                        arr.push("more than or equal '" + minValueKo()+"'");
                     if ((maxExclusiveValueKo() != null) && (maxExclusiveValueKo() != ""))
-                        arr.push("less than " + maxExclusiveValueKo());
+                        arr.push("less than '" + maxExclusiveValueKo()+"'");
                     if ((minExclusiveValueKo() != null) && (minExclusiveValueKo() != ""))
-                        arr.push("more than " + minExclusiveValueKo());
+                        arr.push("more than '" + minExclusiveValueKo()+"'");
                     if (existsValueKo() == true)
                         arr.push("is present");
                     if (existsValueKo() == false)
@@ -232,7 +226,7 @@
                         return "has no filters";
                     }
                 });
-
+                                
                 dispose = function () {
                     filterDescriptionKo.dispose();
                 };
@@ -253,7 +247,8 @@
                     existsValue: existsValueKo,
                     filterDescription: filterDescriptionKo,
                     hasFilter: hasFilterKo,
-                    isFilterOpen: ko.observable(false)
+                    isFilterOpen: ko.observable(false),
+                    canMultipleFilters: ko.observable((dataType == 'date') || (dataType == 'datetime') || (dataType == 'integer') || (dataType == 'decimal'))
                 }
             };
 

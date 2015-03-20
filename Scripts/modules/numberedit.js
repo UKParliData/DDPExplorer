@@ -8,10 +8,13 @@
             self.value = ko.observable();
             self.isValueValid = ko.observable(null);
             self.isDisabled = params.isDisabled;
+            self.isReadyToCheck = ko.observable(false);
 
             self.genericClass = new genericClass;
 
             self.checkValue = ko.computed(function () {
+                if (self.isReadyToCheck() == false)
+                    return;
                 if (self.value() != null) {
                     if (self.dataType == "integer")
                         self.isValueValid(self.genericClass.isInteger(self.value()) == true);
@@ -27,6 +30,7 @@
             self.init = function () {
                 if ((self.number() != null) && (self.number() != ""))
                     self.value(self.number());
+                self.isReadyToCheck(true);
             };
 
             self.dispose = function () {

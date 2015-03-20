@@ -32,12 +32,10 @@
 
                 $.extend(querystring, self.querystring());
                 $(".btn-group").removeClass("open");
-                if (Array.isArray(shortname)) {
-                    sorting = shortname[0].name;
-                    if (shortname.length > 1)
-                        for (var i = 1; i < shortname.length; i++)
-                            sorting += "." + shortname[i].name;
-                }
+                if (Array.isArray(shortname))
+                    sorting = ko.utils.arrayMap(shortname, function (item) {
+                        return item.name;
+                    }).join('.');
                 else
                     sorting = shortname.name;
                 querystring._sort = (isAscending ? "" : "-") + sorting;
@@ -191,7 +189,16 @@
                         if (sortField != null) {
                             if (sortField.indexOf(",") > 0)
                                 sortField = sortField.split(",")[0];
-                            var sortShortname = ko.utils.arrayFirst(self.shortnames(), function (item) { return (item.name == sortField) || ("-" + item.name == sortField); });
+                            var sortShortname = ko.utils.arrayFirst(self.shortnames(), function (item) {
+                                if (Array.isArray(item) == true) {
+                                    var fullName= ko.utils.arrayMap(item, function (arrayItem) {
+                                        return arrayItem.name;
+                                    }).join('.');
+                                    return (fullName == sortField) || ("-" + fullName == sortField);
+                                }
+                                else
+                                    return (item.name == sortField) || ("-" + item.name == sortField);
+                            });
                             if (sortShortname != null)
                                 self.sortByProperty({
                                     shortname: sortShortname,

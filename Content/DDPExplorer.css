@@ -161,8 +161,9 @@ main{
     background-color: transparent !important;
 }
 
-.min-width-350{
-    min-width: 350px !important;
+.dropdown-width-auto{
+    width: auto;
+    white-space: nowrap;
 }
 
 .text-tooltip:hover .tooltip{
@@ -195,6 +196,7 @@ input::-webkit-inner-spin-button {
     border-left: 0px none transparent !important;
     border-right: 0px none transparent !important;
     border-radius: 0px !important;    
+    text-shadow: none !important;
 }
 
 .no-left-border{

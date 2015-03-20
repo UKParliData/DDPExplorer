@@ -11,9 +11,7 @@
             
             self.isDisabledChanged = ko.computed(function () {
                 if (self.isDisabled() == true)
-                    self.value(true);
-                else
-                    self.value(null);
+                    self.value(true);                
             });
 
             self.dispose = function () {

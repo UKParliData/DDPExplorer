@@ -12,37 +12,36 @@
 
         <div class="btn-group" data-bind="visible: (totalItemIndex()!=null) && (totalItemIndex()>0)">
             <button type="button" class="btn btn-default" data-bind="click: showMenu">
-                Sort by <strong data-bind="text: sortByProperty()==null?'None':sortByProperty().shortname.label"></strong>
+                Sort by
+                <!-- ko if: sortByProperty()==null -->
+                    <strong>None</strong>
+                <!-- /ko -->
                 <!-- ko if: sortByProperty()!=null -->
-                <span class="glyphicon" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
+                    <strong>
+                        <shortname-name params="label: sortByProperty().shortname"></shortname-name>
+                    </strong>
+                    <span class="glyphicon" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
                 <!-- /ko -->
                 <span class="caret"></span>
             </button>
-            <div class="dropdown-menu min-width-350">
+            <div class="dropdown-menu dropdown-width-auto padding-10 margin-0">
                 <ul class="list-unstyled" data-bind="foreach: shortnames">
-                    <li data-bind="css: {'margin-bottom-10': $parent.shortnames().length-1>$index()}">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm no-background-color padding-0 margin-right-5" data-bind="click: function(){ $parent.sortBy($data, true); }">
-                                        <h4><span class="glyphicon glyphicon-arrow-up text-primary"></span></h4>
-                                    </button>
-                                    <button type="button" class="btn btn-sm no-background-color padding-0" data-bind="click: function(){ $parent.sortBy($data, false); }">
-                                        <h4><span class=" glyphicon glyphicon-arrow-down text-primary"></span></h4>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-sm-9">
-                                <!-- ko if: Array.isArray($data)==false -->
-                                <span data-bind="text: label"></span>
-                                <!-- /ko -->
-                                <!-- ko if: Array.isArray($data)==true -->
-                                <ul class="list-unstyled" data-bind="foreach: $data">
-                                    <li><span data-bind="text: label, style: {marginLeft: 5*$index()+'px'}"></span></li>
-                                </ul>
-                                <!-- /ko -->
-                            </div>
-                        </div>
+                    <li>
+                        <ul class="list-inline">
+                            <li class="padding-0">
+                                <button type="button" class="btn btn-sm no-background-color padding-0 margin-right-5" data-bind="click: function(){ $parent.sortBy($data, true); }">
+                                    <h4><span class="glyphicon glyphicon-arrow-up text-primary"></span></h4>
+                                </button>
+                            </li>
+                            <li class="padding-0">
+                                <button type="button" class="btn btn-sm no-background-color padding-0" data-bind="click: function(){ $parent.sortBy($data, false); }">
+                                    <h4><span class=" glyphicon glyphicon-arrow-down text-primary"></span></h4>
+                                </button>
+                            </li>
+                            <li>
+                                <shortname-name params="label: $data"></shortname-name>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -53,26 +52,17 @@
                 <span class="glyphicon glyphicon-filter"></span> Filter <span class="caret"></span>
             </button>
 
-            <div class="dropdown-menu min-width-350 padding-10">
+            <div class="dropdown-menu dropdown-width-auto padding-10">
                 <ul class="list-unstyled margin-bottom-10" data-bind="foreach: filters">
                     <li>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <!-- ko if: Array.isArray(label)==false -->
-                                <p class="padding-left-5 margin-top-0 margin-bottom-10">
-                                    <span data-bind="text: label"></span>
-                                </p>
-                                <!-- /ko -->
-                                <!-- ko if: Array.isArray(label)==true -->
-                                <ul class="list-unstyled padding-left-5 margin-top-0 margin-bottom-10" data-bind="foreach: label">
-                                    <li><span data-bind="text: $data, style: {marginLeft: 10*$index()+'px'}"></span></li>
-                                </ul>
-                                <!-- /ko -->
-                            </div>
-                            <div class="col-sm-8">
+                        <ul class="list-inline">
+                            <li>
+                                <shortname-name params="label: label"></shortname-name>
+                            </li>
+                            <li>
                                 <h4 class="margin-top-0 margin-bottom-10"><small data-bind="text: filterDescription"></small></h4>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
                 <button type="button" class="btn btn-default margin-left-5" data-bind="click: clearFilter">Clear</button>
