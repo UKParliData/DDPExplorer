@@ -69,7 +69,7 @@
                     var textSearch = (self.filterSearchText() || "").toUpperCase();
 
                     arr = ko.utils.arrayFilter(self.shortnameProperties(), function (item) {
-                        return (item.hasFilter()==false) &&
+                        return ((item.hasFilter()==false) && (item.isFilterOpen()==false)) &&
                             ((textSearch == "") ||
                             ((Array.isArray(item.label) == true) && (item.label.join(" ").toUpperCase().indexOf(textSearch) >= 0)) ||
                             ((Array.isArray(item.label) == false) && (item.label.toUpperCase().indexOf(textSearch) >= 0)));
