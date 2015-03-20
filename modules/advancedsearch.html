@@ -132,7 +132,7 @@
         </div>
 
         <div data-bind="visible: (filterCount()==0)">No filters added</div>
-        <div class="input-group margin-bottom-10" data-bind="css: {'open': matchingFilters().length>0}">
+        <div class="input-group margin-bottom-10" data-bind="css: {'open': matchingFilters().length>0}, visible: filterCount()<shortnameProperties().length">
             <input type="text" class="form-control min-width-350" placeholder="Type to find field to filter" data-bind="value: filterSearchText, valueUpdate: 'afterkeydown', hasFocus: isFilterSearchFocused, click: function() { return true; }, clickBubble: false" />
             <div class="dropdown-menu dropdown-width-auto">
                 <ul class="list-unstyled" data-bind="foreach: matchingFilters">

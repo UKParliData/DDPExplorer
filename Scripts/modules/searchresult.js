@@ -45,7 +45,7 @@
                 self.load();
             };
 
-            self.getUrl = function () {
+            self.getUrl = function (pageSize) {
                 var url = self.genericClass.host
                 var querystring = {};
 
@@ -53,7 +53,7 @@
                     $.extend(querystring, self.querystring());
                     url += self.endpoint().uriTemplate.fullUri;
                     url += "{0}";
-                    querystring._pageSize = self.pageSize() * (self.currentPage() + 1);
+                    querystring._pageSize = pageSize;
                     querystring._page = 0;
                     if (querystring != null)
                         url += "?" + $.param(querystring);
@@ -64,7 +64,7 @@
             }
 
             self.apiUrl = ko.computed(function () {
-                var url = self.getUrl();
+                var url = self.getUrl(self.pageSize() * (self.currentPage() + 1));
 
                 url = url.replace("{0}", ".json");
                 return url;
@@ -75,7 +75,8 @@
             };
 
             self.outputTo = function (format) {
-                var url = self.getUrl();
+                var pageSize = self.pageSize() * (self.currentPage() + 1);
+                var url = self.getUrl(self.totalItemIndex() > self.endpoint().maxPageSize ? self.endpoint().maxPageSize : self.totalItemIndex());
 
                 $(".btn-group").removeClass("open");
                 url = url.replace("{0}","." + format.toLowerCase());                
