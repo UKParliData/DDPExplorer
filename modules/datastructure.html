@@ -1,0 +1,29 @@
+﻿<article>
+    <section>
+        <h4 class="text-muted">Dataset structure</h4>
+        <p class="bottom-border"></p>
+        <svg id="datasetStructure"></svg>
+    </section>
+    <section>
+        <h4 class="text-muted">Fields</h4>
+        <p class="bottom-border"></p>
+        <table class="table table-bordered">
+            <thead>
+                <tr class="active">
+                    <th>Field name</th>
+                    <th>Type</th>
+                    <th>Uri name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: viewer">
+                <tr>
+                    <th data-bind="text: shortname.label"></th>
+                    <td data-bind="text: shortname.dataType"></td>
+                    <td><code data-bind="text: name"></code></td>
+                    <td data-bind="text: legend.comment"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</article>

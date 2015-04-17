@@ -121,7 +121,18 @@
                         items[i].dataType || items[i].range));
 
                 sessionStorage.setItem("shortnames", JSON.stringify(arr));
-            }            
+            }
+
+            return arr;
+        };
+
+        self.getAllShortnames = function () {
+            var shortnames = sessionStorage.getItem("shortnames");
+
+            if (shortnames != null)
+                return JSON.parse(shortnames);
+            else
+                return null;
         };
 
     }

@@ -20,7 +20,8 @@
             self.outputToName = ko.observable("HTML");
             self.pageSize = ko.observable(10);
             self.textQuery = ko.observable(self.querystring()._search);
-            self.canApiUrlShow = ko.observable(false);            
+            self.canApiUrlShow = ko.observable(false);
+
             self.genericClass = new genericClass;
             self.resourceClass = null;
 
@@ -145,6 +146,14 @@
                 window.conductorVM.selectedComponent("advanced-search");
             };
 
+            self.showDetails = function () {
+                window.conductorVM.parameters({
+                    endpoint: self.endpoint,
+                    shortnames: self.shortnames                    
+                });
+                window.conductorVM.selectedComponent("dataset-dashboard");
+            };
+
             self.readResult = function (result) {
                 var arr = [];
                 var resource;
@@ -171,11 +180,6 @@
                 var originArr = self.resultItems() || [];
                 arr = originArr.concat(arr);
                 self.resultItems(arr);
-            };
-
-            self.errorOnLoad = function () {
-                window.conductorVM.showError("Error while loading data");
-                window.conductorVM.isAppBusy(false);
             };
 
             self.doneLoad = function (data) {
@@ -237,7 +241,7 @@
                 if ((querystring._pageSize == null) && (self.endpoint().endpointType == "ListEndpoint"))
                     querystring._pageSize = self.pageSize();
                 self.querystring(querystring);
-                self.genericClass.getDataFromOwlim(self.endpointUrl, self.querystring(), self.doneLoad, self.errorOnLoad);                
+                self.genericClass.getDataFromOwlim(self.endpointUrl, self.querystring(), self.doneLoad, self.genericClass.errorOnLoad);
             };
 
             self.init();

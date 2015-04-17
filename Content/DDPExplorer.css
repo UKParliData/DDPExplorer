@@ -8,7 +8,7 @@ body {
   background-color: #fff !important;
 }
 
-input, button, a, .dropdown-menu, .list-group-item, .navbar, .well{
+input, button, a, .dropdown-menu, .list-group-item, .navbar, .well, .tooltip-inner{
     border-radius: 0px !important;
 }
 
@@ -57,7 +57,7 @@ main{
 }
 
 .margin-top-0{
-  margin-top: 10px !important;
+  margin-top: 0px !important;
 }
 
 .margin-top-10{
@@ -246,4 +246,48 @@ input::-webkit-inner-spin-button {
 .tab-menu.active a{
     color: #333 !important;
     background-color: transparent !important;
+}
+.axis path, .axis line{
+    shape-rendering: crispEdges;
+}
+
+.x.axis .domain{
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
+}
+
+.y.axis .domain{
+    fill: none;
+    stroke-width: 0;
+}
+
+.tick line{
+    stroke: black;
+    stroke-width: 1;
+}
+
+.data-bubble{
+    stroke: none;
+    fill: #337ab7;
+    fill-opacity: 0.5;
+}
+
+.data-bubble:hover{
+    stroke-width: 2;
+    stroke: black;    
+}
+
+.link {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 2px;
+}
+
+.node circle {
+	stroke: steelblue;
+}
+
+.bottom-border{
+    border-bottom: 1px solid #dedede;
 }

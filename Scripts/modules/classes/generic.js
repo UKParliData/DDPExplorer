@@ -6,7 +6,7 @@
 
         self.endpointUri = "endpoint/";
 
-        self.getDataFromOwlim = function (endpoint, parameters, whenDone, whenError) {            
+        self.getDataFromOwlim = function (endpoint, parameters, whenDone, whenError) {
             $.ajax({
                 url: self.host + endpoint + ".json",
                 data: parameters,
@@ -185,6 +185,17 @@
                         break;
                 }
             return result;
+        };
+
+        self.sortArray = function (arrayToSort, indexFieldName, sortFieldName) {
+            arrayToSort.sort(function (left, right) {
+                return left[sortFieldName] === right[sortFieldName] ? left[indexFieldName] - right[indexFieldName] : left[sortFieldName] > right[sortFieldName] ? 1 : -1;
+            });
+        }
+
+        self.errorOnLoad = function () {
+            window.conductorVM.showError("Error while loading data");
+            window.conductorVM.isAppBusy(false);
         };
         
     }

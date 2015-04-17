@@ -2,14 +2,46 @@
 
 <article>    
     <ul class="list-group" data-bind="foreach: filterEndpoints">
-        <li class="list-group-item margin-bottom-2">
-            <h3>
-                <text data-bind="text: ddpDatasetName"></text>
-                <small>
-                    <p data-bind="text: comment"></p>
-                </small>
-            </h3>
-            <a data-bind="attr:{ href: $parent.endpointUri()+uriTemplate.fullUri}, click: function() { return true;}, clickBubble: false">Click here to browse <text class="text-lowercase" data-bind="text: ddpDatasetName"></text> data</a>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4 data-bind="text: ddpDatasetName" class="margin-top-0"></h4>
+                </div>
+                <div class="col-md-4">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-default" data-bind="click: function(){$parent.showMore($data);}, visible: isShowMore()==false">
+                            <span class="glyphicon glyphicon-cog"></span> Learn more
+                        </button>
+                        <a class="btn btn-default" data-bind="attr:{ href: $parent.endpointUri()+uriTemplate.fullUri}, click: function() { return true;}, clickBubble: false">
+                            <span class="glyphicon glyphicon-list"></span> Explore data
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ko if: isShowMore()==true -->
+                <data-structure params="apiViewers: $parent.apiViewers, ddpDatasetName: $data.ddpDatasetName, shortnames: $parent.shortnames"></data-structure>                
+
+                <section>
+                    <h4 class="text-muted">Common Uri names</h4>
+                    <p class="bottom-border"></p>
+
+                </section>
+
+                <section>
+                    <h4 class="text-muted">Resources</h4>
+                    <p class="bottom-border"></p>
+                    <p>Number of resources: <text data-bind="text: resourceNumber"></text></p>
+                    <p>First record created: <text data-bind="text: firstCreated"></text></p>
+                    <p>Last modified: <text data-bind="text: lastModified"></text></p>
+                </section>
+
+                <section>
+                    <h4 class="text-muted">APIs</h4>
+                    <p class="bottom-border"></p>
+
+                </section>
+            <!-- /ko -->
         </li>
     </ul>
 </article>

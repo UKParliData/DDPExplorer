@@ -3,7 +3,8 @@
     urlArgs: "bust=v1",
     paths: {
         "jquery": "Scripts/jquery-2.1.3.min",
-        "knockout": "Scripts/knockout-3.3.0"
+        "knockout": "Scripts/knockout-3.3.0",
+        "d3": "Scripts/d3/d3.min"
     },
     waitSeconds: 30
 });
@@ -21,6 +22,8 @@ define(["knockout", "jquery", "Scripts/modules/conductor"], function (ko, $, con
     ko.components.register("date-edit", { require: 'Scripts/modules/dateedit.js' });
     ko.components.register("number-edit", { require: 'Scripts/modules/numberedit.js' });
     ko.components.register("boolean-edit", { require: 'Scripts/modules/booleanedit.js' });
+    ko.components.register("dataset-dashboard", { require: 'Scripts/modules/datasetdashboard.js' });
+    ko.components.register("data-structure", { require: 'Scripts/modules/datastructure.js' });
 
     $.support.cors = true;
     window.conductorVM = new conductor();

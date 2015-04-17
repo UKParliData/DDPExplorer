@@ -72,18 +72,24 @@
     <Content Include="Content\images\twitter-logo.png" />
     <Content Include="Content\spinkit.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\DDPExplorer.pubxml" />
+    <Content Include="modules\datastructure.html" />
+    <Content Include="Scripts\d3\d3.js" />
+    <Content Include="Scripts\d3\d3.min.js" />
+    <Content Include="Scripts\d3\LICENSE" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
+    <Content Include="Icon.png" />
     <Content Include="index.html" />
     <Content Include="modules\advancedsearch.html" />
     <Content Include="modules\booleanedit.html" />
     <Content Include="modules\busyindicator.html" />
+    <Content Include="modules\datasetdashboard.html" />
     <Content Include="modules\dateedit.html" />
     <Content Include="modules\endpointlist.html" />
     <Content Include="modules\filteredit.html" />
@@ -98,7 +104,9 @@
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
     <Content Include="Scripts\jquery-2.1.3.min.map" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -111,11 +119,14 @@
     <Content Include="Scripts\knockout-3.3.0.js" />
     <Content Include="Scripts\modules\advancedsearch.js" />
     <Content Include="Scripts\modules\booleanedit.js" />
+    <Content Include="Scripts\modules\classes\apiviewer.js" />
     <Content Include="Scripts\modules\classes\endpoint.js" />
     <Content Include="Scripts\modules\classes\generic.js" />
     <Content Include="Scripts\modules\classes\resource.js" />
     <Content Include="Scripts\modules\classes\shortname.js" />
     <Content Include="Scripts\modules\conductor.js" />
+    <Content Include="Scripts\modules\datasetdashboard.js" />
+    <Content Include="Scripts\modules\datastructure.js" />
     <Content Include="Scripts\modules\dateedit.js" />
     <Content Include="Scripts\modules\endpointlist.js" />
     <Content Include="Scripts\modules\filteredit.js" />
