@@ -1,5 +1,5 @@
 ﻿define(["knockout"], function (ko) {
-    var apiViewerClass = function () {
+    var apiViewerClass = function (shortnames) {
         var self = this;
 
         self.apiViewerItem = function (ddpDatasetName, properties, legends) {
@@ -8,6 +8,9 @@
             for (var i = 0; i < properties.length; i++) {
                 arr.push({
                     name: properties[i],
+                    shortname: ko.utils.arrayFirst(shortnames, function (item) {
+                        return item.name == properties[i]
+                    }),
                     legend: ko.utils.arrayFirst(legends, function (item) {
                         return (item.label._value || item.label) == properties[i];
                     })

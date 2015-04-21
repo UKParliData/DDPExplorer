@@ -22,8 +22,10 @@ define(["knockout", "jquery", "Scripts/modules/conductor"], function (ko, $, con
     ko.components.register("date-edit", { require: 'Scripts/modules/dateedit.js' });
     ko.components.register("number-edit", { require: 'Scripts/modules/numberedit.js' });
     ko.components.register("boolean-edit", { require: 'Scripts/modules/booleanedit.js' });
-    ko.components.register("dataset-dashboard", { require: 'Scripts/modules/datasetdashboard.js' });
+    ko.components.register("data-distribution", { require: 'Scripts/modules/datadistribution.js' });
     ko.components.register("data-structure", { require: 'Scripts/modules/datastructure.js' });
+    ko.components.register("viewer-field-list", { require: 'Scripts/modules/viewerfieldlist.js' });
+    ko.components.register("dataset-stats", { require: 'Scripts/modules/datasetstats.js' });
 
     $.support.cors = true;
     window.conductorVM = new conductor();

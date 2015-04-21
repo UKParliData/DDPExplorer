@@ -5,7 +5,6 @@
 
             self.apiViewers = ko.unwrap(params.apiViewers);
             self.ddpDatasetName = ko.unwrap(params.ddpDatasetName);
-            self.shortnames = ko.unwrap(params.shortnames);
             self.viewer = [];
 
             self.getDatasetStructure = function (datasetName, levelDeep) {
@@ -18,13 +17,7 @@
                 if (viewer == null)
                     return;
                 for (var i = 0; i < viewer.properties.length; i++) {
-                    node = {
-                        name: viewer.properties[i].name,
-                        shortname: ko.utils.arrayFirst(self.shortnames, function (item) {
-                            return item.name == viewer.properties[i].name
-                        }),
-                        legend: viewer.properties[i].legend || {}
-                    };
+                    node = viewer.properties[i];
                     if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.shortname.itemEndpoint!=null))
                         node.children = self.getDatasetStructure(node.shortname.itemEndpoint.ddpDatasetName, 1);
                     arr.push(node);
@@ -34,7 +27,7 @@
 
             self.renderDatasetTree = function () {
                 var margin = { top: 20, right: 20, bottom: 20, left: 20 };
-                var width = d3.select("main.container").node().getBoundingClientRect().width - margin.left - margin.right;
+                var width = d3.select("#datasetStructure").node().getBoundingClientRect().width - margin.left - margin.right;
                 var height = 500 - margin.top - margin.bottom;
 
                 var tree = d3.layout.tree()
@@ -48,10 +41,6 @@
                     .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(120,20)");
-
-                var rootShortname = ko.utils.arrayFirst(self.shortnames, function (item) {
-                    return (item.itemEndpoint != null) && (item.itemEndpoint.ddpDatasetName == self.ddpDatasetName);
-                });
 
                 var root = {
                     name: self.ddpDatasetName,

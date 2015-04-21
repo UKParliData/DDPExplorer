@@ -79,7 +79,10 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\DDPExplorer.pubxml" />
+    <Content Include="modules\datadistribution.html" />
+    <Content Include="modules\datasetstats.html" />
     <Content Include="modules\datastructure.html" />
+    <Content Include="modules\viewerfieldlist.html" />
     <Content Include="Scripts\d3\d3.js" />
     <Content Include="Scripts\d3\d3.min.js" />
     <Content Include="Scripts\d3\LICENSE" />
@@ -89,7 +92,6 @@
     <Content Include="modules\advancedsearch.html" />
     <Content Include="modules\booleanedit.html" />
     <Content Include="modules\busyindicator.html" />
-    <Content Include="modules\datasetdashboard.html" />
     <Content Include="modules\dateedit.html" />
     <Content Include="modules\endpointlist.html" />
     <Content Include="modules\filteredit.html" />
@@ -125,7 +127,8 @@
     <Content Include="Scripts\modules\classes\resource.js" />
     <Content Include="Scripts\modules\classes\shortname.js" />
     <Content Include="Scripts\modules\conductor.js" />
-    <Content Include="Scripts\modules\datasetdashboard.js" />
+    <Content Include="Scripts\modules\datadistribution.js" />
+    <Content Include="Scripts\modules\datasetstats.js" />
     <Content Include="Scripts\modules\datastructure.js" />
     <Content Include="Scripts\modules\dateedit.js" />
     <Content Include="Scripts\modules\endpointlist.js" />
@@ -137,6 +140,7 @@
     <Content Include="Scripts\modules\searchresult.js" />
     <Content Include="Scripts\modules\shortnamename.js" />
     <Content Include="Scripts\modules\shortnamevalue.js" />
+    <Content Include="Scripts\modules\viewerfieldlist.js" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />

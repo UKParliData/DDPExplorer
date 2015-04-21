@@ -145,15 +145,7 @@
                 });
                 window.conductorVM.selectedComponent("advanced-search");
             };
-
-            self.showDetails = function () {
-                window.conductorVM.parameters({
-                    endpoint: self.endpoint,
-                    shortnames: self.shortnames                    
-                });
-                window.conductorVM.selectedComponent("dataset-dashboard");
-            };
-
+            
             self.readResult = function (result) {
                 var arr = [];
                 var resource;

@@ -1,13 +1,13 @@
-﻿define(["knockout", "jquery", "d3", "Scripts/modules/classes/generic", "Scripts/text!modules/datasetdashboard.html"], function (ko, $, d3, genericClass, htmlText) {
+﻿define(["knockout", "jquery", "d3", "Scripts/modules/classes/generic", "Scripts/text!modules/datadistribution.html"], function (ko, $, d3, genericClass, htmlText) {
     return {
         viewModel: function (params) {
             var self = this;
 
             self.endpoint = ko.unwrap(params.endpoint);
-            self.shortnames = ko.unwrap(params.shortnames);
-            self.isDataDistributionShown = ko.observable(false);
-            self.isDataStructureShown = ko.observable(false);
-            self.totalNumber = ko.observable(null);
+            self.selectedDate = ko.observable(null);
+            self.selectedNumber = ko.observable(null);
+            self.isLoading = ko.observable(true);
+            self.totalNumber = null;
             
             self.dates = [];
             self.querystring = {
@@ -17,41 +17,26 @@
                 _page: 0
             };
 
-            self.genericClass = new genericClass;
-
-            self.showDataDistributionTab = function () {
-                self.isDataDistributionShown(true);
-                self.isDataStructureShown(false);
-            };
-
-            self.showDataStructureTab = function () {
-                self.isDataDistributionShown(false);
-                self.isDataStructureShown(true);
-            };
+            self.genericClass = new genericClass;            
             
             self.getDateOnly = function (dateText) {
                 var date = new Date(dateText);
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
                 date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-                
-                var padDate = function (text) {
-                    if (text.length == 2)
-                        return text;
-                    else
-                        return "0" + text;
-                }
 
                 return {
                     fullDate: date,
-                    dateText: date.getUTCFullYear().toString() + padDate((date.getUTCMonth() + 1).toString()) + padDate(date.getUTCDate().toString())
+                    dateText: date.getUTCFullYear().toString() + " " + months[date.getUTCMonth()]
                 };
-            }
+            };
 
             self.doneLoad = function (data) {
                 var date;
-
+                
                 if ((data != null) && (data.result != null)) {
-                    if (self.totalNumber() == null)
-                        self.totalNumber(data.result.totalResults * 1);
+                    if (self.totalNumber == null)
+                        self.totalNumber=data.result.totalResults * 1;
                     if (data.result.items != null) {
                         for (var i = 0; i < data.result.items.length; i++)
                             if ((data.result.items[i].date) && (Array.isArray(data.result.items[i].date) == false)) {
@@ -64,14 +49,15 @@
                             }
                     }
                 }
-                /*if ((data != null) && (data.result != null) && (self.totalNumber() > ((data.result.startIndex * 1)+self.querystring._pageSize))) {
+                /*if ((data != null) && (data.result != null) && (self.totalNumber > ((data.result.startIndex * 1)+self.querystring._pageSize))) {
                     self.querystring._page++;
                     self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, self.genericClass.errorOnLoad);
                 }
                 else*/ {
-                    window.conductorVM.isAppBusy(false);
-                    if (self.dates.length > 0)
+                    if (self.dates.length > 0) {
+                        self.isLoading(false);
                         self.drawDistributionChart();
+                    }
                 }
             };
 
@@ -82,7 +68,7 @@
                 for (var i = 0; i < self.dates.length; i++) {
                     isFound = false;
                     for (var j = 0; j < combinedDates.length; j++)
-                        if (combinedDates[j].dateText.substring(0, 6) == self.dates[i].dateText.substring(0, 6)) {
+                        if (combinedDates[j].dateText == self.dates[i].dateText) {
                             combinedDates[j].count++;
                             combinedDates[j].ids.push(self.dates[i].id);
                             isFound = true;
@@ -102,7 +88,7 @@
 
             self.renderDistributionChart = function (data) {
                 var margin = { top: 40, right: 40, bottom: 40, left: 40 };
-                var width = d3.select("main").node().getBoundingClientRect().width - margin.left - margin.right;
+                var width = d3.select("#distributionChart").node().getBoundingClientRect().width - margin.left - margin.right;
                 var height = 500 - margin.top - margin.bottom;
 
                 var x = d3.time.scale()
@@ -124,7 +110,7 @@
                     .ticks(d3.time.months, 1)
                     .tickFormat(d3.time.format("%Y %b"))
                     .orient("bottom");
-
+                
                 var yAxis = d3.svg.axis()
                     .scale(y)
                     .ticks(5)
@@ -137,29 +123,16 @@
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-                var tooltip = d3.select(".tooltip.bottom");
-                
+                var tooltip = d3.select("#distributionChart + .tooltip");
+
                 svg.append("g")
                     .attr("class", "x axis")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(xAxis);
-                    /*.append("text")
-                    .attr("class", "label")
-                    .attr("x", width)
-                    .attr("y", -6)
-                    .style("text-anchor", "end")
-                    .text("Date");*/
+                    .call(xAxis);                    
 
                 svg.append("g")
                     .attr("class", "y axis")
-                    .call(yAxis);
-                    /*.append("text")
-                    .attr("class", "label")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", 6)
-                    .attr("dy", ".71em")
-                    .style("text-anchor", "end")
-                    .text("Number of records")*/
+                    .call(yAxis);                    
 
                 svg.selectAll(".data-bubble")
                     .data(data)
@@ -169,9 +142,16 @@
                     .attr("r", 0)
                     .attr("cx", function (d) { return x(d.date); })
                     .attr("cy", function (d) { return y(d.count); })
-                    .on("mouseover", function (d) { return tooltip.style("visibility", "visible").select(".tooltip-inner").text(d.count); })
-	                .on("mousemove", function () { return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px"); })
-	                .on("mouseout", function () { return tooltip.style("visibility", "hidden"); })
+                    .on("mouseover", function (d) {
+                        self.selectedDate(d.dateText);
+                        self.selectedNumber(d.count);
+                        return;
+                    })
+                    .on("mouseout", function () {
+	                    self.selectedDate(null);
+	                    self.selectedNumber(null);
+	                    return;
+	                })
                     .transition()
                     .duration(1500)
                     .attr("r", function (d) { return Math.sqrt(height - y(d.count)); })                    
@@ -179,15 +159,7 @@
             };
 
             self.init = function () {
-                var found=ko.utils.arrayFirst(self.shortnames, function (item) {
-                    return item.uri = "http://purl.org/dc/terms/date";
-                });
-                self.isDataDistributionShown(found != null);
-                self.isDataStructureShown(found == null);
-                if (found != null) {
-                    window.conductorVM.isAppBusy(true);                    
-                    self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, self.genericClass.errorOnLoad);
-                }
+                self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, self.genericClass.errorOnLoad);
             };
 
             self.init();

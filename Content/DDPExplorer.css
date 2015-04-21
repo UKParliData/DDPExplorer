@@ -22,6 +22,10 @@ main{
     padding-bottom: 70px;
 }
 
+svg{
+    width: 100%;
+}
+
 @media (min-width: 768px) {
   .container {
     width: 705px!important;
@@ -251,9 +255,13 @@ input::-webkit-inner-spin-button {
     shape-rendering: crispEdges;
 }
 
+.axis text{
+    fill: #777;
+}
+
 .x.axis .domain{
     fill: none;
-    stroke: black;
+    stroke: #777;
     stroke-width: 1;
 }
 
@@ -263,7 +271,7 @@ input::-webkit-inner-spin-button {
 }
 
 .tick line{
-    stroke: black;
+    stroke: #777;
     stroke-width: 1;
 }
 
@@ -274,8 +282,8 @@ input::-webkit-inner-spin-button {
 }
 
 .data-bubble:hover{
-    stroke-width: 2;
-    stroke: black;    
+    fill-opacity: 0.8;
+    stroke: #777;    
 }
 
 .link {
@@ -290,4 +298,8 @@ input::-webkit-inner-spin-button {
 
 .bottom-border{
     border-bottom: 1px solid #dedede;
+}
+
+.opacity-1{
+    opacity: 1 !important;
 }

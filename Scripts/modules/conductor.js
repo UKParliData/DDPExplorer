@@ -16,7 +16,7 @@
         self.genericClass = new genericClass;
         self.endpointClass = new endpointClass;
         self.shortnameClass = null;
-        self.apiViewerClass = new apiViewerClass;
+        self.apiViewerClass = null;
 
         self.toggleNavbar = function (vm, e) {
             var isShown = $(e.target).parent().next(".navbar-collapse").hasClass("in");
@@ -39,21 +39,31 @@
 
         self.continueWhenFinishReadMetadata = ko.computed(function () {
             if (self.endpoints().length > 0) {
-                self.shortnameClass = new shortnameClass(self.endpoints());
+                if (self.shortnames().length == 0) {
+                    self.shortnameClass = new shortnameClass(self.endpoints());
 
-                var shortnames = self.shortnameClass.getAllShortnames();
-                if (shortnames == null)
-                    self.genericClass.getDataFromOwlim("shortnames", { _pageSize: 10000 }, self.getDataForShortnames, self.genericClass.errorOnLoad);
-                else
-                    self.shortnames(shortnames);
+                    var shortnames = self.shortnameClass.getAllShortnames();
+                    if (shortnames == null)
+                        self.genericClass.getDataFromOwlim("shortnames", { _pageSize: 10000 }, self.getDataForShortnames, self.genericClass.errorOnLoad);
+                    else
+                        self.shortnames(shortnames);
+                }
+                if ((self.shortnames().length > 0) && (self.apiViewers().length == 0)) {
+                    self.apiViewerClass = new apiViewerClass(self.shortnames());
+
+                    var apiViewers = self.apiViewerClass.getAllAPIViewers();
+                    if (apiViewers == null)
+                        self.genericClass.getDataFromOwlim("apiviewers", { _pageSize: 10000 }, self.getDataForApiViewers, self.genericClass.errorOnLoad);
+                    else
+                        self.apiViewers(apiViewers);
+                }
             }
             if ((self.endpoints().length > 0) && (self.shortnames().length>0) && (self.apiViewers().length > 0)) {
                 var parameters = self.endpointClass.getEndpointNameFromUrl();
                 if (parameters.endpoint == null) {
                     self.parameters({
                         endpoints: self.endpoints(),
-                        apiViewers: self.apiViewers(),
-                        shortnames: self.shortnames()
+                        apiViewers: self.apiViewers()
                     });
                     self.selectedComponent("endpoint-list");
                 }
@@ -119,13 +129,7 @@
         };
         
         self.init = function () {
-            if (sessionStorage) {
-                var apiViewers = self.apiViewerClass.getAllAPIViewers();
-                if (apiViewers == null)
-                    self.genericClass.getDataFromOwlim("apiviewers", { _pageSize: 10000 }, self.getDataForApiViewers, self.genericClass.errorOnLoad);
-                else
-                    self.apiViewers(apiViewers);
-
+            if (sessionStorage) {               
                 var endpoints = self.endpointClass.getAllEndpoints();
                 if (endpoints == null)
                     self.genericClass.getDataFromOwlim("endpoints", { _pageSize: 10000 }, self.getDataForEndpoints, self.genericClass.errorOnLoad);

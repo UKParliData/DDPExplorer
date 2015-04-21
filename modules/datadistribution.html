@@ -1,0 +1,17 @@
+﻿<!-- ko if: isLoading()==true -->
+    <div>
+        <busy-indicator></busy-indicator>
+    </div>
+<!-- /ko -->
+<!-- ko if: isLoading()==false -->
+    <div class="row">
+        <div class="col-md-2">
+            <strong class="text-muted">Number of records</strong>
+        </div>
+        <div class="col-md-8">
+            <div class="text-center" data-bind="visible: selectedDate()!=null"><text data-bind="text: selectedDate"></text>: <text data-bind="text: selectedNumber"></text> records</div>
+        </div>
+    </div>
+    <svg id="distributionChart"></svg>
+    <div class="pull-right text-muted"><strong>Updated date</strong></div>
+<!-- /ko -->
