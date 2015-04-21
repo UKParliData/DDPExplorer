@@ -60,7 +60,7 @@
             }
         };
 
-        self.endpointItem = function (name, comment, ddpDatasetName, ddpShortnameResources, uriTemplate,
+        self.endpointItem = function (name, comment, ddpDatasetName, ddpIsMainEnpoint, ddpShortnameResources, uriTemplate,
             uriExample, endpointType, textQueryProperty, maxPageSize, defaultViewer, viewers, selector) {
             var arr = [];
 
@@ -76,6 +76,7 @@
                 name: name,
                 comment: comment,
                 ddpDatasetName: ddpDatasetName,
+                ddpIsMainEnpoint: ddpIsMainEnpoint,
                 ddpShortnameResources: ddpShortnameResources,
                 uriTemplate: self.uriTemplateItem(uriTemplate),
                 uriExample: uriExample,
@@ -141,6 +142,7 @@
                             items[i].moniker || items[i].name,
                             items[i].note || items[i].comment,
                             items[i].ddpDatasetName,
+                            items[i].ddpIsMainEnpoint,
                             items[i].ddpShortnameResources || [],
                             items[i].uriTemplate,
                             items[i].exampleUri || items[i].exampleRequestPath,

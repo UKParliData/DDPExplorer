@@ -6,15 +6,19 @@
             self.genericClass = new genericClass;
             
             self.apiViewers = ko.unwrap(params.apiViewers);
-            self.endpoints = ko.utils.arrayFilter(params.endpoints, function (item) {
-                    return (item.ddpDatasetName != null) && (item.endpointType == "ListEndpoint");
-                });
+            self.allEndpoints = ko.unwrap(params.endpoints);
+            self.endpoints = ko.utils.arrayFilter(self.allEndpoints, function (item) {
+                return (item.ddpDatasetName != null) && (item.ddpIsMainEnpoint == true) && (item.endpointType == "ListEndpoint");
+            });
             self.endpoints = ko.utils.arrayMap(self.endpoints, function (item, ix) {
-                    item.sortIndex = ix;
-                    item.isShowMore = ko.observable(false);
-                    item.isShowDataDistribution = ko.observable(false);
-                    return item;
+                item.sortIndex = ix;
+                item.isShowMore = ko.observable(false);
+                item.isShowDataDistribution = ko.observable(false);
+                item.datasetEndpoints = ko.utils.arrayFilter(self.allEndpoints, function (item2) {
+                    return item2.ddpDatasetName == item.ddpDatasetName;
                 });
+                return item;
+            });
             self.genericClass.sortArray(self.endpoints, "sortIndex", "ddpDatasetName");
             self.textQuery = ko.observable(null);
             self.filterEndpoints = ko.observableArray(ko.unwrap(self.endpoints));

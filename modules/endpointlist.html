@@ -23,6 +23,20 @@
                 <section class="margin-bottom-40">
                     <h4>APIs</h4>
                     <p class="bottom-border"></p>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="active">
+                                <th>API</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: datasetEndpoints">
+                            <tr>
+                                <td><code data-bind="text: uriTemplate.fullUri"></code></td>
+                                <td data-bind="text: comment"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </section>
 
                 <section class="margin-bottom-40">

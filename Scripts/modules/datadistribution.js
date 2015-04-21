@@ -107,7 +107,7 @@
 
                 var xAxis = d3.svg.axis()
                     .scale(x)
-                    .ticks(d3.time.months, 1)
+                    .ticks(10)
                     .tickFormat(d3.time.format("%Y %b"))
                     .orient("bottom");
                 

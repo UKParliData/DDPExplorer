@@ -1,4 +1,4 @@
-﻿define(["knockout", "d3", "Scripts/text!modules/datastructure.html"], function (ko, d3, htmlText) {
+﻿define(["knockout", "d3", "Scripts/modules/classes/shortname", "Scripts/modules/classes/apiviewer", "Scripts/text!modules/datastructure.html"], function (ko, d3, shortnameClass, apiViewerClass, htmlText) {
     return {
         viewModel: function (params) {
             var self = this;
@@ -7,6 +7,9 @@
             self.ddpDatasetName = ko.unwrap(params.ddpDatasetName);
             self.viewer = [];
 
+            self.shortnameClass = new shortnameClass([]);
+            self.apiViewerClass = null;
+
             self.getDatasetStructure = function (datasetName, levelDeep) {
                 var arr = [];
                 var node;
@@ -14,12 +17,25 @@
                     return item.ddpDatasetName == datasetName;
                 });
 
+                var getChildrenForAPIViewer = function (apiViewer) {
+                    var arr=[];
+
+                    for (var i = 0; i < apiViewer.properties.length; i++)
+                        arr.push(apiViewer.properties[i]);
+                    return arr;
+                };
+
                 if (viewer == null)
                     return;
                 for (var i = 0; i < viewer.properties.length; i++) {
                     node = viewer.properties[i];
-                    if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.shortname.itemEndpoint!=null))
-                        node.children = self.getDatasetStructure(node.shortname.itemEndpoint.ddpDatasetName, 1);
+                    if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.shortname.itemEndpoint != null))
+                        if (node.shortname.itemEndpoint.ddpDatasetName == datasetName) {
+                            var apiViewer = self.apiViewerClass.convertViewerToAPIViewer(node.shortname.name, node.shortname.itemEndpoint.defaultViewer);
+                            node.children = getChildrenForAPIViewer(apiViewer);
+                        }
+                        else
+                            node.children = self.getDatasetStructure(node.shortname.itemEndpoint.ddpDatasetName, 1);
                     arr.push(node);
                 }
                 return arr;
@@ -53,7 +69,7 @@
                     x0: height / 2,
                     y0: 0
                 };
-
+                
                 var nodes = tree.nodes(root).reverse();
 
                 var links = tree.links(nodes);
@@ -104,7 +120,10 @@
             };
             
             self.init = function () {
-                self.viewer = self.getDatasetStructure(self.ddpDatasetName, 0);
+                var shortnames = self.shortnameClass.getAllShortnames();
+                
+                self.apiViewerClass = new apiViewerClass(shortnames);
+                self.viewer = self.getDatasetStructure(self.ddpDatasetName, 0);                
                 self.renderDatasetTree();
             };
 

@@ -4,15 +4,17 @@
 
         self.apiViewerItem = function (ddpDatasetName, properties, legends) {
             var arr = [];
+            var name = null;
 
             for (var i = 0; i < properties.length; i++) {
+                name = properties[i].split(".")[0];
                 arr.push({
-                    name: properties[i],
+                    name: name,
                     shortname: ko.utils.arrayFirst(shortnames, function (item) {
-                        return item.name == properties[i]
+                        return item.name == name
                     }),
-                    legend: ko.utils.arrayFirst(legends, function (item) {
-                        return (item.label._value || item.label) == properties[i];
+                    legend: ko.utils.arrayFirst(legends || [], function (item) {
+                        return (item.label._value || item.label) == name;
                     })
                 });
             }
@@ -21,6 +23,10 @@
                 ddpDatasetName: ddpDatasetName,
                 properties: arr
             }
+        };
+
+        self.convertViewerToAPIViewer = function (ddpDatasetName, viewer) {
+            return self.apiViewerItem(ddpDatasetName, viewer.properties, viewer.legends);
         };
 
         self.readAPIViewers = function (data) {
