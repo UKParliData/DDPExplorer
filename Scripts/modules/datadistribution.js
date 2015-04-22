@@ -12,7 +12,7 @@
             self.dates = [];
             self.querystring = {
                 _view: "basic",
-                _properties: "date",
+                _properties: "ddpModified",
                 _pageSize: self.endpoint.maxPageSize,
                 _page: 0
             };
@@ -39,8 +39,8 @@
                         self.totalNumber=data.result.totalResults * 1;
                     if (data.result.items != null) {
                         for (var i = 0; i < data.result.items.length; i++)
-                            if ((data.result.items[i].date) && (Array.isArray(data.result.items[i].date) == false)) {
-                                date = self.getDateOnly(data.result.items[i].date._value || data.result.items[i].date);
+                            if ((data.result.items[i].ddpModified) && (Array.isArray(data.result.items[i].ddpModified) == false)) {
+                                date = self.getDateOnly(data.result.items[i].ddpModified._value || data.result.items[i].ddpModified);
                                 self.dates.push({
                                     id: data.result.items[i]._about,
                                     date: date.fullDate,

@@ -27,11 +27,15 @@
 
                 if (viewer == null)
                     return;
-                for (var i = 0; i < viewer.properties.length; i++) {
-                    node = viewer.properties[i];
+                for (var i = 0; i < viewer.properties.length; i++) {                    
+                    node = $.extend({}, viewer.properties[i]);
+                    if (node.shortname == null) {
+                        console.log(node.name);
+                        continue;
+                    }
                     if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.shortname.itemEndpoint != null))
                         if (node.shortname.itemEndpoint.ddpDatasetName == datasetName) {
-                            var apiViewer = self.apiViewerClass.convertViewerToAPIViewer(node.shortname.name, node.shortname.itemEndpoint.defaultViewer);
+                            var apiViewer = self.apiViewerClass.convertViewerToAPIViewer(node.shortname.name, node.shortname.itemEndpoint.defaultViewer);                            
                             node.children = getChildrenForAPIViewer(apiViewer);
                         }
                         else
@@ -44,7 +48,7 @@
             self.renderDatasetTree = function () {
                 var margin = { top: 20, right: 20, bottom: 20, left: 20 };
                 var width = d3.select("#datasetStructure").node().getBoundingClientRect().width - margin.left - margin.right;
-                var height = 500 - margin.top - margin.bottom;
+                var height = 900 - margin.top - margin.bottom;
 
                 var tree = d3.layout.tree()
                     .size([height-20, width-20]);
@@ -74,7 +78,7 @@
 
                 var links = tree.links(nodes);
 
-                nodes.forEach(function (d) { d.y = d.depth * 200; });
+                nodes.forEach(function (d) { d.y = d.depth * 250; });
 
                 var index = 0;
 
