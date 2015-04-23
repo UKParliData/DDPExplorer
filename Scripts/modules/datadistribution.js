@@ -167,7 +167,7 @@
                     })
                     .transition()
                     .duration(1500)
-                    .attr("r", function (d) { return Math.sqrt(height - y(d.count)); })                    
+                    .attr("r", function (d) { return d3.max([Math.sqrt(height - y(d.count)),3]); })
                     .delay(function (d) { return (d.count % 100) * 30; });                
             };
 
@@ -206,24 +206,26 @@
                     .domain([
                         1,
                         d3.max(data, function (item) { return item.index; })
-                    ])
-                    .nice(5)
-                    .range([0, width]);
+                    ])                    
+                    .range([0, width]);                
 
                 var y = d3.scale.linear()
                     .domain([
                         0,
                         d3.max(data, function (item) { return item.count; })
-                    ])
-                    .nice(10)
+                    ])                                        
                     .range([height, 0]);
 
                 var xAxis = d3.svg.axis()
                     .scale(x)
+                    .ticks(5)
+                    .tickFormat(function (d) { return d == 1 ? "1st" : d % 3 == 0 ? d.toString() + "th" : ""; })
                     .orient("bottom");
 
                 var yAxis = d3.svg.axis()
                     .scale(y)
+                    .ticks(5)
+                    .tickFormat(d3.format("d"))
                     .innerTickSize(10)
                     .orient("left");
 
