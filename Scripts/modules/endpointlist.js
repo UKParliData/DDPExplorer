@@ -8,15 +8,10 @@
             self.apiViewers = ko.unwrap(params.apiViewers);
             self.allEndpoints = ko.unwrap(params.endpoints);
             self.endpoints = ko.utils.arrayFilter(self.allEndpoints, function (item) {
-                return (item.ddpDatasetName != null) && (item.ddpIsMainEnpoint == true) && (item.endpointType == "ListEndpoint");
+                return (item.ddpDatasetName != null) && (item.ddpIsMainEndpoint == true) && (item.endpointType == "ListEndpoint");
             });
             self.endpoints = ko.utils.arrayMap(self.endpoints, function (item, ix) {
-                item.sortIndex = ix;
-                item.isShowMore = ko.observable(false);
-                item.isShowDataDistribution = ko.observable(false);
-                item.datasetEndpoints = ko.utils.arrayFilter(self.allEndpoints, function (item2) {
-                    return item2.ddpDatasetName == item.ddpDatasetName;
-                });
+                item.sortIndex = ix;                
                 return item;
             });
             self.genericClass.sortArray(self.endpoints, "sortIndex", "ddpDatasetName");
@@ -25,12 +20,10 @@
             self.endpointUri = ko.observable(self.genericClass.endpointUri);            
 
             self.showMore = function (endpoint) {
-                ko.utils.arrayForEach(self.endpoints, function (item) {
-                    item.isShowDataDistribution(false);
-                    item.isShowMore(false);
-                    return item;
-                });                
-                endpoint.isShowMore(true);
+                window.conductorVM.parameters({
+                    ddpDatasetName: endpoint.ddpDatasetName
+                });
+                window.conductorVM.selectedComponent("dataset-api-help");
             };
 
             self.showDataDistribution = function (endpoint) {
@@ -54,7 +47,6 @@
             self.dispose = function () {
                 self.searchText.dispose();
             };
-
 
         },
         template: htmlText

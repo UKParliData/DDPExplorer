@@ -40,11 +40,14 @@
                     _view: "basic",
                     _properties: "ddpCreated",
                     _sort: "ddpCreated",
-                    _page: 0
+                    _page: 0,
+                    "exists-ddpCreated": true
                 };
                 self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadCreated, self.genericClass.errorOnLoad);
                 querystring._properties = "ddpModified";
                 querystring._sort = "-ddpModified";
+                delete querystring["exists-ddpCreated"];
+                querystring["exists-ddpModified"]=true;
                 self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadModified, self.genericClass.errorOnLoad);
             };
 

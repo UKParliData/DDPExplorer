@@ -4,7 +4,6 @@
             var self = this;
 
             self.name = params.name;
-            self.comment = params.comment;
             self.isSearchBoxShown = params.isSearchBoxShown;
             self.totalItemIndex = params.totalItemIndex;
             self.textQuery = params.textQuery;

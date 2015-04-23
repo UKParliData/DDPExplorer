@@ -59,7 +59,7 @@
                 }
             }
             if ((self.endpoints().length > 0) && (self.shortnames().length>0) && (self.apiViewers().length > 0)) {
-                var parameters = self.endpointClass.getEndpointNameFromUrl();
+                var parameters = self.endpointClass.getEndpointNameFromUrl();                
                 if (parameters.endpoint == null) {
                     self.parameters({
                         endpoints: self.endpoints(),
@@ -72,13 +72,13 @@
                     var endpoints = self.endpoints();
 
                     for (var i = 0; i < endpoints.length; i++)
-                        if ((endpoints[i].ddpDatasetName!=null) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
+                        if ((endpoints[i].ddpIsMainEndpoint == true) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
                             endpoint = endpoints[i];
                             break;
                         }
                     if (endpoint == null)
                         for (var i = 0; i < endpoints.length; i++)
-                            if ((endpoints[i].ddpDatasetName == null) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
+                            if ((endpoints[i].ddpIsMainEndpoint == false) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
                                 endpoint = endpoints[i];
                                 break;
                             }

@@ -1,4 +1,4 @@
-﻿<search-header params="name: endpoint().name, comment: endpoint().comment, isSearchBoxShown: endpoint().textQueryProperty!=null, totalItemIndex: totalItemIndex, textQuery: textQuery, searchText: searchText, isSubmitForm: true, placeholder: 'Search dataset'"></search-header>
+﻿<search-header params="name: endpoint().name, isSearchBoxShown: endpoint().textQueryProperty!=null, totalItemIndex: totalItemIndex, textQuery: textQuery, searchText: searchText, isSubmitForm: true, placeholder: 'Search dataset'"></search-header>
 
 <article>
 
@@ -105,7 +105,10 @@
         <div class="btn-group">
             <button type="button" class="btn btn-default" data-bind="click: showApiUrl"><span class="glyphicon glyphicon-globe"></span> API Url</button>
         </div>
-        <div class="well well-sm margin-top-10" data-bind="visible: canApiUrlShow"><code data-bind="text: apiUrl"></code></div>
+        <div class="well well-sm margin-top-10" data-bind="visible: canApiUrlShow">
+            <code data-bind="text: apiUrl"></code>
+            <div class="text-right"><button type="button" class="btn btn-link" data-bind="click: learnMore">Learn more</button></div>
+        </div>
 
     </section>
 

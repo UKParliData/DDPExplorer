@@ -60,7 +60,7 @@
             }
         };
 
-        self.endpointItem = function (name, comment, ddpDatasetName, ddpIsMainEnpoint, ddpShortnameResources, uriTemplate,
+        self.endpointItem = function (name, comment, ddpDatasetName, ddpIsMainEndpoint, ddpShortnameResources, uriTemplate,
             uriExample, endpointType, textQueryProperty, maxPageSize, defaultViewer, viewers, selector) {
             var arr = [];
 
@@ -76,7 +76,7 @@
                 name: name,
                 comment: comment,
                 ddpDatasetName: ddpDatasetName,
-                ddpIsMainEnpoint: ddpIsMainEnpoint,
+                ddpIsMainEndpoint: ddpIsMainEndpoint,
                 ddpShortnameResources: ddpShortnameResources,
                 uriTemplate: self.uriTemplateItem(uriTemplate),
                 uriExample: uriExample,
@@ -142,7 +142,7 @@
                             items[i].moniker || items[i].name,
                             items[i].note || items[i].comment,
                             items[i].ddpDatasetName,
-                            items[i].ddpIsMainEnpoint,
+                            items[i].ddpIsMainEndpoint,
                             items[i].ddpShortnameResources || [],
                             items[i].uriTemplate,
                             items[i].exampleUri || items[i].exampleRequestPath,
@@ -155,10 +155,10 @@
 
                 var endpointSibling;
                 for (var i = 0; i < arr.length; i++) {
-                    endpointSibling = ko.utils.arrayFirst(arr, function (item) { return (item.endpointType == "ItemEndpoint") && (item.ddpDatasetName == arr[i].ddpDatasetName) && (item.ddpDatasetName != null); });
+                    endpointSibling = ko.utils.arrayFirst(arr, function (item) { return (item.endpointType == "ItemEndpoint") && (item.ddpDatasetName == arr[i].ddpDatasetName) && (item.ddpIsMainEndpoint == true); });
                     if (endpointSibling != null)
                         arr[i].itemEndpointUri = endpointSibling.uriTemplate;
-                    endpointSibling = ko.utils.arrayFirst(arr, function (item) { return (item.endpointType == "ListEndpoint") && (item.ddpDatasetName == arr[i].ddpDatasetName) && (item.ddpDatasetName != null); });
+                    endpointSibling = ko.utils.arrayFirst(arr, function (item) { return (item.endpointType == "ListEndpoint") && (item.ddpDatasetName == arr[i].ddpDatasetName) && (item.ddpIsMainEndpoint == true); });
                     if (endpointSibling != null)
                         arr[i].listEndpointUri = endpointSibling.uriTemplate;
                 }

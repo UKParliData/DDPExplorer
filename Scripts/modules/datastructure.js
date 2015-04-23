@@ -29,10 +29,6 @@
                     return;
                 for (var i = 0; i < viewer.properties.length; i++) {                    
                     node = $.extend({}, viewer.properties[i]);
-                    if (node.shortname == null) {
-                        console.log(node.name);
-                        continue;
-                    }
                     if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.shortname.itemEndpoint != null))
                         if (node.shortname.itemEndpoint.ddpDatasetName == datasetName) {
                             var apiViewer = self.apiViewerClass.convertViewerToAPIViewer(node.shortname.name, node.shortname.itemEndpoint.defaultViewer);                            

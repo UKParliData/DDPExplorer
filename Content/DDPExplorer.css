@@ -8,8 +8,8 @@ body {
   background-color: #fff !important;
 }
 
-input, button, a, .dropdown-menu, .list-group-item, .navbar, .well, .tooltip-inner{
-    border-radius: 0px !important;
+input, button, a, .dropdown-menu, .list-group-item, .navbar, .well, .tooltip-inner, .panel{
+    border-radius: 0px !important;    
 }
 
 main{
@@ -302,4 +302,8 @@ input::-webkit-inner-spin-button {
 
 .opacity-1{
     opacity: 1 !important;
+}
+
+.no-shadow{
+    box-shadow: none !important;
 }

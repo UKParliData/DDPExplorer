@@ -1,0 +1,159 @@
+﻿<article>
+    <div class="panel panel-default no-shadow margin-top-10">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 data-bind="text: endpoint.ddpDatasetName" class="margin-top-0"></h3>
+                    <h3><small data-bind="text: endpoint.comment"></small></h3>
+                </div>
+                <div class="col-md-4">
+                    <div class="pull-right">
+                        <div class="panel panel-default no-shadow">
+                            <div class="panel-body">
+                                <ul class="list-unstyled">
+                                    <li><a href="/index.html">Dataset list</a></li>
+                                    <li class="margin-bottom-10"><a data-bind="attr:{ href: endpointUri+endpoint.uriTemplate.fullUri}, click: function() { return true;}, clickBubble: false">Explore data</a></li>
+                                    <li><a href="#apis">APIs</a></li>
+                                    <li><a href="#dataformats">Data formats</a></li>
+                                    <li><a href="#datasetstructure">Dataset structure</a></li>
+                                    <li><a href="#fields">Fields</a></li>
+                                    <li><a href="#commonurinames">Common Uri names</a></li>
+                                    <li><a href="#statistics">Statistics</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="margin-bottom-40">
+                <h4 id="apis">APIs</h4>
+                <p class="bottom-border"></p>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="active">
+                            <th>API</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: datasetEndpoints">
+                        <tr>
+                            <td><code data-bind="text: uriTemplate.fullUri"></code></td>
+                            <td data-bind="text: comment"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="margin-bottom-40">
+                <h4 id="dataformats">Data formats</h4>
+                <p class="bottom-border"></p>
+                <ul class="list-unstyled">
+                    <li><code>JSON</code> e.g. <a data-bind="text: hostUri+endpoint.uriTemplate.fullUri+'.json', attr: { href: hostUri+endpoint.uriTemplate.fullUri+'.json'}" target="_blank"></a></li>
+                    <li><code>XML</code> e.g. <a data-bind="text: hostUri+endpoint.uriTemplate.fullUri+'.xml', attr: { href: hostUri+endpoint.uriTemplate.fullUri+'.xml'}" target="_blank"></a></li>
+                    <li><code>CSV</code> e.g. <a data-bind="text: hostUri+endpoint.uriTemplate.fullUri+'.csv', attr: { href: hostUri+endpoint.uriTemplate.fullUri+'.csv'}" target="_blank"></a></li>
+                    <li><code>HTML</code> e.g. <a data-bind="text: hostUri+endpoint.uriTemplate.fullUri+'.html', attr: { href: hostUri+endpoint.uriTemplate.fullUri+'.html'}" target="_blank"></a></li>
+                </ul>
+            </section>
+
+            <section class="margin-bottom-40">
+                <h4 id="datasetstructure">Dataset structure</h4>
+                <p class="bottom-border"></p>
+                <data-structure params="apiViewers: apiViewers, ddpDatasetName: endpoint.ddpDatasetName"></data-structure>
+            </section>
+
+            <section class="margin-bottom-40">
+                <h4 id="fields">Fields</h4>
+                <p class="bottom-border"></p>
+                <viewer-field-list params="apiViewers: apiViewers, ddpDatasetName: endpoint.ddpDatasetName"></viewer-field-list>
+            </section>
+
+            <section class="margin-bottom-40">
+                <h4>Common Uri names</h4>
+                <p class="bottom-border"></p>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="active">
+                            <th>Field uri name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2"><strong>Filter options</strong></td>
+                        </tr>
+                        <tr>
+                            <td><code>[uriName]=value</code></td>
+                            <td>Selects only records where <var>uriName</var> equals <var>value</var></td>
+                        </tr>
+                        <tr>
+                            <td><code>min-[uriName]=value</code>*</td>
+                            <td>Selects only records where <var>uriName</var> is greater than or eqaul <var>value</var></td>
+                        </tr>
+                        <tr>
+                            <td><code>max-[uriName]=value</code>*</td>
+                            <td>Selects only records where <var>uriName</var> is less than or eqaul <var>value</var></td>
+                        </tr>
+                        <tr>
+                            <td><code>minEx-[uriName]=value</code>*</td>
+                            <td>Selects only records where <var>uriName</var> is greater than <var>value</var></td>
+                        </tr>
+                        <tr>
+                            <td><code>maxEx-[uriName]=value</code>*</td>
+                            <td>Selects only records where <var>uriName</var> is less than <var>value</var></td>
+                        </tr>
+                        <tr>
+                            <td><code>exists-[uriName]=[true|false]</code></td>
+                            <td>Selects only records where <var>uriName</var> is present (true) or not (false)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>Additional options</strong></td>
+                        </tr>
+                        <tr>
+                            <td><code>_pageSize=value</code></td>
+                            <td>Brings back maximum of <var>value</var> or <text data-bind="text: endpoint.maxPageSize"></text> records - whichever is less.</td>
+                        </tr>
+                        <tr>
+                            <td><code>_page=value</code></td>
+                            <td>Brings back page number <var>value</var></td>
+                        </tr>
+                        <tr>
+                            <td><code>_sort=uriName1,uriName2...</code></td>
+                            <td>Orders data by specified field(s). Use -(minus) in front of <var>uriName</var> to sort in ascending order</td>
+                        </tr>
+                        <tr>
+                            <td><code>_search=value</code></td>
+                            <td>Text search where <var>value</var> is a <a href="http://lucene.apache.org/core/4_1_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description" target="_blank">lucene query</a></td>
+                        </tr>
+                        <tr>
+                            <td><code>_view=value</code></td>
+                            <td>Uses specified view to render data. When use <var>basic</var> it rely on properties listed in <code>_properties</code> option</td>
+                        </tr>
+                        <tr>
+                            <td><code>_properties=value1,value2...</code></td>
+                            <td>Use with <code>_view=basic</code> to bring back data for specified field(s) only</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>* Only applicable for date, datetime, integer or decimal type fields</p>
+            </section>
+
+            <section class="margin-bottom-40">
+                <h4 id="statistics">Statistics</h4>
+                <p class="bottom-border"></p>
+                <dataset-stats params="endpoint: endpoint"></dataset-stats>
+                <button type="button" class="btn btn-default" data-bind="click: function(){showDataDistribution();}, visible: isShowDataDistribution()==false">
+                    <span class="glyphicon glyphicon-equalizer"></span> Data distribution
+                </button>
+            </section>
+
+            <!-- ko if: isShowDataDistribution()==true -->
+            <section class="margin-bottom-40">
+                <h4>Data distribution</h4>
+                <p class="bottom-border"></p>
+                <data-distribution params="endpoint: endpoint"></data-distribution>
+            </section>
+            <!-- /ko -->
+        </div>
+    </div>    
+</article>

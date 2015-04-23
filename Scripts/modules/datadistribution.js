@@ -49,11 +49,11 @@
                             }
                     }
                 }
-                /*if ((data != null) && (data.result != null) && (self.totalNumber > ((data.result.startIndex * 1)+self.querystring._pageSize))) {
+                if ((data != null) && (data.result != null) && (self.totalNumber > ((data.result.startIndex * 1)+self.querystring._pageSize))) {
                     self.querystring._page++;
                     self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, self.genericClass.errorOnLoad);
                 }
-                else*/ {
+                else {
                     if (self.dates.length > 0) {
                         self.isLoading(false);
                         self.drawDistributionChart();
@@ -87,15 +87,16 @@
             };
 
             self.renderDistributionChart = function (data) {
-                var margin = { top: 40, right: 40, bottom: 40, left: 40 };
+                var margin = { top: 40, right: 40, bottom: 40, left: 60 };
                 var width = d3.select("#distributionChart").node().getBoundingClientRect().width - margin.left - margin.right;
-                var height = 500 - margin.top - margin.bottom;
+                var height = 600 - margin.top - margin.bottom;
 
                 var x = d3.time.scale()
                     .domain([
                         d3.min(data, function (item) { return item.date; }),
                         d3.max(data, function (item) { return item.date; })
                     ])
+                    .nice(10)
                     .range([0, width]);
 
                 var y = d3.scale.linear()
@@ -103,17 +104,16 @@
                         0,
                         d3.max(data, function (item) { return item.count; })
                     ])
+                    .nice(10)
                     .range([height, 0]);
 
                 var xAxis = d3.svg.axis()
                     .scale(x)
-                    .ticks(10)
                     .tickFormat(d3.time.format("%Y %b"))
                     .orient("bottom");
                 
                 var yAxis = d3.svg.axis()
                     .scale(y)
-                    .ticks(5)
                     .innerTickSize(10)
                     .orient("left");
 

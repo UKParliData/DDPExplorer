@@ -1,155 +1,28 @@
-﻿<search-header params="name: 'DATASETS', comment: 'Categorized list of all data from Parliament', isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, searchText: null, isSubmitForm: false, placeholder: 'Type to search for dataset'"></search-header>
+﻿<search-header params="name: 'DATASETS', isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, searchText: null, isSubmitForm: false, placeholder: 'Type to search for dataset'"></search-header>
 
-<article>    
-    <ul class="list-group" data-bind="foreach: filterEndpoints">
-        <li class="list-group-item">
-            <div class="row">
-                <div class="col-md-8">
-                    <h3 data-bind="text: ddpDatasetName" class="margin-top-0"></h3>
-                </div>
-                <div class="col-md-4">
-                    <div class="pull-right">
-                        <button type="button" class="btn btn-default" data-bind="click: function(){$parent.showMore($data);}, visible: isShowMore()==false">
-                            <span class="glyphicon glyphicon-cog"></span> Learn more
-                        </button>
-                        <a class="btn btn-default" data-bind="attr:{ href: $parent.endpointUri()+uriTemplate.fullUri}, click: function() { return true;}, clickBubble: false">
-                            <span class="glyphicon glyphicon-list"></span> Explore data
-                        </a>
+<article>
+    <div class="panel panel-default no-shadow">
+        <div class="panel-body">
+            <ul class="list-unstyled" data-bind="foreach: filterEndpoints">
+                <li class="margin-bottom-10">
+                    <div class="row margin-bottom-10">
+                        <div class="col-md-8">
+                            <h4 data-bind="text: ddpDatasetName" class="margin-top-0"></h4>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-default" data-bind="click: function(){$parent.showMore($data);}">
+                                    <span class="glyphicon glyphicon-cog"></span> Learn more
+                                </button>
+                                <a class="btn btn-default" data-bind="attr:{ href: $parent.endpointUri()+uriTemplate.fullUri}, click: function() { return true;}, clickBubble: false">
+                                    <span class="glyphicon glyphicon-list"></span> Explore data
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- ko if: isShowMore()==true -->
-                <section class="margin-bottom-40">
-                    <h4>APIs</h4>
-                    <p class="bottom-border"></p>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr class="active">
-                                <th>API</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: datasetEndpoints">
-                            <tr>
-                                <td><code data-bind="text: uriTemplate.fullUri"></code></td>
-                                <td data-bind="text: comment"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <section class="margin-bottom-40">
-                    <h4>Data formats</h4>
-                    <p class="bottom-border"></p>
-                    <ul class="list-unstyled">
-                        <li><code>JSON</code> e.g. <a data-bind="text: uriTemplate.fullUri+'.json', attr: { href: uriTemplate.fullUri+'.json'}" target="_blank"></a></li>
-                        <li><code>XML</code> e.g. <a data-bind="text: uriTemplate.fullUri+'.xml', attr: { href: uriTemplate.fullUri+'.xml'}" target="_blank"></a></li>
-                        <li><code>CSV</code> e.g. <a data-bind="text: uriTemplate.fullUri+'.csv', attr: { href: uriTemplate.fullUri+'.csv'}" target="_blank"></a></li>
-                        <li><code>HTML</code> e.g. <a data-bind="text: uriTemplate.fullUri+'.html', attr: { href: uriTemplate.fullUri+'.html'}" target="_blank"></a></li>
-                    </ul>
-                </section>
-
-                <section class="margin-bottom-40">
-                    <h4>Dataset structure</h4>
-                    <p class="bottom-border"></p>
-                    <data-structure params="apiViewers: $parent.apiViewers, ddpDatasetName: $data.ddpDatasetName"></data-structure>
-                </section>                
-
-                <section class="margin-bottom-40">
-                    <h4>Fields</h4>
-                    <p class="bottom-border"></p>
-                    <viewer-field-list params="apiViewers: $parent.apiViewers, ddpDatasetName: $data.ddpDatasetName"></viewer-field-list>
-                </section>
-
-                <section class="margin-bottom-40">
-                    <h4>Common Uri names</h4>
-                    <p class="bottom-border"></p>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr class="active">
-                                <th>Field uri name</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="2"><strong>Filter options</strong></td>
-                            </tr>
-                            <tr>
-                                <td><code>[uriName]=value</code></td>
-                                <td>Selects only records where <var>uriName</var> equals <var>value</var></td>
-                            </tr>
-                            <tr>
-                                <td><code>min-[uriName]=value</code>*</td>
-                                <td>Selects only records where <var>uriName</var> is greater than or eqaul <var>value</var></td>
-                            </tr>
-                            <tr>
-                                <td><code>max-[uriName]=value</code>*</td>
-                                <td>Selects only records where <var>uriName</var> is less than or eqaul <var>value</var></td>
-                            </tr>
-                            <tr>
-                                <td><code>minEx-[uriName]=value</code>*</td>
-                                <td>Selects only records where <var>uriName</var> is greater than <var>value</var></td>
-                            </tr>
-                            <tr>
-                                <td><code>maxEx-[uriName]=value</code>*</td>
-                                <td>Selects only records where <var>uriName</var> is less than <var>value</var></td>
-                            </tr>
-                            <tr>
-                                <td><code>exists-[uriName]=[true|false]</code></td>
-                                <td>Selects only records where <var>uriName</var> is present (true) or not (false)</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><strong>Additional options</strong></td>
-                            </tr>
-                            <tr>
-                                <td><code>_pageSize=value</code></td>
-                                <td>Brings back maximum of <var>value</var> or <text data-bind="text: maxPageSize"></text> records - whichever is less.</td>
-                            </tr>
-                            <tr>
-                                <td><code>_page=value</code></td>
-                                <td>Brings back page number <var>value</var></td>
-                            </tr>
-                            <tr>
-                                <td><code>_sort=uriName1,uriName2...</code></td>
-                                <td>Orders data by specified field(s). Use -(minus) in front of <var>uriName</var> to sort in ascending order</td>
-                            </tr>
-                            <tr>
-                                <td><code>_search=value</code></td>
-                                <td>Text search where <var>value</var> is a <a href="http://lucene.apache.org/core/4_1_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description" target="_blank">lucene query</a></td>
-                            </tr>
-                            <tr>
-                                <td><code>_view=value</code></td>
-                                <td>Uses specified view to render data. When use <var>basic</var> it rely on properties listed in <code>_properties</code> option</td>
-                            </tr>
-                            <tr>
-                                <td><code>_properties=value1,value2...</code></td>
-                                <td>Use with <code>_view=basic</code> to bring back data for specified field(s) only</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p>* Only applicable for date, datetime, integer or decimal type fields</p>
-                </section>
-
-                <section class="margin-bottom-40">
-                    <h4>Statistics</h4>
-                    <p class="bottom-border"></p>                    
-                    <dataset-stats params="endpoint: $data"></dataset-stats>
-                    <button type="button" class="btn btn-default" data-bind="click: function(){$parent.showDataDistribution($data);}, visible: isShowDataDistribution()==false">
-                        <span class="glyphicon glyphicon-equalizer"></span> Data distribution
-                    </button>
-                </section>
-
-                <!-- ko if: isShowDataDistribution()==true -->
-                    <section class="margin-bottom-40">
-                        <h4>Data distribution</h4>
-                        <p class="bottom-border"></p>
-                        <data-distribution params="endpoint: $data"></data-distribution>
-                    </section>
-                <!-- /ko -->                
-
-            <!-- /ko -->
-        </li>
-    </ul>
+                    <div data-bind="visible: $index()<$parent.filterEndpoints().length-1" class="bottom-border"></div>
+                </li>
+            </ul>
+        </div>
+    </div>        
 </article>

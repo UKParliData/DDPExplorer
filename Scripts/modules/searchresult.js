@@ -75,6 +75,13 @@
                 self.canApiUrlShow(!self.canApiUrlShow());
             };
 
+            self.learnMore = function () {
+                window.conductorVM.parameters({
+                    ddpDatasetName: self.endpoint().ddpDatasetName
+                });
+                window.conductorVM.selectedComponent("dataset-api-help");
+            };
+
             self.outputTo = function (format) {
                 var pageSize = self.pageSize() * (self.currentPage() + 1);
                 var url = self.getUrl(self.totalItemIndex() > self.endpoint().maxPageSize ? self.endpoint().maxPageSize : self.totalItemIndex());
