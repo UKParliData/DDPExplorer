@@ -7,11 +7,13 @@
     <div class="row">
         <div class="col-md-2">
             <strong class="text-muted">Number of records</strong>
-        </div>
-        <div class="col-md-8">
-            <div class="text-center" data-bind="visible: selectedDate()!=null"><text data-bind="text: selectedDate"></text>: <text data-bind="text: selectedNumber"></text> records</div>
+        </div>        
+    </div>
+    <svg id="distributionChart"></svg>    
+    <div class="pull-right text-muted"><strong>Updated date</strong></div>    
+    <div id="distributionChartTooltip" data-bind="visible: selectedDate()!=null" class="tooltip bottom opacity-1" role="tooltip">
+        <div class="tooltip-inner">
+            <span><text data-bind="text: selectedDate"></text>: <text data-bind="text: selectedNumber"></text></span>
         </div>
     </div>
-    <svg id="distributionChart"></svg>
-    <div class="pull-right text-muted"><strong>Updated date</strong></div>
 <!-- /ko -->

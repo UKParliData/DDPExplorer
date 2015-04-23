@@ -7,8 +7,7 @@
             self.selectedDate = ko.observable(null);
             self.selectedNumber = ko.observable(null);
             self.isLoading = ko.observable(true);
-            self.totalNumber = null;
-            
+            self.totalNumber = null;            
             self.dates = [];
             self.querystring = {
                 _view: "basic",
@@ -71,6 +70,7 @@
                         if (combinedDates[j].dateText == self.dates[i].dateText) {
                             combinedDates[j].count++;
                             combinedDates[j].ids.push(self.dates[i].id);
+                            combinedDates[j].dates.push(self.dates[i].date);
                             isFound = true;
                             break;
                         }
@@ -80,6 +80,7 @@
                             dateText: self.dates[i].dateText,
                             date: new Date(Date.UTC(self.dates[i].date.getUTCFullYear(), self.dates[i].date.getUTCMonth(), 1)),
                             ids: [self.dates[i].id],
+                            dates: [self.dates[i].date],
                             count: 1
                         });
                 }
@@ -96,7 +97,6 @@
                         d3.min(data, function (item) { return item.date; }),
                         d3.max(data, function (item) { return item.date; })
                     ])
-                    .nice(10)
                     .range([0, width]);
 
                 var y = d3.scale.linear()
@@ -109,6 +109,7 @@
 
                 var xAxis = d3.svg.axis()
                     .scale(x)
+                    .ticks(d3.time.months)
                     .tickFormat(d3.time.format("%Y %b"))
                     .orient("bottom");
                 
@@ -123,7 +124,7 @@
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-                var tooltip = d3.select("#distributionChart + .tooltip");
+                var tooltip = d3.select("#distributionChartTooltip");
 
                 svg.append("g")
                     .attr("class", "x axis")
@@ -147,11 +148,14 @@
                         self.selectedNumber(d.count);
                         return;
                     })
+                    .on("mousemove", function () {
+                        return tooltip.style("top",(d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+                    })
                     .on("mouseout", function () {
 	                    self.selectedDate(null);
 	                    self.selectedNumber(null);
 	                    return;
-	                })
+	                })                    
                     .transition()
                     .duration(1500)
                     .attr("r", function (d) { return Math.sqrt(height - y(d.count)); })                    
