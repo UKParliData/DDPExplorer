@@ -8,7 +8,13 @@
             self.viewer = ko.utils.arrayFirst(self.apiViewers, function (item) {
                 return item.ddpDatasetName == self.ddpDatasetName;
             });
-
+            
+            self.showAPIHelp = function (property) {
+                window.conductorVM.parameters({
+                    ddpDatasetName: property.shortname.itemEndpoint.ddpDatasetName
+                });
+                window.conductorVM.selectedComponent("dataset-api-help");
+            };
         },
         template: htmlText
     }

@@ -207,6 +207,7 @@
                         1,
                         d3.max(data, function (item) { return item.index; })
                     ])
+                    .nice(5)
                     .range([0, width]);
 
                 var y = d3.scale.linear()

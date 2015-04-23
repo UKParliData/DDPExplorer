@@ -10,9 +10,14 @@
     <tbody data-bind="foreach: viewer.properties">
         <tr>
             <th data-bind="text: shortname.label"></th>
-            <td data-bind="text: shortname.dataType || 'text'"></td>
+            <td>
+                <text data-bind="text: shortname.dataType || 'text'"></text>
+                <!-- ko if: ((shortname.dataType=='resource') && (shortname.itemEndpoint!=null))-->
+                    <p class="margin-bottom-0">Dataset: <button type="button" class="btn btn-link" data-bind="text: shortname.itemEndpoint.ddpDatasetName, click: $parent.showAPIHelp"></button></p>
+                <!-- /ko -->
+            </td>
             <td><code data-bind="text: name"></code></td>
-            <td data-bind="text: legend==null?'Not available':legend.comment"></td>
+            <td data-bind="text: ((legend==null) || (legend.comment==null)) ?'TBC':legend.comment"></td>
         </tr>
     </tbody>
 </table>
