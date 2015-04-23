@@ -5,9 +5,14 @@
 <!-- /ko -->
 <!-- ko if: isLoading()==false -->
     <div class="row">
-        <div class="col-md-2">
-            <strong class="text-muted">Number of records</strong>
-        </div>        
+        <div class="col-md-4">
+            <strong class="text-muted">Number of records <span data-bind="visible: selectedMonth()!=null">[<text data-bind="text: selectedMonth"></text>]</span></strong>
+        </div>
+        <div class="col-md-8" data-bind="visible: selectedMonth()!=null">
+            <div class="pull-right">
+                <button type="button" class="btn btn-default" data-bind="click: showAll">Show all</button>
+            </div>
+        </div>
     </div>
     <svg id="distributionChart"></svg>    
     <div class="pull-right text-muted"><strong>Updated date</strong></div>    

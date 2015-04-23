@@ -39,6 +39,8 @@
             return (self.isInteger(value) == true) && (value > 0);
         }
 
+        self.months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
         self.dateFormatType={
             year:1,
             month:2,

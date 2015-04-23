@@ -279,6 +279,7 @@ input::-webkit-inner-spin-button {
     stroke: none;
     fill: #337ab7;
     fill-opacity: 0.5;
+    cursor: pointer;
 }
 
 .data-bubble:hover{
@@ -294,6 +295,17 @@ input::-webkit-inner-spin-button {
 
 .node circle {
 	stroke: steelblue;
+}
+
+.data-bar{
+    stroke: none;
+    fill: #373751;
+    fill-opacity: 0.5;
+}
+
+.data-bar:hover{
+    fill-opacity: 0.8;
+    stroke: #777;    
 }
 
 .bottom-border{
