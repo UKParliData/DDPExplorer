@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "d3", "Scripts/modules/classes/generic", "Scripts/text!modules/datadistribution.html"], function (ko, $, d3, genericClass, htmlText) {
+﻿define(["knockout", "jquery", "d3", "Scripts/modules/classes/generic", "Scripts/modules/classes/shortname", "Scripts/text!modules/datadistribution.html"], function (ko, $, d3, genericClass, shortnameClass, htmlText) {
     return {
         viewModel: function (params) {
             var self = this;
@@ -14,11 +14,13 @@
                 _view: "basic",
                 _properties: "ddpModified",
                 _pageSize: self.endpoint.maxPageSize,
-                _page: 0
+                _page: 0,
+                "exists-ddpModified": true
             };
             
             self.genericClass = new genericClass;            
-            
+            self.shortnameClass = new shortnameClass([]);
+
             self.getDateOnly = function (dateText) {
                 var date = new Date(dateText);                
 
@@ -32,10 +34,10 @@
 
             self.doneLoad = function (data) {
                 var date;
-                
+
                 if ((data != null) && (data.result != null)) {
                     if (self.totalNumber == null)
-                        self.totalNumber=data.result.totalResults * 1;
+                        self.totalNumber = data.result.totalResults * 1;
                     if (data.result.items != null) {
                         for (var i = 0; i < data.result.items.length; i++)
                             if ((data.result.items[i].ddpModified) && (Array.isArray(data.result.items[i].ddpModified) == false)) {
@@ -48,7 +50,7 @@
                             }
                     }
                 }
-                if ((data != null) && (data.result != null) && (self.totalNumber > ((data.result.startIndex * 1)+self.querystring._pageSize))) {
+                if ((data != null) && (data.result != null) && (self.totalNumber > ((data.result.startIndex * 1) + self.querystring._pageSize))) {
                     self.querystring._page++;
                     self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, self.genericClass.errorOnLoad);
                 }
@@ -161,7 +163,7 @@
                     .on("click", function (d) {
                         self.selectedDate(null);
                         self.selectedNumber(null);
-                        self.drawDailyDistributionChart(d.dates);
+                        self.drawDailyDistributionChart(d.dates, d.date);
                         self.selectedMonth(d.dateText);
                         return;
                     })
@@ -171,27 +173,25 @@
                     .delay(function (d) { return (d.count % 100) * 30; });                
             };
 
-            self.drawDailyDistributionChart = function (dates) {
-                var isFound = false;
+            self.drawDailyDistributionChart = function (dates, monthDate) {
                 var combinedDates = [];
+                var lastDay = new Date(Date.UTC(monthDate.getUTCFullYear(), monthDate.getUTCMonth() + 1, 0)).getUTCDate();
+                var tempDate;
+                var arr=[];
 
-                for (var i = 0; i < dates.length; i++) {
-                    isFound = false;
-                    for (var j = 0; j < combinedDates.length; j++)
-                        if (combinedDates[j].date.getUTCDate() == dates[i].getUTCDate()) {
-                            combinedDates[j].count++;
-                            isFound = true;
-                            break;
-                        }
-                    if (isFound == false)
-                        combinedDates.push({
-                            index: dates[i].getUTCDate(),
-                            date: dates[i],
-                            dateText: dates[i].getUTCFullYear().toString() + " " + self.genericClass.months[dates[i].getUTCMonth()] + " " + (dates[i].getUTCDate() < 10 ? "0" + dates[i].getUTCDate().toString() : dates[i].getUTCDate().toString()),
-                            count: 1
-                        });
-                }
-                self.genericClass.sortArray(combinedDates, "index", "dateText");
+                for (var i = 0; i < lastDay; i++) {
+                    arr = ko.utils.arrayFilter(dates, function (item) {
+                        return item.getUTCDate() == i + 1;
+                    });
+                    tempDate = new Date(Date.UTC(monthDate.getUTCFullYear(), monthDate.getUTCMonth(), i + 1));
+                    combinedDates.push({
+                        index: i + 1,
+                        date: tempDate,
+                        dateText: (tempDate.getUTCDate() < 10 ? "0" + tempDate.getUTCDate().toString() : tempDate.getUTCDate().toString()) + " " + self.genericClass.months[tempDate.getUTCMonth()] + " " + tempDate.getUTCFullYear().toString(),
+                        dayText: (i + 1) == 1 ? "1st" : (i + 1) == 2 ? "2nd" : (i + 1) == 3 ? "3rd" : (i + 1) + "th",
+                        count: arr.length
+                    });
+                }                
                 self.renderDailyDistributionChart(combinedDates);
             };
 
@@ -201,25 +201,21 @@
                 var height = 600 - margin.top - margin.bottom;
                 
                 $("#distributionChart").empty();
-
-                var x = d3.scale.linear()
-                    .domain([
-                        1,
-                        d3.max(data, function (item) { return item.index; })
-                    ])                    
-                    .range([0, width]);                
+                var x = d3.scale.ordinal()
+                    .domain(data.map(function (d) { return d.dayText; }))
+                    .rangeRoundBands([0, width], .1);
 
                 var y = d3.scale.linear()
                     .domain([
                         0,
                         d3.max(data, function (item) { return item.count; })
-                    ])                                        
+                    ])
                     .range([height, 0]);
 
                 var xAxis = d3.svg.axis()
-                    .scale(x)
-                    .ticks(5)
-                    .tickFormat(function (d) { return d == 1 ? "1st" : d % 3 == 0 ? d.toString() + "th" : ""; })
+                    .scale(x)                    
+                    .innerTickSize(0)
+                    .tickValues(["1st","5th","10th","15th","20th","25th",data[data.length-1].dayText])
                     .orient("bottom");
 
                 var yAxis = d3.svg.axis()
@@ -251,9 +247,9 @@
                     .enter()
                     .append("rect")
                     .attr("class", "data-bar")
-                    .attr("width", 10)
+                    .attr("width", x.rangeBand())
                     .attr("height", 0)
-                    .attr("x", function (d) { return x(d.index); })
+                    .attr("x", function (d) { return x(d.dayText); })
                     .attr("y", height)
                     .on("mouseover", function (d) {
                         self.selectedDate(d.dateText);
@@ -267,12 +263,33 @@
                         self.selectedDate(null);
                         self.selectedNumber(null);
                         return;
-                    })                    
+                    })
+                    .on("click", function (d) {
+                        self.showResultsForSelectedDate(d.date);
+                    })
                     .transition()
                     .duration(1500)
-                    .attr("height", function (d) { return height-y(d.count); })
+                    .attr("height", function (d) { return height - y(d.count); })
                     .attr("y", function (d) { return y(d.count); })
                     .delay(function (d) { return (d.count % 100) * 30; });
+            };
+
+            self.showResultsForSelectedDate = function (date) {
+                var shortnames = self.shortnameClass.getAllShortnames();
+                var querystring = {};
+
+                querystring["min-ddpModified"] = self.genericClass.formatDate("yyyy-MM-ddTHH:mm:ss.fffffffZ", date);
+                date.setUTCDate(date.getUTCDate() + 1);
+                querystring["maxEx-ddpModified"] = self.genericClass.formatDate("yyyy-MM-ddTHH:mm:ss.fffffffZ", date);
+
+                window.conductorVM.parameters({
+                    endpointUrl: self.endpoint.uriTemplate.fullUri,
+                    querystring: querystring,
+                    endpoint: self.endpoint,
+                    viewerName: self.endpoint.defaultViewer.name,
+                    shortnames: shortnames
+                });
+                window.conductorVM.selectedComponent("search-result");
             };
 
             self.showAll = function () {

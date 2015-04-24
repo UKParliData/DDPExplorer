@@ -141,8 +141,8 @@
             <section class="margin-bottom-40">
                 <h4 id="statistics">Statistics</h4>
                 <p class="bottom-border"></p>
-                <dataset-stats params="endpoint: endpoint"></dataset-stats>
-                <button type="button" class="btn btn-default" data-bind="click: function(){showDataDistribution();}, visible: isShowDataDistribution()==false">
+                <dataset-stats params="endpoint: endpoint, isModifiedResourceExists: isModifiedResourceExists"></dataset-stats>
+                <button type="button" class="btn btn-default" data-bind="click: function(){showDataDistribution();}, visible: (isShowDataDistribution()==false) && (isModifiedResourceExists()==true)">
                     <span class="glyphicon glyphicon-equalizer"></span> Data distribution
                 </button>
             </section>

@@ -19,6 +19,8 @@
             self.datasetEndpoints = ko.utils.arrayFilter(self.endpoints, function (item) {
                 return item.ddpDatasetName == self.endpoint.ddpDatasetName;
             });
+            self.isModifiedResourceExists = ko.observable(false);
+
 
             self.showDataDistribution = function () {
                 self.isShowDataDistribution(true);

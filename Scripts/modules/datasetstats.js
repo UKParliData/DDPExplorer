@@ -7,27 +7,32 @@
             self.resourceNumber = ko.observable(null);
             self.firstCreated = ko.observable(null);
             self.lastModified = ko.observable(null);            
+            self.isModifiedResourceExists = params.isModifiedResourceExists;
 
             self.genericClass = new genericClass;
 
             self.doneLoadCreated = function (data) {
-                if ((data != null) && (data.result != null)) {
+                if ((data != null) && (data.result != null) &&
+                    (data.result.items != null) && (data.result.items.length > 0) && (data.result.items[0].ddpCreated != null)) {
                     self.resourceNumber(data.result.totalResults * 1);
-                    if ((data.result.items != null) && (data.result.items.length > 0) && (data.result.items[0].ddpCreated != null))
-                        self.firstCreated(data.result.items[0].ddpCreated._value || data.result.items[0].ddpCreated);
-                    else
-                        self.firstCreated("Not available")
+                    self.firstCreated(data.result.items[0].ddpCreated._value || data.result.items[0].ddpCreated);
                 }
-                else
-                    self.resourceNumber("Not available");
+                else {
+                    self.firstCreated("Not available");
+                    self.resourceNumber(0);
+                }
             };
 
             self.doneLoadModified = function (data) {
                 if ((data != null) && (data.result != null) &&
-                    (data.result.items != null) && (data.result.items.length > 0) && (data.result.items[0].ddpModified != null))
+                    (data.result.items != null) && (data.result.items.length > 0) && (data.result.items[0].ddpModified != null)) {
+                    self.isModifiedResourceExists(true);
                     self.lastModified(data.result.items[0].ddpModified._value || data.result.items[0].ddpModified);
-                else
+                }
+                else {
                     self.lastModified("Not available");
+                    self.isModifiedResourceExists(false);
+                }
             };
 
             self.isLoading = ko.computed(function () {
@@ -38,11 +43,11 @@
                 var querystring = {
                     _pageSize: 1,
                     _view: "basic",
-                    _properties: "ddpCreated",
-                    _sort: "ddpCreated",
-                    _page: 0,
-                    "exists-ddpCreated": true
+                    _page: 0                    
                 };
+                querystring._properties = "ddpCreated";
+                querystring._sort = "-ddpCreated";
+                querystring["exists-ddpCreated"] = true;
                 self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadCreated, self.genericClass.errorOnLoad);
                 querystring._properties = "ddpModified";
                 querystring._sort = "-ddpModified";
