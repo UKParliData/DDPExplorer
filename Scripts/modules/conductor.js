@@ -49,7 +49,7 @@
                         self.shortnames(shortnames);
                 }
                 if ((self.shortnames().length > 0) && (self.apiViewers().length == 0)) {
-                    self.apiViewerClass = new apiViewerClass(self.shortnames());
+                    self.apiViewerClass = new apiViewerClass(self.shortnames(), self.endpoints());
 
                     var apiViewers = self.apiViewerClass.getAllAPIViewers();
                     if (apiViewers == null)

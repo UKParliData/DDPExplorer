@@ -4,5 +4,10 @@
     </ul>
 <!-- /ko -->
 <!-- ko if: Array.isArray(value)==false -->
-    <span data-bind="text: value"></span>
+    <!-- ko if: uri!=null -->
+        <a data-bind="text: value, attr: {href: uri}"></a>
+    <!-- /ko -->
+    <!-- ko if: uri==null -->
+        <span data-bind="text: value"></span>
+    <!-- /ko -->    
 <!-- /ko -->

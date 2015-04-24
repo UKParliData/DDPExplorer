@@ -1,5 +1,5 @@
 ﻿define(["knockout", "jquery", "Scripts/modules/classes/generic"], function (ko, $, genericClass) {
-    var resourceClass = function (resourceEndpoint) {
+    var resourceClass = function (resourceEndpoint, apiViewer) {
         var self = this;
 
         self.genericClass = new genericClass;
@@ -14,15 +14,19 @@
             return result;
         }
 
-        self.parseUri = function (shortname, uri) {
+        self.parseUri = function (shortname, uri) {            
             if ((uri != null) && (uri.indexOf("http://data.parliament.uk/") == 0)) {
                 uri = uri.replace("http://data.parliament.uk/", "");
                 if (uri.indexOf("resources/") == 0) {
-                    if ((shortname.itemEndpoint != null) &&
-                        (shortname.itemEndpoint.uriTemplate != null) &&
-                        (shortname.itemEndpoint.uriTemplate.restUri != null) &&
-                        (shortname.itemEndpoint.uriTemplate.restUri.length > 1))
-                        uri = self.genericClass.endpointUri + uri.replace("resources", self.giveMeItemEndpoint(shortname.itemEndpoint.uriTemplate.restUri));
+                    var property = ko.utils.arrayFirst(apiViewer.properties, function (item) {
+                        return item.name == shortname.name;
+                    });
+                    if ((property!=null) &&
+                        (property.itemEndpoint != null) &&
+                        (property.itemEndpoint.uriTemplate != null) &&
+                        (property.itemEndpoint.uriTemplate.restUri != null) &&
+                        (property.itemEndpoint.uriTemplate.restUri.length > 1))
+                        uri = self.genericClass.endpointUri + uri.replace("resources", self.giveMeItemEndpoint(property.itemEndpoint.uriTemplate.restUri));
                     else
                         if ((shortname.dataType == "headresource") && (resourceEndpoint.itemEndpointUri != null))
                             uri = self.genericClass.endpointUri + uri.replace("resources", self.giveMeItemEndpoint(resourceEndpoint.itemEndpointUri.restUri));

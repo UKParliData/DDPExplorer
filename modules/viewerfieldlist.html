@@ -12,8 +12,8 @@
             <th data-bind="text: shortname.label"></th>
             <td>
                 <text data-bind="text: shortname.dataType || 'text'"></text>
-                <!-- ko if: ((shortname.dataType=='resource') && (shortname.itemEndpoint!=null))-->
-                    <p class="margin-bottom-0">Dataset: <button type="button" class="btn btn-link" data-bind="text: shortname.itemEndpoint.ddpDatasetName, click: $parent.showAPIHelp"></button></p>
+                <!-- ko if: ((shortname.dataType=='resource') && (itemEndpoint!=null))-->
+                    <p class="margin-bottom-0">Dataset: <button type="button" class="btn btn-link" data-bind="text: itemEndpoint.ddpDatasetName, click: $parent.showAPIHelp"></button></p>
                 <!-- /ko -->
             </td>
             <td><code data-bind="text: name"></code></td>

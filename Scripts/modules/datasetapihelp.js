@@ -5,7 +5,7 @@
 
             self.genericClass = new genericClass;
             self.endpointClass = new endpointClass;
-            self.apiViewerClass = new apiViewerClass([]);
+            self.apiViewerClass = new apiViewerClass([], []);
             
             self.ddpDatasetName = ko.unwrap(params.ddpDatasetName);
             self.apiViewers = self.apiViewerClass.getAllAPIViewers();

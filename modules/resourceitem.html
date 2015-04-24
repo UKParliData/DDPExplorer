@@ -4,20 +4,15 @@
             <h4>
                 <button type="button" class="btn btn-link btn-sm padding-0" data-bind="click: toggleResource, visible: properties().length>0">
                     <span class="glyphicon glyphicon-upload text-info" data-bind="css:{'resource-open': resource().isVisible()==true,'resource-closed': resource().isVisible()==false}"></span>
-                </button>
-                <!-- ko if: resource().internalUri!=null -->
-                <a data-bind="text: resource().label, attr: {href: resource().internalUri}"></a>
-                <!-- /ko -->
-                <!-- ko if: resource().internalUri==null -->
-                <span data-bind="text: resource().label"></span>
-                <!-- /ko -->
+                </button>                
+                <span data-bind="text: resource().label"></span>                
             </h4>
             <!-- ko if: resource().description!=null -->
                 <div class="tooltip bottom" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" data-bind="text: resource().description"></div></div>
             <!-- /ko -->
-        </div>
+        </div>        
         <div class="col-sm-9 col-sm-padding">
-            <h4><shortname-value params="value: resource().value"></shortname-value></h4>
+            <h4><shortname-value params="value: resource().value, uri: resource().internalUri"></shortname-value></h4>
         </div>
     </div>
 <!-- /ko -->

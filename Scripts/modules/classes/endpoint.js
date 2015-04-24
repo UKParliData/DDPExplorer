@@ -60,7 +60,7 @@
             }
         };
 
-        self.endpointItem = function (name, comment, ddpDatasetName, ddpIsMainEndpoint, ddpShortnameResources, uriTemplate,
+        self.endpointItem = function (id, name, comment, ddpDatasetName, ddpIsMainEndpoint, uriTemplate,
             uriExample, endpointType, textQueryProperty, maxPageSize, defaultViewer, viewers, selector) {
             var arr = [];
 
@@ -73,11 +73,11 @@
             selector = selector || {};
 
             return {
+                id: id,
                 name: name,
                 comment: comment,
                 ddpDatasetName: ddpDatasetName,
-                ddpIsMainEndpoint: ddpIsMainEndpoint,
-                ddpShortnameResources: ddpShortnameResources,
+                ddpIsMainEndpoint: ddpIsMainEndpoint,                
                 uriTemplate: self.uriTemplateItem(uriTemplate),
                 uriExample: uriExample,
                 endpointType: endpointType.substring(endpointType.indexOf("#") + 1),
@@ -139,11 +139,11 @@
                 for (var i = 0; i < items.length; i++)
                     if (items[i].defaultViewer)
                         arr.push(self.endpointItem(
+                            items[i]._about,
                             items[i].moniker || items[i].name,
                             items[i].note || items[i].comment,
                             items[i].ddpDatasetName,
-                            items[i].ddpIsMainEndpoint,
-                            items[i].ddpShortnameResources || [],
+                            items[i].ddpIsMainEndpoint,                            
                             items[i].uriTemplate,
                             items[i].exampleUri || items[i].exampleRequestPath,
                             items[i].type,

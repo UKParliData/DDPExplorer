@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/resource", "Scripts/text!modules/searchresult.html"], function (ko, $, genericClass, resourceClass, htmlText) {
+﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/resource", "Scripts/modules/classes/apiviewer", "Scripts/text!modules/searchresult.html"], function (ko, $, genericClass, resourceClass, apiViewerClass, htmlText) {
     return {
         viewModel: function (params) {
             var self = this;
@@ -23,7 +23,7 @@
             self.canApiUrlShow = ko.observable(false);
 
             self.genericClass = new genericClass;
-            self.resourceClass = null;
+            self.resourceClass = null;            
 
             self.endpointUri = ko.observable(self.genericClass.endpointUri);
 
@@ -156,8 +156,12 @@
             self.readResult = function (result) {
                 var arr = [];
                 var resource;
-
-                self.resourceClass = new resourceClass(self.endpoint());
+                var apiViewers = new apiViewerClass([], []).getAllAPIViewers();
+                var apiViewer = ko.utils.arrayFirst(apiViewers, function (item) {
+                    return item.ddpDatasetName == self.endpoint().ddpDatasetName;
+                });
+                
+                self.resourceClass = new resourceClass(self.endpoint(), apiViewer);
                 if (self.endpoint().endpointType == "ListEndpoint") {
                     for (var i = 0; i < result.items.length; i++) {
                         resource = self.resourceClass.resourceItem(result.items[i], self.shortnames(), null, "");

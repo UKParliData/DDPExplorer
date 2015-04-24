@@ -1,4 +1,4 @@
-﻿define(["knockout", "d3", "Scripts/modules/classes/shortname", "Scripts/modules/classes/apiviewer", "Scripts/text!modules/datastructure.html"], function (ko, d3, shortnameClass, apiViewerClass, htmlText) {
+﻿define(["knockout", "d3", "Scripts/modules/classes/endpoint", "Scripts/modules/classes/shortname", "Scripts/modules/classes/apiviewer", "Scripts/text!modules/datastructure.html"], function (ko, d3, endpointClass, shortnameClass, apiViewerClass, htmlText) {
     return {
         viewModel: function (params) {
             var self = this;
@@ -7,6 +7,7 @@
             self.ddpDatasetName = ko.unwrap(params.ddpDatasetName);
             self.viewer = [];
 
+            self.endpointClass = new endpointClass();
             self.shortnameClass = new shortnameClass([]);
             self.apiViewerClass = null;
 
@@ -29,13 +30,13 @@
                     return;
                 for (var i = 0; i < viewer.properties.length; i++) {                    
                     node = $.extend({}, viewer.properties[i]);
-                    if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.shortname.itemEndpoint != null))
-                        if (node.shortname.itemEndpoint.ddpDatasetName == datasetName) {
-                            var apiViewer = self.apiViewerClass.convertViewerToAPIViewer(node.shortname.name, node.shortname.itemEndpoint.defaultViewer);                            
+                    if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.itemEndpoint != null))
+                        if (node.itemEndpoint.ddpDatasetName == datasetName) {
+                            var apiViewer = self.apiViewerClass.convertViewerToAPIViewer(node.shortname.name, node.itemEndpoint.defaultViewer);
                             node.children = getChildrenForAPIViewer(apiViewer);
                         }
                         else
-                            node.children = self.getDatasetStructure(node.shortname.itemEndpoint.ddpDatasetName, 1);
+                            node.children = self.getDatasetStructure(node.itemEndpoint.ddpDatasetName, 1);
                     arr.push(node);
                 }
                 return arr;
@@ -121,8 +122,9 @@
             
             self.init = function () {
                 var shortnames = self.shortnameClass.getAllShortnames();
-                
-                self.apiViewerClass = new apiViewerClass(shortnames);
+                var endpoints = self.endpointClass.getAllEndpoints();
+
+                self.apiViewerClass = new apiViewerClass(shortnames, endpoints);
                 self.viewer = self.getDatasetStructure(self.ddpDatasetName, 0);                
                 self.renderDatasetTree();
             };

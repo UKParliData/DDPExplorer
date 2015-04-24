@@ -4,6 +4,7 @@
             var self = this;
 
             self.value = ko.unwrap(params.value);
+            self.uri = ko.unwrap(params.uri);
           
         },
         template: htmlText

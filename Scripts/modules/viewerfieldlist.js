@@ -11,7 +11,7 @@
             
             self.showAPIHelp = function (property) {
                 window.conductorVM.parameters({
-                    ddpDatasetName: property.shortname.itemEndpoint.ddpDatasetName
+                    ddpDatasetName: property.itemEndpoint.ddpDatasetName
                 });
                 window.conductorVM.selectedComponent("dataset-api-help");
             };

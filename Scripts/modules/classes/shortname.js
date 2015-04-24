@@ -5,12 +5,9 @@
         self.shortnameItem = function (uri, name, isMultivalued, isStructured, dataType) {
             var dt = null;
             var label = name;
-            var itemEndpoint = null;
-
+            
             if ((dataType != null) && (dataType.indexOf("#") > 0))
                 dt = dataType.substring(dataType.indexOf("#") + 1).toLowerCase();
-            if (dt == "resource")
-                itemEndpoint = self.findEndpointForResource(name);
             if (name.length > 1) {
                 label = name[0];
                 for (var i = 1; i < name.length; i++) {
@@ -26,22 +23,11 @@
                 label: label,
                 isMultivalued: isMultivalued,
                 isStructured: isStructured,
-                dataType: dt,
-                itemEndpoint: itemEndpoint,
+                dataType: dt,                
                 description: null,
                 valuePattern: null
             }
         };
-
-        self.findEndpointForResource = function (name) {
-            var found=null;
-            for (var i = 0; i < endpoints.length; i++) {
-                found = ko.utils.arrayFirst(endpoints[i].ddpShortnameResources, function (item) { return item.label == name; });
-                if (found != null)
-                    return endpoints[i];
-            }
-            return null;
-        }
 
         self.findLegendForShortname = function (shortname, legends, shortnameFullPath) {
             var result = {};
