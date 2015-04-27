@@ -60,7 +60,7 @@
                         url += "?" + $.param(querystring);
                 }
                 else
-                    url += self.endpointUrl;
+                    url += self.endpointUrl + "{0}";
                 return url;
             }
 
