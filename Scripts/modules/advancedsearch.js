@@ -188,7 +188,7 @@
                 return querystring;
             };            
 
-            self.shortnameProperty = function (index, name, label, dataType, description,
+            self.shortnameProperty = function (index, name, label, dataType, comment,
                 valuePattern, isSelected, searchValue, minValue, maxValue, minExclusiveValue,
                 maxExclusiveValue, existsValue) {
                 
@@ -238,7 +238,7 @@
                     name: name,
                     label: label,
                     dataType: dataType,
-                    description: description,
+                    comment: comment,
                     valuePattern: valuePattern,
                     isSelected: isSelectedKo,
                     searchValue: searchValueKo,
@@ -259,7 +259,7 @@
                 var name;
                 var label;
                 var dataType;
-                var description;
+                var comment;
                 var valuePattern;
                 var shortnames = self.shortnames();
 
@@ -268,14 +268,14 @@
                         name = ko.utils.arrayMap(shortnames[i], function (item) { return item.name; }).join(".");
                         label = ko.utils.arrayMap(shortnames[i], function (item) { return item.label; });
                         dataType = shortnames[i][shortnames[i].length - 1].dataType;
-                        description = shortnames[i][shortnames[i].length - 1].description;
+                        comment = shortnames[i][shortnames[i].length - 1].comment;
                         valuePattern = shortnames[i][shortnames[i].length - 1].valuePattern
                     }
                     else {
                         name = shortnames[i].name;
                         label = shortnames[i].label;
                         dataType = shortnames[i].dataType;
-                        description = shortnames[i].description;
+                        comment = shortnames[i].comment;
                         valuePattern = shortnames[i].valuePattern;
                     }
                     arr.push(self.shortnameProperty(
@@ -283,7 +283,7 @@
                         name,
                         label,
                         dataType,
-                        description,
+                        comment,
                         valuePattern,
                         ko.utils.arrayFirst(selectedArr, function (item) { return item == name; }) != null,
                         self.querystring[name] || null,

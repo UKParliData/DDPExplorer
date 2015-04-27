@@ -2,7 +2,7 @@
     var shortnameClass = function (endpoints) {
         var self = this;
 
-        self.shortnameItem = function (uri, name, isMultivalued, isStructured, dataType) {
+        self.shortnameItem = function (uri, name, comment, isMultivalued, isStructured, dataType) {
             var dt = null;
             var label = name;
             
@@ -20,11 +20,11 @@
             return {
                 uri: uri,
                 name: name,
+                comment: comment,
                 label: label,
                 isMultivalued: isMultivalued,
                 isStructured: isStructured,
                 dataType: dt,                
-                description: null,
                 valuePattern: null
             }
         };
@@ -36,7 +36,7 @@
             if (legends != null) {
                 var found = ko.utils.arrayFirst(legends, function (item) { return (item.label._value || item.label) == shortnameFullPath; });
                 if (found != null) {
-                    result.description = found.comment;
+                    result.comment = found.comment;
                     result.valuePattern = found.valuePattern;
                 }
             }
@@ -48,8 +48,7 @@
             var shortnames = JSON.parse(sessionStorage.getItem("shortnames"));
 
             if ((viewer != null) && (viewer.properties != null)) {
-                var found = null;
-                var description = null;
+                var found = null;                
                 var shortnameFullPath = "";
                 var complexPropertyArr;
                 var complexShortname;
@@ -102,6 +101,7 @@
                     arr.push(self.shortnameItem(
                         items[i]._about,
                         items[i].propertyName || items[i].label,
+                        items[i].note || items[i].comment,
                         items[i].isMultivalued || items[i].multiValued,
                         items[i].isStructured || items[i].structured,
                         items[i].dataType || items[i].range));

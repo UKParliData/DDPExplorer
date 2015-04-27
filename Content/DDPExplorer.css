@@ -301,6 +301,7 @@ input::-webkit-inner-spin-button {
     stroke: none;
     fill: #373751;
     fill-opacity: 0.5;
+    cursor: pointer;
 }
 
 .data-bar:hover{

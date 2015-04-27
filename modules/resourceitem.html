@@ -7,8 +7,8 @@
                 </button>                
                 <span data-bind="text: resource().label"></span>                
             </h4>
-            <!-- ko if: resource().description!=null -->
-                <div class="tooltip bottom" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" data-bind="text: resource().description"></div></div>
+            <!-- ko if: resource().comment!=null -->
+                <div class="tooltip bottom" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" data-bind="text: resource().comment"></div></div>
             <!-- /ko -->
         </div>        
         <div class="col-sm-9 col-sm-padding">
@@ -36,19 +36,14 @@
         <div class="row" data-bind="style: {paddingLeft: 20*($parent.deepLevel()+1)+'px'}">
             <div class="col-sm-3 col-sm-padding text-title text-tooltip">
                 <h4>
-                    <!-- ko if: ((dataType=='resource') && (internalUri)) -->
-                        <a data-bind="text: label, attr: {href: internalUri}"></a>
-                    <!-- /ko -->
-                    <!-- ko if: ((dataType!='resource') || (internalUri==null)) -->
-                        <span data-bind="text: label"></span>
-                    <!-- /ko -->
+                    <span data-bind="text: label"></span>
                 </h4>
-                <!-- ko if: description!=null -->
-                    <div class="tooltip bottom" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" data-bind="text: description"></div></div>
+                <!-- ko if: comment!=null -->
+                    <div class="tooltip bottom" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" data-bind="text: comment"></div></div>
                 <!-- /ko -->
             </div>
             <div class="col-sm-9 col-sm-padding">
-                <h4><shortname-value params="value: value"></shortname-value></h4>
+                <h4><shortname-value params="value: value, uri: internalUri"></shortname-value></h4>
             </div>
         </div>
     <!-- /ko -->

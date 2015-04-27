@@ -8,25 +8,33 @@
             var found = null;
             var legend = null;
             var itemEndpoint = null;
-
+            var shortname = null;
             for (var i = 0; i < properties.length; i++) {
                 name = properties[i].split(".")[0];
                 found = ko.utils.arrayFirst(arr, function (item) { return item.name == name; });
                 legend = null;
                 itemEndpoint = null;
+                shortname = null;
                 if (found == null) {
+                    shortname=ko.utils.arrayFirst(shortnames, function (item) {
+                        return item.name == name
+                    })
                     legend = ko.utils.arrayFirst(legends || [], function (item) {
                         return (item.label._value || item.label) == name;
                     });
-                    if ((legend != null) && (legend.endpoint != null))
+                    if ((legend != null) && (legend.endpoint != null)) {
+                        if (legend.comment == null)
+                            legend.comment = shortname.comment;
                         itemEndpoint = ko.utils.arrayFirst(endpoints, function (item) {
                             return item.id == legend.endpoint;
                         });
+                    }
+                    else
+                        if ((legend == null) && (shortname!=null) && (shortname.comment != null))
+                            legend = { comment: shortname.comment };
                     arr.push({
                         name: name,
-                        shortname: ko.utils.arrayFirst(shortnames, function (item) {
-                            return item.name == name
-                        }),
+                        shortname: shortname,
                         legend: legend,
                         itemEndpoint: itemEndpoint
                     });

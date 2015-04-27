@@ -75,7 +75,7 @@
                 dataType: shortname.dataType,
                 fullUri: uri,
                 internalUri: internalUri,
-                description: shortname.description || null,
+                comment: shortname.comment || null,
                 isVisible: ko.observable(true)
             }
         };
