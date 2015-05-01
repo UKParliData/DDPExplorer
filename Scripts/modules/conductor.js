@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/endpoint", "Scripts/modules/classes/shortname", "Scripts/modules/classes/apiviewer"], function (ko, $, genericClass, endpointClass, shortnameClass, apiViewerClass) {
+﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/endpoint", "Scripts/modules/classes/shortname", "Scripts/modules/classes/apiviewer", "Scripts/text!Scripts/modules/releaseddatasets.json"], function (ko, $, genericClass, endpointClass, shortnameClass, apiViewerClass, releasedDatasets) {
     var conductorVM = function () {
         var self = this;
 
@@ -119,7 +119,7 @@
         };
 
         self.getDataForEndpoints = function (data) {
-            var arr = self.endpointClass.readEndpoints(data);
+            var arr = self.endpointClass.readEndpoints(data, releasedDatasets);
             self.endpoints(arr);
         };
 

@@ -8,7 +8,7 @@
             self.apiViewers = ko.unwrap(params.apiViewers);
             self.allEndpoints = ko.unwrap(params.endpoints);
             self.endpoints = ko.utils.arrayFilter(self.allEndpoints, function (item) {
-                return (item.ddpDatasetName != null) && (item.ddpIsMainEndpoint == true) && (item.endpointType == "ListEndpoint");
+                return (item.ddpDatasetName != null) && (item.ddpIsMainEndpoint == true) && (item.endpointType == "ListEndpoint") && (item.isDatasetReleased == true);
             });
             self.endpoints = ko.utils.arrayMap(self.endpoints, function (item, ix) {
                 item.sortIndex = ix;                

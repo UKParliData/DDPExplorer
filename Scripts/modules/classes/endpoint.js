@@ -61,7 +61,7 @@
         };
 
         self.endpointItem = function (id, name, comment, ddpDatasetName, ddpIsMainEndpoint, uriTemplate,
-            uriExample, endpointType, textQueryProperty, maxPageSize, defaultViewer, viewers, selector) {
+            uriExample, endpointType, textQueryProperty, maxPageSize, defaultViewer, viewers, selector, isDatasetReleased) {
             var arr = [];
 
             if ((viewers != null) && (viewers.length > 0))
@@ -77,6 +77,7 @@
                 name: name,
                 comment: comment,
                 ddpDatasetName: ddpDatasetName,
+                isDatasetReleased: isDatasetReleased,
                 ddpIsMainEndpoint: ddpIsMainEndpoint,                
                 uriTemplate: self.uriTemplateItem(uriTemplate),
                 uriExample: uriExample,
@@ -131,7 +132,7 @@
             return true;
         };
 
-        self.readEndpoints = function (data) {
+        self.readEndpoints = function (data, releasedDatasets) {
             var arr = [];
             
             if ((data != null) && (data.result != null) && (data.result.items != null)) {
@@ -143,7 +144,7 @@
                             items[i].moniker || items[i].name,
                             items[i].note || items[i].comment,
                             items[i].ddpDatasetName,
-                            items[i].ddpIsMainEndpoint,                            
+                            items[i].ddpIsMainEndpoint,
                             items[i].uriTemplate,
                             items[i].exampleUri || items[i].exampleRequestPath,
                             items[i].type,
@@ -151,7 +152,9 @@
                             items[i].maxPageSize,
                             items[i].endpointDefaultViewer || items[i].defaultViewer,
                             items[i].endpointViewers || items[i].viewer,
-                            items[i].sparqlSelector || items[i].selector));
+                            items[i].sparqlSelector || items[i].selector,
+                            releasedDatasets.indexOf(items[i].ddpDatasetName) >= 0
+                            ));
 
                 var endpointSibling;
                 for (var i = 0; i < arr.length; i++) {
