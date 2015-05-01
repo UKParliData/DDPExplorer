@@ -21,14 +21,10 @@
 
             self.doneLoadCreated = function (data) {
                 if ((data != null) && (data.result != null) &&
-                    (data.result.items != null) && (data.result.items.length > 0) && (data.result.items[0].ddpCreated != null)) {
-                    self.resourceNumber(data.result.totalResults * 1);
+                    (data.result.items != null) && (data.result.items.length > 0) && (data.result.items[0].ddpCreated != null))
                     self.firstCreated(data.result.items[0].ddpCreated._value || data.result.items[0].ddpCreated);
-                }
-                else {
-                    self.firstCreated(null);
-                    self.resourceNumber(0);
-                }
+                else
+                    self.firstCreated("");
             };
 
             self.doneLoadModified = function (data) {
@@ -38,7 +34,7 @@
                     self.lastModified(data.result.items[0].ddpModified._value || data.result.items[0].ddpModified);
                 }
                 else {
-                    self.lastModified(null);
+                    self.lastModified("");
                     self.isModifiedResourceExists(false);
                 }
             };

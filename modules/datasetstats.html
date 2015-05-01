@@ -4,7 +4,7 @@
     </div>
 <!-- /ko -->
 <!-- ko if: isLoading()==false -->
-    <p data-bind="visible: resourceNumber()!=null">Number of resources: <strong data-bind="text: resourceNumber"></strong></p>
-    <p data-bind="visible: firstCreated()!=null">First created record on: <strong data-bind="text: firstCreated"></strong></p>
-    <p data-bind="visible: lastModified()!=null">Last modified record on: <strong data-bind="text: lastModified"></strong></p>
+    <p data-bind="visible: resourceNumber()!=''">Number of resources: <strong data-bind="text: resourceNumber"></strong></p>
+    <p data-bind="visible: firstCreated()!=''">First created record on: <strong data-bind="text: firstCreated"></strong></p>
+    <p data-bind="visible: lastModified()!=''">Last modified record on: <strong data-bind="text: lastModified"></strong></p>
 <!-- /ko -->
