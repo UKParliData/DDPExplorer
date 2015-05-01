@@ -26,7 +26,7 @@
                     self.firstCreated(data.result.items[0].ddpCreated._value || data.result.items[0].ddpCreated);
                 }
                 else {
-                    self.firstCreated("Not available");
+                    self.firstCreated(null);
                     self.resourceNumber(0);
                 }
             };
@@ -38,7 +38,7 @@
                     self.lastModified(data.result.items[0].ddpModified._value || data.result.items[0].ddpModified);
                 }
                 else {
-                    self.lastModified("Not available");
+                    self.lastModified(null);
                     self.isModifiedResourceExists(false);
                 }
             };

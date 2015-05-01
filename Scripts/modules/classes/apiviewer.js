@@ -19,6 +19,8 @@
                     shortname=ko.utils.arrayFirst(shortnames, function (item) {
                         return item.name == name
                     })
+                    if (shortname == null)
+                        continue;
                     legend = ko.utils.arrayFirst(legends || [], function (item) {
                         return (item.label._value || item.label) == name;
                     });
