@@ -11,6 +11,14 @@
 
             self.genericClass = new genericClass;
 
+            self.doneLoadNumber = function (data) {
+                if ((data != null) && (data.result != null) &&
+                    (data.result.items != null) && (data.result.items.length > 0)) 
+                    self.resourceNumber(data.result.totalResults * 1);
+                else 
+                    self.resourceNumber(0);
+            };
+
             self.doneLoadCreated = function (data) {
                 if ((data != null) && (data.result != null) &&
                     (data.result.items != null) && (data.result.items.length > 0) && (data.result.items[0].ddpCreated != null)) {
@@ -45,6 +53,7 @@
                     _view: "basic",
                     _page: 0                    
                 };
+                self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadNumber, self.genericClass.errorOnLoad);
                 querystring._properties = "ddpCreated";
                 querystring._sort = "-ddpCreated";
                 querystring["exists-ddpCreated"] = true;
