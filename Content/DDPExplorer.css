@@ -38,6 +38,7 @@ svg{
     border-top: 5px solid #000 !important;
     background-color: #fff !important;
     position:absolute;
+    width: 100%;
 }
 
 .margin-0{

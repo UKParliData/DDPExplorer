@@ -12,6 +12,7 @@
             });
             self.endpoints = ko.utils.arrayMap(self.endpoints, function (item, ix) {
                 item.sortIndex = ix;
+                item.href = item.ddpDatasetName.split(" ").join("").split(",").join("");
                 return item;
             });
             self.genericClass.sortArray(self.endpoints, "sortIndex", "ddpDatasetName");
