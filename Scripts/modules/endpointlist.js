@@ -11,7 +11,7 @@
                 return (item.ddpDatasetName != null) && (item.ddpIsMainEndpoint == true) && (item.endpointType == "ListEndpoint") && (item.isDatasetReleased == true);
             });
             self.endpoints = ko.utils.arrayMap(self.endpoints, function (item, ix) {
-                item.sortIndex = ix;                
+                item.sortIndex = ix;
                 return item;
             });
             self.genericClass.sortArray(self.endpoints, "sortIndex", "ddpDatasetName");

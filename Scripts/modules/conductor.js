@@ -11,7 +11,7 @@
         self.hasError = ko.observable(false);
         self.hasInfo = ko.observable(false);
         self.errorText = ko.observableArray([]);
-        self.infoText = ko.observableArray([]);        
+        self.infoText = ko.observableArray([]);
 
         self.genericClass = new genericClass;
         self.endpointClass = new endpointClass;
@@ -58,62 +58,69 @@
                         self.apiViewers(apiViewers);
                 }
             }
-            if ((self.endpoints().length > 0) && (self.shortnames().length>0) && (self.apiViewers().length > 0)) {
-                var parameters = self.endpointClass.getEndpointNameFromUrl();                
-                if (parameters.endpoint == null) {
+            if ((self.endpoints().length > 0) && (self.shortnames().length > 0) && (self.apiViewers().length > 0)) {
+                var parameters = self.endpointClass.getEndpointNameFromUrl();
+                if (parameters.learnMore != null) {
                     self.parameters({
-                        endpoints: self.endpoints(),
-                        apiViewers: self.apiViewers()
+                        ddpDatasetName: parameters.learnMore
                     });
-                    self.selectedComponent("endpoint-list");
+                    self.selectedComponent("dataset-api-help");
                 }
-                else {
-                    var endpoint = null;
-                    var endpoints = self.endpoints();
+                else
+                    if (parameters.endpoint == null) {
+                        self.parameters({
+                            endpoints: self.endpoints(),
+                            apiViewers: self.apiViewers()
+                        });
+                        self.selectedComponent("endpoint-list");
+                    }
+                    else {
+                        var endpoint = null;
+                        var endpoints = self.endpoints();
 
-                    for (var i = 0; i < endpoints.length; i++)
-                        if ((endpoints[i].ddpIsMainEndpoint == true) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
-                            endpoint = endpoints[i];
-                            break;
-                        }
-                    if (endpoint == null)
                         for (var i = 0; i < endpoints.length; i++)
-                            if ((endpoints[i].ddpIsMainEndpoint == false) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
+                            if ((endpoints[i].ddpIsMainEndpoint == true) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
                                 endpoint = endpoints[i];
                                 break;
                             }
-                    if (endpoint != null) {
-                        var viewer = endpoint.defaultViewer;
-
-                        if ((parameters.querystring != null) && (parameters.querystring._view != null) && (parameters.querystring._view != "basic")) {
-                            for (var i = 0; i < endpoint.viewer.length; i++)
-                                if (endpoint.viewer[i].name == parameters.querystring._view) {
-                                    viewer = endpoint.viewer[i];
+                        if (endpoint == null)
+                            for (var i = 0; i < endpoints.length; i++)
+                                if ((endpoints[i].ddpIsMainEndpoint == false) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
+                                    endpoint = endpoints[i];
                                     break;
                                 }
+                        if (endpoint != null) {
+                            var viewer = endpoint.defaultViewer;
+
+                            if ((parameters.querystring != null) && (parameters.querystring._view != null) && (parameters.querystring._view != "basic")) {
+                                for (var i = 0; i < endpoint.viewer.length; i++)
+                                    if (endpoint.viewer[i].name == parameters.querystring._view) {
+                                        viewer = endpoint.viewer[i];
+                                        break;
+                                    }
+                            }
+                            var shortnames = self.shortnameClass.findShortnamesForViewer(viewer);
+                            if (shortnames != null) {
+                                self.parameters({
+                                    endpointUrl: parameters.endpoint,
+                                    querystring: parameters.querystring,
+                                    endpoint: endpoint,
+                                    viewerName: endpoint.defaultViewer.name,
+                                    shortnames: shortnames
+                                });
+                                self.selectedComponent("search-result");
+                            }
+                            else
+                                self.showError("No shortnames found");
                         }
-                        var shortnames = self.shortnameClass.findShortnamesForViewer(viewer);
-                        if (shortnames != null) {
-                            self.parameters({
-                                endpointUrl: parameters.endpoint,
-                                querystring: parameters.querystring,
-                                endpoint: endpoint,
-                                viewerName: endpoint.defaultViewer.name,
-                                shortnames: shortnames
-                            });
-                            self.selectedComponent("search-result");
-                        }
-                        else 
-                            self.showError("No shortnames found");
+                        else
+                            self.showError("No matching endpoint found");
                     }
-                    else 
-                        self.showError("No matching endpoint found");
-                }
                 self.isAppBusy(false);
             }
         });
 
-        self.getDataForApiViewers = function (data) {            
+        self.getDataForApiViewers = function (data) {
             var arr = self.apiViewerClass.readAPIViewers(data);
             self.apiViewers(arr);
         };
@@ -124,12 +131,12 @@
         };
 
         self.getDataForShortnames = function (data) {
-            var arr=self.shortnameClass.readShortnames(data);
+            var arr = self.shortnameClass.readShortnames(data);
             self.shortnames(arr);
         };
-        
+
         self.init = function () {
-            if (sessionStorage) {               
+            if (sessionStorage) {
                 var endpoints = self.endpointClass.getAllEndpoints();
                 if (endpoints == null)
                     self.genericClass.getDataFromOwlim("endpoints", { _pageSize: 10000 }, self.getDataForEndpoints, self.genericClass.errorOnLoad);

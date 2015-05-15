@@ -12,13 +12,13 @@
     <link rel="stylesheet" type="text/css" href="Content/DDPExplorer.css" />
 </head>
 <body data-bind="click: genericClass.closeAllPopups">
-    <div class="container padding-0">
-        <nav class="navbar padding-5 border-bottom-header margin-0">
+    <div class="container-fluid padding-0">
+        <nav class="navbar padding-5 border-bottom-header margin-0 side-paddings">
             <hgroup class="navbar-header">                    
                 <a href="http://data.parliament.uk"><img src="Content/images/ddp-logo.png" alt="Data.Parliament Logo" title="Data.Parliament Logo" /></a>
             </hgroup>
             <div class="navbar-right">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav font-size-h4">
                     <li><a href="http://ddpckan-btaext.cloudapp.net">Home</a></li>
                     <li><a href="http://ddpckan-btaext.cloudapp.net/dataset">Datasets</a></li>
                     <li><a href="http://ddpckan-btaext.cloudapp.net/developers">Developer</a></li>
@@ -29,20 +29,20 @@
         </nav>
     </div>
     <!-- ko if: hasError() -->
-    <div class="container">
+    <div class="container-fluid internal-margins">
         <!-- ko foreach: errorText -->
         <div class="alert alert-danger" data-bind="text: $data"></div>
         <!-- /ko -->
     </div>
     <!-- /ko -->
     <!-- ko if: hasInfo() -->
-    <div class="container">
+    <div class="container-fluid internal-margins">
         <!-- ko foreach: infoText -->
         <div class="alert alert-info" data-bind="text: infoText"></div>
         <!-- /ko -->
     </div>
     <!-- /ko -->
-    <main class="container">
+    <main class="container-fluid internal-margins">
         <!-- ko if: isAppBusy() -->
         <div class="modal fade in show">
             <div class="modal-backdrop fade in full-height"></div>
@@ -55,8 +55,8 @@
         <div data-bind="component: { name: selectedComponent, params: parameters }"></div>
         <!-- /ko -->
     </main>
-    <div class="container padding-0">
-        <footer class="footer-wrapper">
+    <div class="container-fluid padding-0">
+        <footer class="footer-wrapper side-paddings">
             <div class="row margin-bottom-0 padding-10">
                 <div class="col-md-6">
                     <h4 class="navbar-text">© 2015 Houses of Parliament</h4>
@@ -64,7 +64,7 @@
                 <div class="col-md-6">
                     <div class="navbar-header pull-right">
                         <ul class="list-inline">
-                            <li><h4 class="margin-top-15"><a>Contact us</a></h4></li>
+                            <li><h4 class="margin-top-15"><a href="mailto:data@parliament.uk">Contact us</a></h4></li>
                             <li>
                                 <a href="https://twitter.com/UKParliData" title="data.parliament.uk (@UKParliData) on Twitter">
                                     <img src="Content/images/twitter-logo.png" alt="data.parliament.uk (@UKParliData) on Twitter">

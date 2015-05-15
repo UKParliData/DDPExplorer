@@ -7,7 +7,9 @@
             var divider = search.indexOf("&");
             var endpoint = null;
             var querystring = null;
-            if (search.indexOf("endpoint=") == 0) {
+            var learnMore = null;
+
+            if (search.toUpperCase().indexOf("ENDPOINT=") == 0) {
                 if (divider > 0) {
                     endpoint = search.substring(search.indexOf("/") + 1, divider);
                     var params = search.substring(search.indexOf("&") + 1).split("&");
@@ -18,9 +20,13 @@
                 else
                     endpoint = search.substring(search.indexOf('/') + 1);
             }
+            else
+                if (search.toUpperCase().indexOf("LEARNMORE=") == 0)
+                    learnMore = decodeURIComponent(search.split("=")[1]);
             return {
                 endpoint: endpoint,
-                querystring: querystring
+                querystring: querystring,
+                learnMore: learnMore
             }
         };
 

@@ -26,22 +26,6 @@ svg{
     width: 100%;
 }
 
-@media (min-width: 768px) {
-  .container {
-    width: 705px!important;
-  }
-}
-@media (min-width: 992px) {
-  .container {
-    width: 880px!important;
-  }
-}
-@media (min-width: 1200px) {
-  .container {
-    width: 1100px!important;
-  }
-}
-
 .border-bottom-header{
     border-left:0px none !important;
     border-right:0px none !important;
@@ -319,4 +303,18 @@ input::-webkit-inner-spin-button {
 
 .no-shadow{
     box-shadow: none !important;
+}
+
+.font-size-h4 {
+  font-size: 18px;
+}
+
+.internal-margins {
+  margin-left: 3% !important;
+  margin-right: 3% !important;
+}
+
+.side-paddings {
+  padding-left: 40px !important;
+  padding-right: 40px !important;
 }
