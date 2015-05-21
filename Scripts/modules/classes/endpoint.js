@@ -140,7 +140,7 @@
 
         self.readEndpoints = function (data, releasedDatasets) {
             var arr = [];
-            alert(1);
+            
             if ((data != null) && (data.result != null) && (data.result.items != null)) {
                 var items = data.result.items;
                 for (var i = 0; i < items.length; i++)
