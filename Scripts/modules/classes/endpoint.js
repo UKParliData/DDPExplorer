@@ -140,11 +140,11 @@
 
         self.readEndpoints = function (data, releasedDatasets) {
             var arr = [];
-            
+            alert(1);
             if ((data != null) && (data.result != null) && (data.result.items != null)) {
                 var items = data.result.items;
                 for (var i = 0; i < items.length; i++)
-                    if (items[i].defaultViewer)
+                    if ((items[i].endpointDefaultViewer || items[i].defaultViewer)!=null)
                         arr.push(self.endpointItem(
                             items[i]._about,
                             items[i].moniker || items[i].name,

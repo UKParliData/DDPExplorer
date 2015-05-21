@@ -61,7 +61,7 @@
                 for (var i = 0; i < items.length; i++)
                     arr.push(self.apiViewerItem(                        
                             items[i].ddpDatasetName,
-                            items[i].properties || [],
+                            items[i].propertyNames || items[i].properties || [],
                             items[i].ddpPropertyLegends || []));
 
                 sessionStorage.setItem("apiviewers", JSON.stringify(arr));
