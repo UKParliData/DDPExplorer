@@ -31,7 +31,13 @@
 
             self.showDataDistribution = function () {
                 self.isShowDataDistribution(true);
-            };            
+            };
+
+            var init = function () {
+                window.conductorVM.isPageLoading(false);
+            };
+
+            init();
             
         },
         template: htmlText

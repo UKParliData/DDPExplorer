@@ -13,7 +13,7 @@
 
             self.textQuery = ko.observable(ko.unwrap(params.textQuery));
             self.viewerName = ko.unwrap(params.viewerName);
-            self.shortnameProperties = params.shortnameProperties || ko.observableArray([]);
+            self.shortnameProperties = ko.observableArray(ko.unwrap(params.shortnameProperties) || []);
 
             self.filters = ko.observableArray(ko.utils.arrayFilter(self.shortnameProperties(), function (item) { return item.hasFilter() == true; }));
             self.firstItemIndex = ko.observable(null);
@@ -29,7 +29,7 @@
             self.endpointUrl = genericUnit.parseUrl().endpoint;            
             self.endpoint = ko.observable(endpointUnit.findEndpointForUrl(self.endpointUrl));
             self.shortnames = ko.observable(null);
-            self.querystring = ko.observable(null);
+            self.querystring = ko.observable(null);            
 
             self.sortBy = function (shortname, isAscending) {                
                 var sorting = "";
@@ -117,6 +117,13 @@
                     $(e.target).parent(".btn-group").addClass("open");
                 e.stopPropagation();
             };
+
+            self.nextPageSize = ko.pureComputed(function () {                
+                if ((2 + self.currentPage()) * self.pageSize() <= self.totalItemIndex())
+                    return self.pageSize();
+                else
+                    return self.totalItemIndex() - ((1 + self.currentPage()) * self.pageSize());
+            });
 
             self.loadMore = function () {
                 self.isLoadingMore(true);
@@ -224,21 +231,12 @@
                 self.totalItemIndex(null);
                 querystring._page = self.currentPage();
                 self.querystring(querystring);
-                self.init();
+                loading();
             };
 
-            self.init = function () {
-                var querystring = {};                
-                var viewer = null;
+            var loading = function () {
+                var querystring = {};
 
-                self.querystring(shortnamePropertyUnit.buildQueryString(self.shortnameProperties(), self.textQuery()));
-                if (self.viewerName == null)
-                    self.viewerName=self.endpoint().defaultViewer.name;
-                viewer = ko.utils.arrayFirst(self.endpoint().viewers, function (item) {
-                    return item.name == self.viewerName;
-                });
-
-                self.shortnames(shortnameUnit.findShortnamesForViewer(viewer));
                 $.extend(querystring, self.querystring());
                 if (self.isLoadingMore() == false)
                     window.conductorVM.isAppBusy(true);
@@ -249,10 +247,31 @@
                 if ((querystring._pageSize == null) && (self.endpoint().endpointType == "ListEndpoint"))
                     querystring._pageSize = self.pageSize();
                 self.querystring(querystring);
-                genericUnit.getDataFromOwlim(self.endpointUrl, self.querystring(), self.doneLoad, genericUnit.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpointUrl, self.querystring(), self.doneLoad, genericUnit.errorOnLoad, self.endpoint().ddpDatasetName);
+                window.conductorVM.isPageLoading(false);
             };
 
-            self.init();
+            var init = function () {                
+                var viewer = null;
+                var shortnames = [];
+
+                self.querystring(shortnamePropertyUnit.buildQueryString(self.shortnameProperties(), self.textQuery()));
+                if (self.viewerName == null)
+                    self.viewerName=self.endpoint().defaultViewer.name;
+                viewer = ko.utils.arrayFirst(self.endpoint().viewers, function (item) {
+                    return item.name == self.viewerName;
+                });
+                shortnames = shortnameUnit.findShortnamesForViewer(viewer);
+                ko.utils.arrayForEach(shortnames, function (item, index) {
+                    item.sortIndex = index;
+                });
+                genericUnit.sortArray(shortnames, "sortIndex", "label");
+                self.shortnames(shortnames);
+
+                loading();
+            };
+
+            init();
 
             self.dispose = function () {
                 self.apiUrl.dispose();                

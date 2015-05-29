@@ -47,6 +47,12 @@
                 }
             });
 
+            var init = function () {
+                window.conductorVM.isPageLoading(false);
+            };
+
+            init();
+
             self.dispose = function () {
                 self.searchText.dispose();
             };

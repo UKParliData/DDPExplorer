@@ -50,16 +50,16 @@
                     _view: "basic",
                     _page: 0                    
                 };
-                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadNumber, genericUnit.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadNumber, genericUnit.errorOnLoad, "Dataset statistics");
                 querystring._properties = "ddpCreated";
                 querystring._sort = "-ddpCreated";
                 querystring["exists-ddpCreated"] = true;
-                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadCreated, genericUnit.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadCreated, genericUnit.errorOnLoad, "Dataset statistics");
                 querystring._properties = "ddpModified";
                 querystring._sort = "-ddpModified";
                 delete querystring["exists-ddpCreated"];
                 querystring["exists-ddpModified"]=true;
-                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadModified, genericUnit.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadModified, genericUnit.errorOnLoad, "Dataset statistics");
             };
 
             self.dispose = function () {

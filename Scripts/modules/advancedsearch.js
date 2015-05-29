@@ -171,6 +171,7 @@
                 for (var i = 0; i < arr.length; i++)
                     arr[i].isFilterOpen(false);
                 self.isAllSelected(selectedArr.length == arr.length);
+                window.conductorVM.isPageLoading(false);
             };
 
             self.init();

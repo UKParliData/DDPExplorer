@@ -20,7 +20,8 @@
                     <strong>
                         <shortname-name params="label: sortByProperty().shortname"></shortname-name>
                     </strong>
-                    <span class="glyphicon" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
+                    <span class="glyphicon font-size-h6" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
+                    <span class="font-size-h6" data-bind="text: sortByProperty().isAscending==true?'asc':'desc'"></span>
                 <!-- /ko -->
                 <span class="caret"></span>
             </button>
@@ -29,13 +30,13 @@
                     <li>
                         <ul class="list-inline">
                             <li class="padding-0">
-                                <button type="button" class="btn btn-sm no-background-color padding-0 margin-right-5" data-bind="click: function(){ $parent.sortBy($data, true); }">
-                                    <h4><span class="glyphicon glyphicon-arrow-up text-primary"></span></h4>
+                                <button type="button" class="btn no-background-color padding-0 margin-right-5 text-primary font-size-h6" data-bind="click: function(){ $parent.sortBy($data, true); }">
+                                    <span class="glyphicon glyphicon-arrow-up"></span>asc
                                 </button>
                             </li>
                             <li class="padding-0">
-                                <button type="button" class="btn btn-sm no-background-color padding-0" data-bind="click: function(){ $parent.sortBy($data, false); }">
-                                    <h4><span class=" glyphicon glyphicon-arrow-down text-primary"></span></h4>
+                                <button type="button" class="btn no-background-color padding-0 text-primary font-size-h6" data-bind="click: function(){ $parent.sortBy($data, false); }">
+                                    <span class="glyphicon glyphicon-arrow-down"></span>desc
                                 </button>
                             </li>
                             <li>
@@ -125,7 +126,7 @@
             <busy-indicator></busy-indicator>
         <!-- /ko -->
         <!-- ko if: ((isLoadingMore()==false) && (endpoint().endpointType=='ListEndpoint') && (firstItemIndex()!=null) && (firstItemIndex()<lastItemIndex()) && (totalItemIndex()>lastItemIndex())) -->
-            <button type="button" class="btn btn-lg btn-default" data-bind="click: loadMore">Load more</button>
+            <button type="button" class="btn btn-lg btn-default" data-bind="click: loadMore">Load <text data-bind="text: nextPageSize"></text> items more</button>
         <!-- /ko -->
         <!-- ko if: (endpoint().endpointType=='ItemEndpoint') && (endpoint().listEndpointUri!=null) -->
             <button type="button" class="btn btn-lg btn-default" data-bind="click: fullList">Go to full list</button>

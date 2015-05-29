@@ -200,22 +200,6 @@ input::-webkit-inner-spin-button {
     width: 50% !important;
 }
 
-.resource-closed {
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    transform: rotate(90deg);
-}
-
-.resource-open {
-    -webkit-transform: rotate(140deg);
-    -moz-transform: rotate(140deg);
-    -ms-transform: rotate(140deg);
-    -o-transform: rotate(140deg);
-    transform: rotate(140deg);
-}
-
 .tab-menu{
     padding-bottom: 2px;
     border-bottom: 1px solid #dedede;
@@ -285,8 +269,7 @@ input::-webkit-inner-spin-button {
 .data-bar{
     stroke: none;
     fill: #373751;
-    fill-opacity: 0.5;
-    cursor: pointer;
+    fill-opacity: 0.5;    
 }
 
 .data-bar:hover{
@@ -308,6 +291,10 @@ input::-webkit-inner-spin-button {
 
 .font-size-h4 {
   font-size: 18px;
+}
+
+.font-size-h6 {
+  font-size: 12px;
 }
 
 .internal-margins {

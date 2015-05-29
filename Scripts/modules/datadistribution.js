@@ -1,8 +1,10 @@
-﻿define(["knockout", "jquery", "d3", "Scripts/modules/classes/generic", "Scripts/modules/classes/shortname", "Scripts/modules/classes/shortnameproperty", "Scripts/text!modules/datadistribution.html"], function (ko, $, d3, genericClass, shortnameClass, shortnamePropertyClass, htmlText) {
+﻿define(["knockout", "jquery", "d3", "Scripts/modules/classes/generic", "Scripts/modules/classes/routing", "Scripts/modules/classes/shortname", "Scripts/modules/classes/shortnameproperty", "Scripts/text!modules/datadistribution.html"], function (ko, $, d3, genericClass, routingClass, shortnameClass, shortnamePropertyClass, htmlText) {
     return {
         viewModel: function (params) {
             var self = this;
 
+            var genericUnit = new genericClass;
+            var routingUnit = new routingClass;
             var shortnameUnit = new shortnameClass([]);
             var shortnamePropertyUnit = new shortnamePropertyClass;
 
@@ -20,9 +22,7 @@
                 _pageSize: self.endpoint.maxPageSize,
                 _page: 0,
                 "exists-ddpModified": true
-            };
-
-            var genericUnit = new genericClass;
+            };            
 
             self.getDateOnly = function (dateText) {
                 var date = new Date(dateText);
@@ -55,7 +55,7 @@
                 }
                 if ((data != null) && (data.result != null) && (self.totalNumber > ((data.result.startIndex * 1) + self.querystring._pageSize))) {
                     self.querystring._page++;
-                    genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, genericUnit.errorOnLoad);
+                    genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, genericUnit.errorOnLoad, "Data distribution");
                 }
                 else {
                     if (self.dates.length > 0) {
@@ -267,9 +267,9 @@
                         self.selectedNumber(null);
                         return;
                     })
-                    .on("click", function (d) {
+                    /*.on("click", function (d) {
                         self.showResultsForSelectedDate(d.date);
-                    })
+                    })*/
                     .transition()
                     .duration(1500)
                     .attr("height", function (d) { return height - y(d.count); })
@@ -280,7 +280,7 @@
             self.showResultsForSelectedDate = function (date) {
                 var querystring = {};
                 var shortnameProperties = [];
-                var shortnames = shortnameUnit.findShortnamesForViewer(self.endpoint.defaultViewer.name);
+                var shortnames = shortnameUnit.findShortnamesForViewer(self.endpoint.defaultViewer);
 
                 querystring["min-ddpModified"] = genericUnit.formatDate("yyyy-MM-ddTHH:mm:ss.fffffffZ", date);
                 date.setUTCDate(date.getUTCDate() + 1);
@@ -295,7 +295,7 @@
             };
 
             self.init = function () {
-                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, genericUnit.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, self.querystring, self.doneLoad, genericUnit.errorOnLoad, "Data distribution");
             };
 
             self.init();

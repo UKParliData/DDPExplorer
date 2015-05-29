@@ -3,7 +3,7 @@
         <div class="col-sm-3 col-sm-padding text-title text-tooltip">
             <h4>
                 <button type="button" class="btn btn-link btn-sm padding-0" data-bind="click: toggleResource, visible: properties().length>0">
-                    <span class="glyphicon glyphicon-upload text-info" data-bind="css:{'resource-open': resource().isVisible()==true,'resource-closed': resource().isVisible()==false}"></span>
+                    <span class="glyphicon text-info" data-bind="css:{'glyphicon-minus': resource().isVisible()==true,'glyphicon-plus': resource().isVisible()==false}"></span>
                 </button>                
                 <span data-bind="text: resource().label"></span>                
             </h4>

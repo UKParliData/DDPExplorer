@@ -11,13 +11,18 @@
         self.selectedComponent = ko.observable(null);
         self.parameters = ko.observable(null);
         self.isAppBusy = ko.observable(true);
+        self.isPageLoading = ko.observable(false);
         self.endpoints = ko.observableArray([]);
         self.apiViewers = ko.observableArray([]);
         self.shortnames = ko.observableArray([]);
         self.hasError = ko.observable(false);
         self.hasInfo = ko.observable(false);
         self.errorText = ko.observableArray([]);
-        self.infoText = ko.observableArray([]);        
+        self.infoText = ko.observableArray([]);
+
+        var selectedComponentSubscription = self.selectedComponent.subscribe(function () {
+            self.isPageLoading(true);
+        });
 
         self.toggleNavbar = function (vm, e) {
             var isShown = $(e.target).parent().next(".navbar-collapse").hasClass("in");
@@ -45,7 +50,7 @@
 
                     var shortnames = shortnameUnit.getAllShortnames();
                     if (shortnames == null)
-                        self.genericUnit.getDataFromOwlim("shortnames", { _pageSize: 10000 }, self.getDataForShortnames, self.genericUnit.errorOnLoad);
+                        self.genericUnit.getDataFromOwlim("shortnames", { _pageSize: 10000 }, self.getDataForShortnames, self.genericUnit.errorOnLoad, "Definition for fields");
                     else
                         self.shortnames(shortnames);
                 }
@@ -54,7 +59,7 @@
 
                     var apiViewers = apiViewerUnit.getAllAPIViewers();
                     if (apiViewers == null)
-                        self.genericUnit.getDataFromOwlim("apiviewers", { _pageSize: 10000 }, self.getDataForApiViewers, self.genericUnit.errorOnLoad);
+                        self.genericUnit.getDataFromOwlim("apiviewers", { _pageSize: 10000 }, self.getDataForApiViewers, self.genericUnit.errorOnLoad, "Definition for datasets structures");
                     else
                         self.apiViewers(apiViewers);
                 }
@@ -84,7 +89,7 @@
             if (sessionStorage) {
                 var endpoints = endpointUnit.getAllEndpoints();
                 if (endpoints == null)
-                    self.genericUnit.getDataFromOwlim("endpoints", { _pageSize: 10000 }, self.getDataForEndpoints, self.genericUnit.errorOnLoad);
+                    self.genericUnit.getDataFromOwlim("endpoints", { _pageSize: 10000 }, self.getDataForEndpoints, self.genericUnit.errorOnLoad, "Definition for APIs");
                 else
                     self.endpoints(endpoints);
                 window.onpopstate = routingUnit.loadComponentOnPageLoad;
@@ -93,6 +98,7 @@
 
         self.dispose = function () {
             self.continueWhenFinishReadMetadata.dispose();
+            selectedComponentSubscription.dispose();
             window.onpopstate = null;
         };
 

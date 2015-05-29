@@ -27,28 +27,28 @@
                 </ul>
             </div>
         </nav>
-    </div>
-    <!-- ko if: hasError() -->
-    <div class="container-fluid internal-margins" style="display:none" data-bind="visible: hasError()==true">
-        <!-- ko foreach: errorText -->
-        <div class="alert alert-danger" data-bind="text: $data"></div>
-        <!-- /ko -->
-    </div>
-    <!-- /ko -->
-    <!-- ko if: hasInfo() -->
-    <div class="container-fluid internal-margins" style="display:none" data-bind="visible: hasInfo()==true">
-        <!-- ko foreach: infoText -->
-        <div class="alert alert-info" data-bind="text: infoText"></div>
-        <!-- /ko -->
-    </div>
-    <!-- /ko -->
+    </div>    
     <main class="container-fluid internal-margins">
-        <!-- ko if: isAppBusy() -->
+        <!-- ko if: ((isAppBusy()==true) || (isPageLoading()==true)) -->
         <div class="modal fade in show">
             <div class="modal-backdrop fade in full-height"></div>
             <div class="modal-dialog vertical-center">
                 <busy-indicator></busy-indicator>
             </div>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: hasError() -->
+        <div style="display:none" data-bind="visible: hasError()==true">
+            <!-- ko foreach: errorText -->
+            <div class="alert alert-danger" data-bind="text: $data"></div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko if: hasInfo() -->
+        <div style="display:none" data-bind="visible: hasInfo()==true">
+            <!-- ko foreach: infoText -->
+            <div class="alert alert-info" data-bind="text: infoText"></div>
+            <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko if: selectedComponent()!=null -->
@@ -64,7 +64,7 @@
                 <div class="col-md-6">
                     <div class="navbar-header pull-right">
                         <ul class="list-inline">
-                            <li><h4 class="margin-top-15"><a href="mailto:data@parliament.uk"><span class="glyphicon glyphicon-envelope"></span> Contact us</a></h4></li>
+                            <li><div class="margin-top-15 font-size-h4"><a href="mailto:data@parliament.uk"><span class="glyphicon glyphicon-envelope"></span> Contact us</a></div></li>
                             <li>
                                 <a href="https://twitter.com/UKParliData" title="data.parliament.uk (@UKParliData) on Twitter">
                                     <img src="Content/images/twitter-logo.png" alt="data.parliament.uk (@UKParliData) on Twitter">

@@ -6,7 +6,7 @@
 
         self.endpointQueryString = "endpoint";
 
-        self.getDataFromOwlim = function (endpoint, parameters, whenDone, whenError) {
+        self.getDataFromOwlim = function (endpoint, parameters, whenDone, whenError, dataToLoadDescription) {
             $.ajax({
                 timeout: 65 *1000,
                 url: self.host + endpoint + ".json",
@@ -14,7 +14,9 @@
                 dataType: "jsonp",
                 success: function () {
                 },
-                error: whenError
+                error: function () {
+                    whenError(dataToLoadDescription);
+                }
             }).done(whenDone);
         };
 
@@ -225,8 +227,8 @@
             });
         }
 
-        self.errorOnLoad = function () {
-            window.conductorVM.showError("Error while loading data");
+        self.errorOnLoad = function (dataToLoadDescription) {
+            window.conductorVM.showError("Whoops! Something went wrong when looking for " + dataToLoadDescription + ". Please try again in a few moments.");
             window.conductorVM.isAppBusy(false);
         };
         
