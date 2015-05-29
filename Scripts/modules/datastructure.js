@@ -3,13 +3,14 @@
         viewModel: function (params) {
             var self = this;
 
+            var endpointUnit = new endpointClass();
+            var shortnameUnit = new shortnameClass([]);
+            var apiViewerUnit = null;
+
             self.apiViewers = ko.unwrap(params.apiViewers);
             self.ddpDatasetName = ko.unwrap(params.ddpDatasetName);
-            self.viewer = [];
 
-            self.endpointClass = new endpointClass();
-            self.shortnameClass = new shortnameClass([]);
-            self.apiViewerClass = null;
+            self.viewer = [];
 
             self.getDatasetStructure = function (datasetName, levelDeep) {
                 var arr = [];
@@ -32,7 +33,7 @@
                     node = $.extend({}, viewer.properties[i]);
                     if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.itemEndpoint != null))
                         if (node.itemEndpoint.ddpDatasetName == datasetName) {
-                            var apiViewer = self.apiViewerClass.convertViewerToAPIViewer(node.shortname.name, node.itemEndpoint.defaultViewer);
+                            var apiViewer = apiViewerUnit.convertViewerToAPIViewer(node.shortname.name, node.itemEndpoint.defaultViewer);
                             node.children = getChildrenForAPIViewer(apiViewer);
                         }
                         else
@@ -121,10 +122,10 @@
             };
             
             self.init = function () {
-                var shortnames = self.shortnameClass.getAllShortnames();
-                var endpoints = self.endpointClass.getAllEndpoints();
+                var shortnames = shortnameUnit.getAllShortnames();
+                var endpoints = endpointUnit.getAllEndpoints();
 
-                self.apiViewerClass = new apiViewerClass(shortnames, endpoints);
+                apiViewerUnit = new apiViewerClass(shortnames, endpoints);
                 self.viewer = self.getDatasetStructure(self.ddpDatasetName, 0);                
                 self.renderDatasetTree();
             };

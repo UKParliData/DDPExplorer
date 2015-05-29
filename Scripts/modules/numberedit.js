@@ -10,16 +10,16 @@
             self.isDisabled = params.isDisabled;
             self.isReadyToCheck = ko.observable(false);
 
-            self.genericClass = new genericClass;
+            genericUnit = new genericClass;
 
             self.checkValue = ko.computed(function () {
                 if (self.isReadyToCheck() == false)
                     return;
                 if (self.value() != null) {
                     if (self.dataType == "integer")
-                        self.isValueValid(self.genericClass.isInteger(self.value()) == true);
+                        self.isValueValid(genericUnit.isInteger(self.value()) == true);
                     if (self.dataType == "decimal")
-                        self.isValueValid(self.genericClass.isDecimal(self.value()) == true);
+                        self.isValueValid(genericUnit.isDecimal(self.value()) == true);
                 }
                 if ((self.isValueValid() == true) && (self.value()!=null) && (self.value()!=""))
                     self.number(self.value());

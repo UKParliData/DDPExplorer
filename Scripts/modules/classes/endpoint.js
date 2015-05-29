@@ -2,34 +2,6 @@
     var endpointClass = function () {
         var self = this;
 
-        self.getEndpointNameFromUrl = function () {
-            var search = window.location.search.replace("?", "");
-            var divider = search.indexOf("&");
-            var endpoint = null;
-            var querystring = null;
-            var learnMore = null;
-
-            if (search.toUpperCase().indexOf("ENDPOINT=") == 0) {
-                if (divider > 0) {
-                    endpoint = search.substring(search.indexOf("/") + 1, divider);
-                    var params = search.substring(search.indexOf("&") + 1).split("&");
-                    querystring = {};
-                    for (var i = 0; i < params.length; i++)
-                        querystring[decodeURIComponent(params[i].split("=")[0])] = decodeURIComponent(params[i].split("=")[1]);
-                }
-                else
-                    endpoint = search.substring(search.indexOf('/') + 1);
-            }
-            else
-                if (search.toUpperCase().indexOf("LEARNMORE=") == 0)
-                    learnMore = decodeURIComponent(search.split("=")[1]);
-            return {
-                endpoint: endpoint,
-                querystring: querystring,
-                learnMore: learnMore
-            }
-        };
-
         self.viewerItem = function (name, properties, legends) {
             return {
                 name: name,
@@ -97,6 +69,24 @@
                 itemEndpointUri: null,
                 listEndpointUri: null
             }
+        };
+
+        self.findEndpointForUrl = function (endpointUrl) {
+            var endpoints = self.getAllEndpoints();
+            var result = null;
+
+            for (var i = 0; i < endpoints.length; i++)
+                if ((endpoints[i].ddpIsMainEndpoint == true) && (self.isEndpointUrlMatching(endpointUrl, endpoints[i].uriTemplate))) {
+                    result = endpoints[i];
+                    break;
+                }
+            if (result == null)
+                for (var i = 0; i < endpoints.length; i++)
+                    if ((endpoints[i].ddpIsMainEndpoint == false) && (self.isEndpointUrlMatching(endpointUrl, endpoints[i].uriTemplate))) {
+                        result = endpoints[i];
+                        break;
+                    }
+            return result;
         };
 
         self.isEndpointUrlMatching = function (endpoint, template) {

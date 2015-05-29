@@ -2,7 +2,7 @@
     var resourceClass = function (resourceEndpoint, apiViewer) {
         var self = this;
 
-        self.genericClass = new genericClass;
+        var genericUnit = new genericClass;
 
         self.giveMeItemEndpoint = function (restUri) {
             var result = null;
@@ -26,14 +26,14 @@
                         (property.itemEndpoint.uriTemplate != null) &&
                         (property.itemEndpoint.uriTemplate.restUri != null) &&
                         (property.itemEndpoint.uriTemplate.restUri.length > 1))
-                        uri = self.genericClass.endpointUri + uri.replace("resources", self.giveMeItemEndpoint(property.itemEndpoint.uriTemplate.restUri));
+                        uri = "?" + genericUnit.endpointQueryString+"=" + uri.replace("resources", self.giveMeItemEndpoint(property.itemEndpoint.uriTemplate.restUri));
                     else
                         if ((shortname.dataType == "headresource") && (resourceEndpoint.itemEndpointUri != null))
-                            uri = self.genericClass.endpointUri + uri.replace("resources", self.giveMeItemEndpoint(resourceEndpoint.itemEndpointUri.restUri));
+                            uri = "?" + genericUnit.endpointQueryString+"="+ uri.replace("resources", self.giveMeItemEndpoint(resourceEndpoint.itemEndpointUri.restUri));
                 }
                 else
                     if ((uri.indexOf("members/") == 0) || (uri.indexOf("terms/") == 0))
-                        uri = self.genericClass.endpointUri + uri;
+                        uri = "?" + genericUnit.endpointQueryString + "=" + uri;
             }
             return uri;
         };

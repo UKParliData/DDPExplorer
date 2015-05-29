@@ -1,6 +1,12 @@
-﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/endpoint", "Scripts/modules/classes/shortname", "Scripts/modules/classes/apiviewer", "Scripts/text!Scripts/modules/releaseddatasets.json"], function (ko, $, genericClass, endpointClass, shortnameClass, apiViewerClass, releasedDatasets) {
+﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/routing", "Scripts/modules/classes/endpoint", "Scripts/modules/classes/shortname", "Scripts/modules/classes/apiviewer", "Scripts/text!Scripts/modules/releaseddatasets.json"], function (ko, $, genericClass, routingClass, endpointClass, shortnameClass, apiViewerClass, releasedDatasets) {
     var conductorVM = function () {
         var self = this;
+
+        self.genericUnit = new genericClass;
+        var routingUnit = new routingClass;
+        var endpointUnit = new endpointClass;
+        var shortnameUnit = null;
+        var apiViewerUnit = null;
 
         self.selectedComponent = ko.observable(null);
         self.parameters = ko.observable(null);
@@ -11,12 +17,7 @@
         self.hasError = ko.observable(false);
         self.hasInfo = ko.observable(false);
         self.errorText = ko.observableArray([]);
-        self.infoText = ko.observableArray([]);
-
-        self.genericClass = new genericClass;
-        self.endpointClass = new endpointClass;
-        self.shortnameClass = null;
-        self.apiViewerClass = null;
+        self.infoText = ko.observableArray([]);        
 
         self.toggleNavbar = function (vm, e) {
             var isShown = $(e.target).parent().next(".navbar-collapse").hasClass("in");
@@ -40,113 +41,59 @@
         self.continueWhenFinishReadMetadata = ko.computed(function () {
             if (self.endpoints().length > 0) {
                 if (self.shortnames().length == 0) {
-                    self.shortnameClass = new shortnameClass(self.endpoints());
+                    shortnameUnit = new shortnameClass(self.endpoints());
 
-                    var shortnames = self.shortnameClass.getAllShortnames();
+                    var shortnames = shortnameUnit.getAllShortnames();
                     if (shortnames == null)
-                        self.genericClass.getDataFromOwlim("shortnames", { _pageSize: 10000 }, self.getDataForShortnames, self.genericClass.errorOnLoad);
+                        self.genericUnit.getDataFromOwlim("shortnames", { _pageSize: 10000 }, self.getDataForShortnames, self.genericUnit.errorOnLoad);
                     else
                         self.shortnames(shortnames);
                 }
                 if ((self.shortnames().length > 0) && (self.apiViewers().length == 0)) {
-                    self.apiViewerClass = new apiViewerClass(self.shortnames(), self.endpoints());
+                    apiViewerUnit = new apiViewerClass(self.shortnames(), self.endpoints());
 
-                    var apiViewers = self.apiViewerClass.getAllAPIViewers();
+                    var apiViewers = apiViewerUnit.getAllAPIViewers();
                     if (apiViewers == null)
-                        self.genericClass.getDataFromOwlim("apiviewers", { _pageSize: 10000 }, self.getDataForApiViewers, self.genericClass.errorOnLoad);
+                        self.genericUnit.getDataFromOwlim("apiviewers", { _pageSize: 10000 }, self.getDataForApiViewers, self.genericUnit.errorOnLoad);
                     else
                         self.apiViewers(apiViewers);
                 }
             }
             if ((self.endpoints().length > 0) && (self.shortnames().length > 0) && (self.apiViewers().length > 0)) {
-                var parameters = self.endpointClass.getEndpointNameFromUrl();
-                if (parameters.learnMore != null) {
-                    self.parameters({
-                        ddpDatasetName: parameters.learnMore
-                    });
-                    self.selectedComponent("dataset-api-help");
-                }
-                else
-                    if (parameters.endpoint == null) {
-                        self.parameters({
-                            endpoints: self.endpoints(),
-                            apiViewers: self.apiViewers()
-                        });
-                        self.selectedComponent("endpoint-list");
-                    }
-                    else {
-                        var endpoint = null;
-                        var endpoints = self.endpoints();
-
-                        for (var i = 0; i < endpoints.length; i++)
-                            if ((endpoints[i].ddpIsMainEndpoint == true) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
-                                endpoint = endpoints[i];
-                                break;
-                            }
-                        if (endpoint == null)
-                            for (var i = 0; i < endpoints.length; i++)
-                                if ((endpoints[i].ddpIsMainEndpoint == false) && (self.endpointClass.isEndpointUrlMatching(parameters.endpoint, endpoints[i].uriTemplate))) {
-                                    endpoint = endpoints[i];
-                                    break;
-                                }
-                        if (endpoint != null) {
-                            var viewer = endpoint.defaultViewer;
-
-                            if ((parameters.querystring != null) && (parameters.querystring._view != null) && (parameters.querystring._view != "basic")) {
-                                for (var i = 0; i < endpoint.viewer.length; i++)
-                                    if (endpoint.viewer[i].name == parameters.querystring._view) {
-                                        viewer = endpoint.viewer[i];
-                                        break;
-                                    }
-                            }
-                            var shortnames = self.shortnameClass.findShortnamesForViewer(viewer);
-                            if (shortnames != null) {
-                                self.parameters({
-                                    endpointUrl: parameters.endpoint,
-                                    querystring: parameters.querystring,
-                                    endpoint: endpoint,
-                                    viewerName: endpoint.defaultViewer.name,
-                                    shortnames: shortnames
-                                });
-                                self.selectedComponent("search-result");
-                            }
-                            else
-                                self.showError("No shortnames found");
-                        }
-                        else
-                            self.showError("No matching endpoint found");
-                    }
                 self.isAppBusy(false);
+                setTimeout(routingUnit.loadComponentOnPageLoad, 500);
             }
         });
 
         self.getDataForApiViewers = function (data) {
-            var arr = self.apiViewerClass.readAPIViewers(data);
+            var arr = apiViewerUnit.readAPIViewers(data);
             self.apiViewers(arr);
         };
 
         self.getDataForEndpoints = function (data) {
-            var arr = self.endpointClass.readEndpoints(data, releasedDatasets);
+            var arr = endpointUnit.readEndpoints(data, releasedDatasets);
             self.endpoints(arr);
         };
 
         self.getDataForShortnames = function (data) {
-            var arr = self.shortnameClass.readShortnames(data);
+            var arr = shortnameUnit.readShortnames(data);
             self.shortnames(arr);
         };
 
         self.init = function () {
             if (sessionStorage) {
-                var endpoints = self.endpointClass.getAllEndpoints();
+                var endpoints = endpointUnit.getAllEndpoints();
                 if (endpoints == null)
-                    self.genericClass.getDataFromOwlim("endpoints", { _pageSize: 10000 }, self.getDataForEndpoints, self.genericClass.errorOnLoad);
+                    self.genericUnit.getDataFromOwlim("endpoints", { _pageSize: 10000 }, self.getDataForEndpoints, self.genericUnit.errorOnLoad);
                 else
                     self.endpoints(endpoints);
-            }
+                window.onpopstate = routingUnit.loadComponentOnPageLoad;
+            }            
         };
 
         self.dispose = function () {
             self.continueWhenFinishReadMetadata.dispose();
+            window.onpopstate = null;
         };
 
         self.init();

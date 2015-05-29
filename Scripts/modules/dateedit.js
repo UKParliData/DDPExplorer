@@ -3,37 +3,38 @@
         viewModel: function (params) {
             var self = this;
 
+            var genericUnit = new genericClass;
+
             self.value = params.value;
             self.isDisabled = params.isDisabled;
+
             self.dayValue = ko.observable();
             self.monthValue = ko.observable();
             self.yearValue = ko.observable();
             self.isValueValid = ko.observable(null);
             self.isMonthFocused = ko.observable(false);
             self.isDayFocused = ko.observable(false);
-            self.isReadyToCheck = ko.observable(false);
-
-            self.genericClass = new genericClass;
+            self.isReadyToCheck = ko.observable(false);            
 
             self.checkDate = ko.computed(function () {
                 if (self.isReadyToCheck() == false)
                     return;
                 if (self.yearValue() != null)
-                    self.isValueValid((self.genericClass.isIntegerAndGreaterThanZero(self.yearValue()) == true) && (self.yearValue() <= 2099));
+                    self.isValueValid((genericUnit.isIntegerAndGreaterThanZero(self.yearValue()) == true) && (self.yearValue() <= 2099));
                 else
                     self.isValueValid(null);                
                 if ((self.isValueValid() == true) && (self.yearValue().length == 4))
                     self.isMonthFocused(true);
                 if (self.isValueValid() == true) {
                     if (self.monthValue() != null)
-                        self.isValueValid((self.genericClass.isIntegerAndGreaterThanZero(self.monthValue()) == true) && (self.monthValue() <= 12));
+                        self.isValueValid((genericUnit.isIntegerAndGreaterThanZero(self.monthValue()) == true) && (self.monthValue() <= 12));
                     else
                         self.isValueValid(null);
                     if ((self.isValueValid() == true) && (self.monthValue().length == 2))
                         self.isDayFocused(true);
                     if (self.isValueValid() == true) {
                         if (self.dayValue() != null)
-                            self.isValueValid((self.genericClass.isIntegerAndGreaterThanZero(self.dayValue()) == true) && (self.dayValue() <= 31));
+                            self.isValueValid((genericUnit.isIntegerAndGreaterThanZero(self.dayValue()) == true) && (self.dayValue() <= 31));
                         else
                             self.isValueValid(null);
                         if (self.isValueValid() == true) {

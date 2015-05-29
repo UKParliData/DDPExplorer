@@ -3,13 +3,14 @@
         viewModel: function (params) {
             var self = this;
 
+            var genericUnit = new genericClass;
+
             self.endpoint = ko.unwrap(params.endpoint);
+
             self.resourceNumber = ko.observable(null);
             self.firstCreated = ko.observable(null);
             self.lastModified = ko.observable(null);            
-            self.isModifiedResourceExists = params.isModifiedResourceExists;
-
-            self.genericClass = new genericClass;
+            self.isModifiedResourceExists = params.isModifiedResourceExists;            
 
             self.doneLoadNumber = function (data) {
                 if ((data != null) && (data.result != null) &&
@@ -49,16 +50,16 @@
                     _view: "basic",
                     _page: 0                    
                 };
-                self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadNumber, self.genericClass.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadNumber, genericUnit.errorOnLoad);
                 querystring._properties = "ddpCreated";
                 querystring._sort = "-ddpCreated";
                 querystring["exists-ddpCreated"] = true;
-                self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadCreated, self.genericClass.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadCreated, genericUnit.errorOnLoad);
                 querystring._properties = "ddpModified";
                 querystring._sort = "-ddpModified";
                 delete querystring["exists-ddpCreated"];
                 querystring["exists-ddpModified"]=true;
-                self.genericClass.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadModified, self.genericClass.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadModified, genericUnit.errorOnLoad);
             };
 
             self.dispose = function () {

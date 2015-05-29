@@ -30,5 +30,5 @@ define(["knockout", "jquery", "Scripts/modules/conductor"], function (ko, $, con
 
     $.support.cors = true;
     window.conductorVM = new conductor();
-    ko.applyBindings(window.conductorVM);
+    ko.applyBindings(window.conductorVM);    
 });

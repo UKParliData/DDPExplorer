@@ -11,8 +11,8 @@
                         <div class="panel panel-default no-shadow">
                             <div class="panel-body">
                                 <ul class="list-unstyled">
-                                    <li><a href="/index.html">Dataset list</a></li>
-                                    <li class="margin-bottom-10"><a data-bind="attr:{ href: endpointUri+endpoint.uriTemplate.fullUri}, click: function() { return true;}, clickBubble: false">Explore data</a></li>
+                                    <li><button type="button" class="btn btn-link padding-0" data-bind="click: goHome">Dataset list</button></li>
+                                    <li class="margin-bottom-10"><button type="button" class="btn btn-link padding-0" data-bind="click: function(){ goExplore(endpoint); }">Explore data</button></li>
                                     <li><a href="#apis">APIs</a></li>
                                     <li><a href="#dataformats">Data formats</a></li>
                                     <li><a href="#datasetstructure">Dataset structure</a></li>

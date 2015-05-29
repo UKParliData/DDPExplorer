@@ -4,19 +4,19 @@
     <div class="panel panel-default no-shadow">
         <div class="panel-body">
             <ul class="list-unstyled" data-bind="foreach: filterEndpoints">
-                <li class="margin-bottom-10" data-bind="attr: {href: '#'+href}">
+                <li class="margin-bottom-10">
                     <div class="row margin-bottom-10">
                         <div class="col-md-8">
                             <h4 data-bind="text: ddpDatasetName" class="margin-top-0"></h4>
                         </div>
                         <div class="col-md-4">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-default" data-bind="click: function(){$parent.showMore($data);}">
+                                <button type="button" class="btn btn-default" data-bind="click: function(){ $parent.learnMore($data);}">
                                     <span class="glyphicon glyphicon-cog"></span> Learn more
                                 </button>
-                                <a class="btn btn-default" data-bind="attr:{ href: $parent.endpointUri()+uriTemplate.fullUri}, click: function() { return true;}, clickBubble: false">
+                                <button type="button" class="btn btn-default" data-bind="click:function(){ $parent.goExplore($data);}">
                                     <span class="glyphicon glyphicon-list"></span> Explore data
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>

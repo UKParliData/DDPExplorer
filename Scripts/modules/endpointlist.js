@@ -1,30 +1,32 @@
-﻿define(["knockout", "Scripts/modules/classes/generic", "Scripts/text!modules/endpointlist.html"], function (ko, genericClass, htmlText) {
+﻿define(["knockout", "Scripts/modules/classes/generic", "Scripts/modules/classes/routing", "Scripts/modules/classes/endpoint", "Scripts/modules/classes/apiviewer", "Scripts/text!modules/endpointlist.html"], function (ko, genericClass, routingClass, endpointClass, apiViewerClass, htmlText) {
     return {
-        viewModel: function (params) {
+        viewModel: function () {
             var self = this;
 
-            self.genericClass = new genericClass;
-            
-            self.apiViewers = ko.unwrap(params.apiViewers);
-            self.allEndpoints = ko.unwrap(params.endpoints);
+            var genericUnit = new genericClass;
+            var routingUnit = new routingClass;
+            var endpointUnit = new endpointClass();
+            var apiViewerUnit = new apiViewerClass([], []);
+
+            self.allEndpoints = endpointUnit.getAllEndpoints();
+            self.apiViewers = apiViewerUnit.getAllAPIViewers();
             self.endpoints = ko.utils.arrayFilter(self.allEndpoints, function (item) {
                 return (item.ddpDatasetName != null) && (item.ddpIsMainEndpoint == true) && (item.endpointType == "ListEndpoint") && (item.isDatasetReleased == true);
             });
             self.endpoints = ko.utils.arrayMap(self.endpoints, function (item, ix) {
                 item.sortIndex = ix;
-                item.href = item.ddpDatasetName.split(" ").join("").split(",").join("");
                 return item;
             });
-            self.genericClass.sortArray(self.endpoints, "sortIndex", "ddpDatasetName");
+            genericUnit.sortArray(self.endpoints, "sortIndex", "ddpDatasetName");
             self.textQuery = ko.observable(null);
-            self.filterEndpoints = ko.observableArray(ko.unwrap(self.endpoints));
-            self.endpointUri = ko.observable(self.genericClass.endpointUri);            
+            self.filterEndpoints = ko.observableArray(ko.unwrap(self.endpoints));            
 
-            self.showMore = function (endpoint) {
-                window.conductorVM.parameters({
-                    ddpDatasetName: endpoint.ddpDatasetName
-                });
-                window.conductorVM.selectedComponent("dataset-api-help");
+            self.learnMore = function (endpoint) {
+                routingUnit.datasetAPIHelp(false, endpoint.ddpDatasetName);                
+            };
+
+            self.goExplore = function (endpoint) {
+                routingUnit.searchResult(false, endpoint.uriTemplate.fullUri, endpoint.defaultViewer.name, null, null);
             };
 
             self.showDataDistribution = function (endpoint) {

@@ -1,14 +1,20 @@
-﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/resource", "Scripts/modules/classes/apiviewer", "Scripts/text!modules/searchresult.html"], function (ko, $, genericClass, resourceClass, apiViewerClass, htmlText) {
+﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/routing", "Scripts/modules/classes/endpoint", "Scripts/modules/classes/shortname", "Scripts/modules/classes/resource", "Scripts/modules/classes/apiviewer", "Scripts/modules/classes/shortnameproperty", "Scripts/text!modules/searchresult.html"], function (ko, $, genericClass, routingClass, endpointClass, shortnameClass, resourceClass, apiViewerClass, shortnamePropertyClass, htmlText) {
     return {
         viewModel: function (params) {
             var self = this;
+          
+            var genericUnit = new genericClass;
+            var routingUnit = new routingClass;
+            var endpointUnit = new endpointClass;
+            var shortnameUnit = new shortnameClass(endpointUnit.getAllEndpoints());
+            var resourceUnit = null;
+            var apiViewerUnit = new apiViewerClass([], []);
+            var shortnamePropertyUnit = new shortnamePropertyClass;
 
-            self.querystring = ko.observable(ko.unwrap(params.querystring || {}));
-            self.endpointUrl = ko.unwrap(params.endpointUrl);
-            self.endpoint = ko.observable(ko.unwrap(params.endpoint));
-            self.shortnames = ko.observable(ko.unwrap(params.shortnames));
+            self.textQuery = ko.observable(ko.unwrap(params.textQuery));
             self.viewerName = ko.unwrap(params.viewerName);
             self.shortnameProperties = params.shortnameProperties || ko.observableArray([]);
+
             self.filters = ko.observableArray(ko.utils.arrayFilter(self.shortnameProperties(), function (item) { return item.hasFilter() == true; }));
             self.firstItemIndex = ko.observable(null);
             self.lastItemIndex = ko.observable(null);
@@ -18,14 +24,12 @@
             self.isLoadingMore = ko.observable(false);
             self.sortByProperty = ko.observable(null);
             self.outputToName = ko.observable("HTML");
-            self.pageSize = ko.observable(10);
-            self.textQuery = ko.observable(self.querystring()._search);
+            self.pageSize = ko.observable(10);            
             self.canApiUrlShow = ko.observable(false);
-
-            self.genericClass = new genericClass;
-            self.resourceClass = null;            
-
-            self.endpointUri = ko.observable(self.genericClass.endpointUri);
+            self.endpointUrl = genericUnit.parseUrl().endpoint;            
+            self.endpoint = ko.observable(endpointUnit.findEndpointForUrl(self.endpointUrl));
+            self.shortnames = ko.observable(null);
+            self.querystring = ko.observable(null);
 
             self.sortBy = function (shortname, isAscending) {                
                 var sorting = "";
@@ -47,7 +51,7 @@
             };
 
             self.getUrl = function (pageSize) {
-                var url = self.genericClass.host
+                var url = genericUnit.host
                 var querystring = {};
 
                 if (self.endpoint().endpointType == "ListEndpoint") {
@@ -62,7 +66,7 @@
                 else
                     url += self.endpointUrl + "{0}";
                 return url;
-            }
+            };
 
             self.apiUrl = ko.computed(function () {
                 var url = self.getUrl(self.pageSize() * (self.currentPage() + 1));
@@ -108,7 +112,7 @@
             self.showMenu = function (vm, e) {
                 var hasClass = $(e.target).parent(".btn-group").hasClass("open");
 
-                self.genericClass.closeAllPopups();
+                genericUnit.closeAllPopups();
                 if (hasClass == false)
                     $(e.target).parent(".btn-group").addClass("open");
                 e.stopPropagation();
@@ -134,37 +138,36 @@
             };
 
             self.showAdvancedSearch = function () {
-                window.conductorVM.parameters({
-                    endpointUrl: self.endpointUrl,
-                    viewerName: self.viewerName,
-                    endpoint: self.endpoint,
-                    shortnames: self.shortnames,
-                    textQuery: self.textQuery,
-                    querystring: self.querystring(),
-                    shortnameProperties: self.shortnameProperties
-                });
-                window.conductorVM.selectedComponent("advanced-search");
+                routingUnit.advancedSearch(false, self.endpoint().uriTemplate.fullUri, self.viewerName, self.textQuery, self.shortnameProperties);                
+            };
+
+            self.learnMore = function () {
+                routingUnit.datasetAPIHelp(false, self.endpoint().ddpDatasetName);
+            };
+
+            self.fullList = function () {
+                routingUnit.searchResult(false, self.endpoint().listEndpointUri.fullUri, null, null, null);
             };
             
             self.readResult = function (result) {
                 var arr = [];
                 var resource;
-                var apiViewers = new apiViewerClass([], []).getAllAPIViewers();
+                var apiViewers = apiViewerUnit.getAllAPIViewers();
                 var apiViewer = ko.utils.arrayFirst(apiViewers, function (item) {
                     return item.ddpDatasetName == self.endpoint().ddpDatasetName;
                 });
                 
-                self.resourceClass = new resourceClass(self.endpoint(), apiViewer);
+                resourceUnit = new resourceClass(self.endpoint(), apiViewer);
                 if (self.endpoint().endpointType == "ListEndpoint") {
                     for (var i = 0; i < result.items.length; i++) {
-                        resource = self.resourceClass.resourceItem(result.items[i], self.shortnames(), null, "");
-                        resource.properties = self.resourceClass.mergeProperties(resource.properties);
+                        resource = resourceUnit.resourceItem(result.items[i], self.shortnames(), null, "");
+                        resource.properties = resourceUnit.mergeProperties(resource.properties);
                         arr.push(resource);
                     }
                 }
                 else {                    
-                    resource = self.resourceClass.resourceItem(result.primaryTopic, self.shortnames(), null, "");                    
-                    resource.properties = self.resourceClass.mergeProperties(resource.properties);                    
+                    resource = resourceUnit.resourceItem(result.primaryTopic, self.shortnames(), null, "");                    
+                    resource.properties = resourceUnit.mergeProperties(resource.properties);                    
                     arr.push(resource);
                 }
                 if (self.endpoint().endpointType == "ListEndpoint") {
@@ -225,8 +228,17 @@
             };
 
             self.init = function () {
-                var querystring = {};
+                var querystring = {};                
+                var viewer = null;
 
+                self.querystring(shortnamePropertyUnit.buildQueryString(self.shortnameProperties(), self.textQuery()));
+                if (self.viewerName == null)
+                    self.viewerName=self.endpoint().defaultViewer.name;
+                viewer = ko.utils.arrayFirst(self.endpoint().viewers, function (item) {
+                    return item.name == self.viewerName;
+                });
+
+                self.shortnames(shortnameUnit.findShortnamesForViewer(viewer));
                 $.extend(querystring, self.querystring());
                 if (self.isLoadingMore() == false)
                     window.conductorVM.isAppBusy(true);
@@ -237,13 +249,13 @@
                 if ((querystring._pageSize == null) && (self.endpoint().endpointType == "ListEndpoint"))
                     querystring._pageSize = self.pageSize();
                 self.querystring(querystring);
-                self.genericClass.getDataFromOwlim(self.endpointUrl, self.querystring(), self.doneLoad, self.genericClass.errorOnLoad);
+                genericUnit.getDataFromOwlim(self.endpointUrl, self.querystring(), self.doneLoad, genericUnit.errorOnLoad);
             };
 
             self.init();
 
             self.dispose = function () {
-                self.apiUrl.dispose();
+                self.apiUrl.dispose();                
             };
 
         },

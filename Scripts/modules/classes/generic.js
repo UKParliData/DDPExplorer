@@ -4,10 +4,11 @@
         
         self.host = "http://lda.data.parliament.uk/";
 
-        self.endpointUri = "endpoint/";
+        self.endpointQueryString = "endpoint";
 
         self.getDataFromOwlim = function (endpoint, parameters, whenDone, whenError) {
             $.ajax({
+                timeout: 65 *1000,
                 url: self.host + endpoint + ".json",
                 data: parameters,
                 dataType: "jsonp",
@@ -15,6 +16,35 @@
                 },
                 error: whenError
             }).done(whenDone);
+        };
+
+        self.parseUrl = function () {
+            var search = window.location.search.replace("?", "");
+            var divider = search.indexOf("&");
+            var endpoint = null;
+            var querystring = null;
+            var learnMore = null;
+
+            if (search.toUpperCase().indexOf(self.endpointQueryString.toUpperCase()+"=") == 0) {
+                if (divider > 0) {
+                    endpoint = search.substring(search.indexOf("/") + 1, divider);
+                    var params = search.substring(search.indexOf("&") + 1).split("&");
+                    querystring = {};
+                    for (var i = 0; i < params.length; i++)
+                        querystring[decodeURIComponent(params[i].split("=")[0])] = decodeURIComponent(params[i].split("=")[1]);
+                }
+                else
+                    endpoint = search.substring(search.indexOf("=") + 1);
+            }
+            else
+                if (search.toUpperCase().indexOf("LEARNMORE=") == 0)
+                    learnMore = decodeURIComponent(search.split("=")[1]);
+            return {
+                endpoint: endpoint,
+                querystring: querystring,
+                learnMore: learnMore,
+                hash: window.location.hash
+            }
         };
 
         self.closeAllPopups = function () {

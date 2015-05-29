@@ -11,10 +11,10 @@
     <link rel="stylesheet" type="text/css" href="Content/spinkit.css" />
     <link rel="stylesheet" type="text/css" href="Content/DDPExplorer.css" />
 </head>
-<body data-bind="click: genericClass.closeAllPopups">
+<body data-bind="click: genericUnit.closeAllPopups">
     <div class="container-fluid padding-0">
         <nav class="navbar padding-5 border-bottom-header margin-0 side-paddings">
-            <hgroup class="navbar-header">                    
+            <hgroup class="navbar-header">
                 <a href="http://data.parliament.uk"><img src="Content/images/ddp-logo.png" alt="Data.Parliament Logo" title="Data.Parliament Logo" /></a>
             </hgroup>
             <div class="navbar-right">
@@ -29,14 +29,14 @@
         </nav>
     </div>
     <!-- ko if: hasError() -->
-    <div class="container-fluid internal-margins">
+    <div class="container-fluid internal-margins" style="display:none" data-bind="visible: hasError()==true">
         <!-- ko foreach: errorText -->
         <div class="alert alert-danger" data-bind="text: $data"></div>
         <!-- /ko -->
     </div>
     <!-- /ko -->
     <!-- ko if: hasInfo() -->
-    <div class="container-fluid internal-margins">
+    <div class="container-fluid internal-margins" style="display:none" data-bind="visible: hasInfo()==true">
         <!-- ko foreach: infoText -->
         <div class="alert alert-info" data-bind="text: infoText"></div>
         <!-- /ko -->
@@ -64,7 +64,7 @@
                 <div class="col-md-6">
                     <div class="navbar-header pull-right">
                         <ul class="list-inline">
-                            <li><h4 class="margin-top-15"><a href="mailto:data@parliament.uk">Contact us</a></h4></li>
+                            <li><h4 class="margin-top-15"><a href="mailto:data@parliament.uk"><span class="glyphicon glyphicon-envelope"></span> Contact us</a></h4></li>
                             <li>
                                 <a href="https://twitter.com/UKParliData" title="data.parliament.uk (@UKParliData) on Twitter">
                                     <img src="Content/images/twitter-logo.png" alt="data.parliament.uk (@UKParliData) on Twitter">
