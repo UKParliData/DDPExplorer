@@ -1,8 +1,10 @@
-﻿define(["knockout", "jquery", "Scripts/modules/classes/generic"], function (ko, $, genericClass) {
+﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/endpoint"], function (ko, $, genericClass, endpointClass) {
     var resourceClass = function (resourceEndpoint, apiViewer) {
         var self = this;
 
         var genericUnit = new genericClass;
+        var endpointUnit = new endpointClass;
+        var allEndpoints=endpointUnit.getAllEndpoints();
 
         self.giveMeItemEndpoint = function (restUri) {
             var result = null;
@@ -14,6 +16,31 @@
             return result;
         }
 
+        var findEndpointForShortname = function (shortname) {
+            var result = null;
+            var found = null;
+
+            for (var i=0;i<resourceEndpoint.viewers.length;i++)
+                if ((resourceEndpoint.viewers[i].legends != null) && (resourceEndpoint.viewers[i].legends.length > 0)) {
+                    result = ko.utils.arrayFirst(resourceEndpoint.viewers[i].legends, function (item) {
+                        return (item.label._value || item.label) == shortname.name;
+                    });
+                    if ((result!=null) && (result.endpoint!=null)){
+                        result=ko.utils.arrayFirst(allEndpoints,function(item){
+                            return item.id==result.endpoint;
+                        });
+                        if (result != null)
+                            return {
+                                itemEndpoint: {
+                                    uriTemplate: result.uriTemplate
+                                }
+                            };
+                    }
+                }
+
+            return result;
+        };
+
         self.parseUri = function (shortname, uri) {            
             if ((uri != null) && (uri.indexOf("http://data.parliament.uk/") == 0)) {
                 uri = uri.replace("http://data.parliament.uk/", "");
@@ -21,6 +48,8 @@
                     var property = ko.utils.arrayFirst(apiViewer.properties, function (item) {
                         return item.name == shortname.name;
                     });
+                    if (property == null)
+                        property = findEndpointForShortname(shortname);
                     if ((property!=null) &&
                         (property.itemEndpoint != null) &&
                         (property.itemEndpoint.uriTemplate != null) &&

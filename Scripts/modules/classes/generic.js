@@ -37,6 +37,8 @@
                 }
                 else
                     endpoint = search.substring(search.indexOf("=") + 1);
+                if (endpoint.toUpperCase().indexOf("ENDPOINT/") == 0)
+                    endpoint = endpoint.substring(9);
             }
             else
                 if (search.toUpperCase().indexOf("LEARNMORE=") == 0)
@@ -223,13 +225,22 @@
 
         self.sortArray = function (arrayToSort, indexFieldName, sortFieldName) {
             arrayToSort.sort(function (left, right) {
+                if (Array.isArray(left))
+                    return 1;
+                if (Array.isArray(right))
+                    return -1;
                 return left[sortFieldName] === right[sortFieldName] ? left[indexFieldName] - right[indexFieldName] : left[sortFieldName] > right[sortFieldName] ? 1 : -1;
             });
         }
 
         self.errorOnLoad = function (dataToLoadDescription) {
-            window.conductorVM.showError("Whoops! Something went wrong when looking for " + dataToLoadDescription + ". Please try again in a few moments.");
+            self.customError("Whoops! Something went wrong when looking for " + dataToLoadDescription + ". Please try again in a few moments.");
+        };
+
+        self.customError = function (text) {
+            window.conductorVM.showError(text);
             window.conductorVM.isAppBusy(false);
+            window.conductorVM.isPageLoading(false);
         };
         
     }

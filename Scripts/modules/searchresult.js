@@ -26,10 +26,11 @@
             self.outputToName = ko.observable("HTML");
             self.pageSize = ko.observable(10);            
             self.canApiUrlShow = ko.observable(false);
-            self.endpointUrl = genericUnit.parseUrl().endpoint;            
-            self.endpoint = ko.observable(endpointUnit.findEndpointForUrl(self.endpointUrl));
+            self.endpointUrl = genericUnit.parseUrl().endpoint;
             self.shortnames = ko.observable(null);
-            self.querystring = ko.observable(null);            
+            self.querystring = ko.observable(null);
+            self.endpoint = ko.observable(endpointUnit.findEndpointForUrl(self.endpointUrl));                        
+            self.isRequestValid = ko.observable(false);
 
             self.sortBy = function (shortname, isAscending) {                
                 var sorting = "";
@@ -53,6 +54,9 @@
             self.getUrl = function (pageSize) {
                 var url = genericUnit.host
                 var querystring = {};
+
+                if (self.endpoint() == null)
+                    return "";
 
                 if (self.endpoint().endpointType == "ListEndpoint") {
                     $.extend(querystring, self.querystring());
@@ -251,10 +255,22 @@
                 window.conductorVM.isPageLoading(false);
             };
 
-            var init = function () {                
+            var checkIfValidRequest = function () {
+                if (self.endpoint() != null)
+                    return true;
+                else {
+                    genericUnit.customError("Whoops! Something went wrong. Please check url.")
+                    return false;
+                }
+            };
+
+            var init = function () {
                 var viewer = null;
                 var shortnames = [];
 
+                self.isRequestValid(checkIfValidRequest());
+                if (self.isRequestValid() == false)
+                    return;
                 self.querystring(shortnamePropertyUnit.buildQueryString(self.shortnameProperties(), self.textQuery()));
                 if (self.viewerName == null)
                     self.viewerName=self.endpoint().defaultViewer.name;
