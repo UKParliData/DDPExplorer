@@ -21,12 +21,17 @@
             });
             self.isModifiedResourceExists = ko.observable(false);
 
+            self.getCSV = function () {
+                var url = genericUnit.host + self.endpoint.uriTemplate.fullUri + ".csv?_page=0&_pageSize=" + self.endpoint.maxPageSize;
+                window.open(url, "formatOutput");
+            };
+
             self.goHome = function () {
                 routingUnit.endpointList(false);
             };
 
-            self.goExplore = function (endpoint) {
-                routingUnit.searchResult(false, endpoint.uriTemplate.fullUri, endpoint.defaultViewer.name, null, null);
+            self.goExplore = function () {
+                routingUnit.searchResult(false, self.endpoint.uriTemplate.fullUri, self.endpoint.defaultViewer.name, null, null);
             };
 
             self.showDataDistribution = function () {

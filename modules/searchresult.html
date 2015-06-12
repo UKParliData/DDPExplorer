@@ -6,8 +6,8 @@
     <section class="margin-bottom-40">
         
         <div class="btn-group">
-            <button type="button" class="btn btn-default" data-bind="click: function(){window.history.back();}">
-                <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back
+            <button type="button" class="btn btn-primary" data-bind="click:function(){ outputTo('CSV'); }">
+                <span class="glyphicon glyphicon-download"></span> CSV
             </button>
         </div>
 
@@ -21,8 +21,7 @@
                     <strong>
                         <shortname-name params="label: sortByProperty().shortname"></shortname-name>
                     </strong>
-                    <span class="glyphicon font-size-h6" data-bind="css: {'glyphicon-arrow-up': sortByProperty().isAscending==true, 'glyphicon-arrow-down': sortByProperty().isAscending==false}"></span>
-                    <span class="font-size-h6" data-bind="text: sortByProperty().isAscending==true?'asc':'desc'"></span>
+                    <span class="glyphicon font-size-h6" data-bind="css: {'glyphicon-sort-by-alphabet': sortByProperty().isAscending==true, 'glyphicon-sort-by-alphabet-alt': sortByProperty().isAscending==false}"></span>                    
                 <!-- /ko -->
                 <span class="caret"></span>
             </button>
@@ -31,13 +30,13 @@
                     <li>
                         <ul class="list-inline">
                             <li class="padding-0">
-                                <button type="button" class="btn no-background-color padding-0 margin-right-5 text-primary font-size-h6" data-bind="click: function(){ $parent.sortBy($data, true); }">
-                                    <span class="glyphicon glyphicon-arrow-up"></span>asc
+                                <button type="button" class="btn no-background-color padding-0 text-primary font-size-h5" data-bind="click: function(){ $parent.sortBy($data, true); }">
+                                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
                                 </button>
                             </li>
                             <li class="padding-0">
-                                <button type="button" class="btn no-background-color padding-0 text-primary font-size-h6" data-bind="click: function(){ $parent.sortBy($data, false); }">
-                                    <span class="glyphicon glyphicon-arrow-down"></span>desc
+                                <button type="button" class="btn no-background-color padding-0 text-primary font-size-h5" data-bind="click: function(){ $parent.sortBy($data, false); }">
+                                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
                                 </button>
                             </li>
                             <li>

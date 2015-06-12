@@ -19,7 +19,12 @@
             });
             genericUnit.sortArray(self.endpoints, "sortIndex", "ddpDatasetName");
             self.textQuery = ko.observable(null);
-            self.filterEndpoints = ko.observableArray(ko.unwrap(self.endpoints));            
+            self.filterEndpoints = ko.observableArray(ko.unwrap(self.endpoints));
+
+            self.getCSV = function (endpoint) {
+                var url = genericUnit.host + endpoint.uriTemplate.fullUri + ".csv?_page=0&_pageSize=" + endpoint.maxPageSize;
+                window.open(url, "formatOutput");
+            };
 
             self.learnMore = function (endpoint) {
                 routingUnit.datasetAPIHelp(false, endpoint.ddpDatasetName);                

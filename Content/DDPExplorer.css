@@ -293,6 +293,10 @@ input::-webkit-inner-spin-button {
   font-size: 18px;
 }
 
+.font-size-h5{
+    font-size: 14px;
+}
+
 .font-size-h6 {
   font-size: 12px;
 }

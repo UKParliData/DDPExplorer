@@ -11,12 +11,15 @@
                         </div>
                         <div class="col-md-4">
                             <div class="pull-right">
+                                <button type="button" class="btn btn-primary" data-bind="click:function(){ $parent.getCSV($data);}">
+                                    <span class="glyphicon glyphicon-download"></span> CSV
+                                </button>
                                 <button type="button" class="btn btn-default" data-bind="click: function(){ $parent.learnMore($data);}">
                                     <span class="glyphicon glyphicon-cog"></span> Learn more
                                 </button>
                                 <button type="button" class="btn btn-default" data-bind="click:function(){ $parent.goExplore($data);}">
                                     <span class="glyphicon glyphicon-list"></span> Explore data
-                                </button>
+                                </button>                                
                             </div>
                         </div>
                     </div>

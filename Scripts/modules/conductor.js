@@ -76,7 +76,7 @@
         };
 
         self.getDataForEndpoints = function (data) {
-            var arr = endpointUnit.readEndpoints(data, releasedDatasets);
+            var arr = endpointUnit.readEndpoints(data, JSON.parse(releasedDatasets));
             self.endpoints(arr);
         };
 

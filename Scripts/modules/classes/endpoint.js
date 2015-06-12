@@ -134,7 +134,7 @@
             if ((data != null) && (data.result != null) && (data.result.items != null)) {
                 var items = data.result.items;
                 for (var i = 0; i < items.length; i++)
-                    if ((items[i].endpointDefaultViewer || items[i].defaultViewer)!=null)
+                    if ((items[i].endpointDefaultViewer || items[i].defaultViewer) != null)
                         arr.push(self.endpointItem(
                             items[i]._about,
                             items[i].moniker || items[i].name,
@@ -149,7 +149,7 @@
                             items[i].endpointDefaultViewer || items[i].defaultViewer,
                             items[i].endpointViewers || items[i].viewer,
                             items[i].sparqlSelector || items[i].selector,
-                            releasedDatasets.indexOf(items[i].ddpDatasetName) >= 0
+                            releasedDatasets.length == 0 ? true : releasedDatasets.indexOf(items[i].ddpDatasetName) >= 0
                             ));
 
                 var endpointSibling;
