@@ -27,7 +27,7 @@
                 shortnameProperties: shortnameProperties
             });
             window.conductorVM.selectedComponent("search-result");
-        };
+        };        
 
         self.advancedSearch = function (isRedirect, endpointUri, viewerName, textQuery, shortnameProperties) {
             if (isRedirect == false)
@@ -38,6 +38,15 @@
                 shortnameProperties: shortnameProperties
             });
             window.conductorVM.selectedComponent("advanced-search");
+        };
+
+        self.downloadList = function (isRedirect, endpointUri, querystring) {
+            if (isRedirect == false)
+                history.pushState({ querystring: querystring }, "", "?" + genericUnit.endpointQueryString + "=" + endpointUri + "#download-list");
+            window.conductorVM.parameters({
+                querystring: querystring
+            });
+            window.conductorVM.selectedComponent("download-list");
         };
 
         self.loadComponentOnPageLoad = function (e) {
@@ -53,7 +62,14 @@
                         if (parameters.hash == "#advanced-search")
                             self.advancedSearch(true, null, null, null, null);
                         else
-                            self.searchResult(true, null, null, null, null);
+                            if (parameters.hash == "#download-list") {
+                                var querystring = null;
+                                if ((e != null) && (e.state != null) && (e.state.querystring != null))
+                                    querystring = e.state.querystring;
+                                self.downloadList(true, null, querystring);
+                            }
+                            else
+                                self.searchResult(true, null, null, null, null);
                     }
         };        
 

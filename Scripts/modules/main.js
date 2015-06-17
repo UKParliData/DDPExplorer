@@ -27,6 +27,7 @@ define(["knockout", "jquery", "Scripts/modules/conductor"], function (ko, $, con
     ko.components.register("viewer-field-list", { require: 'Scripts/modules/viewerfieldlist.js' });
     ko.components.register("dataset-stats", { require: 'Scripts/modules/datasetstats.js' });
     ko.components.register("dataset-api-help", { require: 'Scripts/modules/datasetapihelp.js' });
+    ko.components.register("download-list", { require: 'Scripts/modules/downloadlist.js' });
 
     $.support.cors = true;
     window.conductorVM = new conductor();

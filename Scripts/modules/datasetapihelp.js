@@ -21,11 +21,10 @@
             });
             self.isModifiedResourceExists = ko.observable(false);
 
-            self.getCSV = function () {
-                var url = genericUnit.host + self.endpoint.uriTemplate.fullUri + ".csv?_page=0&_pageSize=" + self.endpoint.maxPageSize;
-                window.open(url, "formatOutput");
+            self.download = function () {
+                routingUnit.downloadList(false, self.endpoint.uriTemplate.fullUri, null);
             };
-
+            
             self.goHome = function () {
                 routingUnit.endpointList(false);
             };

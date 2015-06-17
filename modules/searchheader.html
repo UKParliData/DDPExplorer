@@ -1,7 +1,7 @@
 ﻿<article class="search-background margin-bottom-40">
     <section class="container margin-bottom-40 text-header">        
         <p class="pull-right">DATA MATTER</p>
-        <h1 data-bind="text: name" class="text-header text-uppercase"></h1>
+        <h1 data-bind="text: name" class="text-header"></h1>
         <h4 data-bind="visible: (totalItemIndex!=null) && (totalItemIndex()>0)">Number of records: <strong data-bind="text: totalItemIndex"></strong></h4>        
     </section>
 
@@ -21,7 +21,11 @@
                             <!-- /ko -->
                         </div>
                     </div>
-
+                    <!-- ko if: showAdvancedSearch!=null -->
+                        <div class="margin-top-10 pull-right">
+                            <button type="button" class="btn btn-sm btn-default" data-bind="click: showAdvancedSearch">Advanced search</button>
+                        </div>
+                    <!-- /ko -->
                 </form>                
             </div>
         </div>

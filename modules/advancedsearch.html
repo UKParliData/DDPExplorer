@@ -1,4 +1,4 @@
-﻿<search-header params="name: endpoint.name, isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, isSubmitForm: false, placeholder: 'Search text'"></search-header>
+﻿<search-header params="name: endpoint().name, isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, isSubmitForm: false, placeholder: 'Search text'"></search-header>
 
 <article>
     
@@ -27,7 +27,7 @@
                     <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu dropdown-width-auto">
-                    <ul class="list-unstyled" data-bind="foreach: endpoint.viewers">
+                    <ul class="list-unstyled" data-bind="foreach: endpoint().viewers">
                         <li><button type="button" class="btn btn-link" data-bind="click: function(){ $parent.selectViewer($data); }, text: name"></button></li>
                     </ul>
                 </div>

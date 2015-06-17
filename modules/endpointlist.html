@@ -1,4 +1,4 @@
-﻿<search-header params="name: 'DATASETS', isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, searchText: null, isSubmitForm: false, placeholder: 'Type to search for dataset'"></search-header>
+﻿<search-header params="name: 'APIs', isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, searchText: null, isSubmitForm: false, placeholder: 'Type to search for dataset'"></search-header>
 
 <article>
     <div class="panel panel-default no-shadow">
@@ -6,13 +6,13 @@
             <ul class="list-unstyled" data-bind="foreach: filterEndpoints">
                 <li class="margin-bottom-10">
                     <div class="row margin-bottom-10">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <h4 data-bind="text: ddpDatasetName" class="margin-top-0"></h4>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-primary" data-bind="click:function(){ $parent.getCSV($data);}">
-                                    <span class="glyphicon glyphicon-download"></span> CSV
+                                <button type="button" class="btn btn-primary" data-bind="click:function(){ $parent.download($data);}">
+                                    Download
                                 </button>
                                 <button type="button" class="btn btn-default" data-bind="click: function(){ $parent.learnMore($data);}">
                                     <span class="glyphicon glyphicon-cog"></span> Learn more

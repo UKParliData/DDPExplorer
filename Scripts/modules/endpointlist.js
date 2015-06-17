@@ -21,9 +21,8 @@
             self.textQuery = ko.observable(null);
             self.filterEndpoints = ko.observableArray(ko.unwrap(self.endpoints));
 
-            self.getCSV = function (endpoint) {
-                var url = genericUnit.host + endpoint.uriTemplate.fullUri + ".csv?_page=0&_pageSize=" + endpoint.maxPageSize;
-                window.open(url, "formatOutput");
+            self.download = function (endpoint) {
+                routingUnit.downloadList(false, endpoint.uriTemplate.fullUri, null);
             };
 
             self.learnMore = function (endpoint) {

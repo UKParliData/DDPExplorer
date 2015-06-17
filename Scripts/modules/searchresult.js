@@ -83,6 +83,10 @@
                 self.canApiUrlShow(!self.canApiUrlShow());
             };
 
+            self.download = function () {
+                routingUnit.downloadList(false, self.endpoint().uriTemplate.fullUri, self.querystring());
+            };
+
             self.outputTo = function (format) {
                 var pageSize = self.pageSize() * (self.currentPage() + 1);
                 var url = self.getUrl(self.totalItemIndex() > self.endpoint().maxPageSize ? self.endpoint().maxPageSize : self.totalItemIndex());
@@ -149,7 +153,8 @@
             };
 
             self.showAdvancedSearch = function () {
-                routingUnit.advancedSearch(false, self.endpoint().uriTemplate.fullUri, self.viewerName, self.textQuery, self.shortnameProperties);                
+                if (self.endpoint().endpointType == "ListEndpoint")
+                    routingUnit.advancedSearch(false, self.endpoint().uriTemplate.fullUri, self.viewerName, self.textQuery, self.shortnameProperties);
             };
 
             self.learnMore = function () {

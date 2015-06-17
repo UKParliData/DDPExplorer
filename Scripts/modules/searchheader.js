@@ -10,6 +10,7 @@
             self.searchText = params.searchText;
             self.isSubmitForm = params.isSubmitForm;
             self.placeholder = params.placeholder;
+            self.showAdvancedSearch = params.showAdvancedSearch;
 
             self.trySearchText = function () {
                 if (self.isSubmitForm == true)

@@ -1,13 +1,13 @@
 ﻿<!-- ko if: isRequestValid()==true -->
-<search-header params="name: endpoint().name, isSearchBoxShown: endpoint().textQueryProperty!=null, totalItemIndex: totalItemIndex, textQuery: textQuery, searchText: searchText, isSubmitForm: true, placeholder: 'Search dataset'"></search-header>
+<search-header params="name: endpoint().name, isSearchBoxShown: endpoint().textQueryProperty!=null, totalItemIndex: totalItemIndex, textQuery: textQuery, searchText: searchText, isSubmitForm: true, placeholder: 'Search dataset', showAdvancedSearch: showAdvancedSearch"></search-header>
 
 <article>
 
     <section class="margin-bottom-40">
         
         <div class="btn-group">
-            <button type="button" class="btn btn-primary" data-bind="click:function(){ outputTo('CSV'); }">
-                <span class="glyphicon glyphicon-download"></span> CSV
+            <button type="button" class="btn btn-primary" data-bind="click: download">
+                Download
             </button>
         </div>
 
@@ -91,16 +91,12 @@
             </button>
             <div class="dropdown-menu">
                 <ul class="list-unstyled">
-                    <li data-bind="visible: (totalItemIndex()>endpoint().maxPageSize)" class="padding-10"><span class="text-info glyphicon glyphicon-info-sign"></span><span data-bind="text: ' '+endpoint().maxPageSize+' of '+totalItemIndex()+' resources'"></span></li>
+                    <li data-bind="visible: (totalItemIndex()>endpoint().maxPageSize)" class="padding-10"><span class="text-info glyphicon glyphicon-info-sign"></span><span data-bind="text: ' '+endpoint().maxPageSize+' of '+totalItemIndex()+' items.'"></span> <a href="http://blog.data.parliament.uk">Why?</a></li>
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('JSON'); }">JSON</button></li>
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('XML'); }">XML</button></li>
                     <li><button type="button" class="btn btn-link" data-bind="click: function(){ outputTo('CSV'); }">CSV</button></li>
                 </ul>
             </div>
-        </div>
-
-        <div class="btn-group" data-bind="visible: (endpoint().endpointType=='ListEndpoint')">
-            <button type="button" class="btn btn-default" data-bind="click: showAdvancedSearch"><span class="glyphicon glyphicon-tasks"></span> Advanced search</button>
         </div>
         
         <div class="btn-group">

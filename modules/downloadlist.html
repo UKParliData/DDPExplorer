@@ -1,0 +1,63 @@
+﻿<search-header params="name: endpoint.name, isSearchBoxShown: false, totalItemIndex: null, textQuery: null, isSubmitForm: false, placeholder: null"></search-header>
+
+<article>
+
+    <div class="margin-bottom-40">
+        <h2>Download</h2>
+        <!-- ko if: ((resourceNumber()>endpoint.maxPageSize) || (resourceNumber()>endpoint.maxPageSize)) -->
+            <p>This data is divided into chunks of <strong data-bind="text: endpoint.maxPageSize"></strong>. <a href="http://blog.data.parliament.uk">Why?</a></p>
+        <!-- /ko -->
+    </div>
+
+    <!-- ko if: pages().length>0 -->
+
+        <h3>Result of search (<span data-bind="text: resourceNumber"></span>)</h3>
+        <!-- ko if: sortShortname()!=null -->
+            <p>Sorted by <strong><shortname-name params="label: sortShortname().shortname"></shortname-name> <span data-bind="text: sortShortname().isAscending==true?'ascending':'descending'"></span></strong></p>
+        <!-- /ko -->
+
+        <ul class="list-unstyled" data-bind="foreach: pages">
+            <li class="margin-bottom-10">
+                <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){downloadResult(page);}">
+                    <div class="pull-left">
+                        <span class="glyphicon glyphicon-download"></span>
+                    </div>
+                    <span data-bind="text: start"></span> to <span data-bind="text: end"></span>
+                </button>
+            </li>
+        </ul>
+    <!-- /ko -->
+
+    <!-- ko if: pages().length>0 -->
+        <h3>All (<span data-bind="text: allResourceNumber"></span>)</h3>
+    <!-- /ko -->
+    <!-- ko if: allSortShortname()!=null -->
+        <p>Sorted by <strong><shortname-name params="label: allSortShortname().shortname"></shortname-name> <span data-bind="text: allSortShortname().isAscending==true?'ascending':'descending'"></span></strong></p>
+    <!-- /ko -->
+
+    <ul class="list-unstyled" data-bind="foreach: allPages">
+        <li class="margin-bottom-10">
+            <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){downloadAll(page);}">
+                <div class="pull-left">
+                    <span class="glyphicon glyphicon-download"></span>
+                </div>
+                <span data-bind="text: start"></span> to <span data-bind="text: end"></span>
+            </button>
+
+        </li>
+    </ul>
+
+    <div class="clearfix margin-bottom-40"></div>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default" data-bind="click: learnMore">
+            <span class="glyphicon glyphicon-cog"></span> Learn more
+        </button>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default" data-bind="click: goExplore">
+            <span class="glyphicon glyphicon-list"></span> Explore data
+        </button>
+    </div>
+
+</article>
