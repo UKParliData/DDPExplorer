@@ -21,9 +21,32 @@
             self.allSortShortname = ko.observable(null);
 
             self.downloadResult = function (page) {
+                var url = genericUnit.host
+                var querystring = {};
+
+                $.extend(querystring, self.querystring);                
+                querystring._pageSize = self.endpoint.maxPageSize;
+                querystring._page = page;
+
+                url += self.endpoint.uriTemplate.fullUri;
+                url += ".csv";
+                url += "?" + $.param(querystring);
+                
+                window.open(url, "formatOutput");
             };
 
             self.downloadAll = function (page) {
+                var url = genericUnit.host
+                var querystring = {};
+
+                querystring._pageSize = self.endpoint.maxPageSize;
+                querystring._page = page;
+
+                url += self.endpoint.uriTemplate.fullUri;
+                url += ".csv";
+                url += "?" + $.param(querystring);
+
+                window.open(url, "formatOutput");
             };
 
             self.learnMore = function () {

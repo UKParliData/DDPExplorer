@@ -18,7 +18,7 @@
 
         <ul class="list-unstyled" data-bind="foreach: pages">
             <li class="margin-bottom-10">
-                <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){downloadResult(page);}">
+                <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){ $parent.downloadResult(page);}">
                     <div class="pull-left">
                         <span class="glyphicon glyphicon-download"></span>
                     </div>
@@ -37,7 +37,7 @@
 
     <ul class="list-unstyled" data-bind="foreach: allPages">
         <li class="margin-bottom-10">
-            <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){downloadAll(page);}">
+            <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){ $parent.downloadAll(page);}">
                 <div class="pull-left">
                     <span class="glyphicon glyphicon-download"></span>
                 </div>

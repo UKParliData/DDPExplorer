@@ -5,7 +5,7 @@
 
     <section class="margin-bottom-40">
         
-        <div class="btn-group">
+        <div class="btn-group" data-bind="visible: endpoint().endpointType=='ListEndpoint'">
             <button type="button" class="btn btn-primary" data-bind="click: download">
                 Download
             </button>
