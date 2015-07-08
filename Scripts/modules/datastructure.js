@@ -11,54 +11,45 @@
             self.ddpDatasetName = ko.unwrap(params.ddpDatasetName);
 
             self.viewer = [];
+            self.totalNumberOfNodes = 0;
 
-            self.getDatasetStructure = function (datasetName, levelDeep) {
+            self.getDatasetStructure = function (datasetName, levelDeep, viewer) {
                 var arr = [];
                 var node;
-                var viewer = ko.utils.arrayFirst(self.apiViewers, function (item) {
-                    return item.ddpDatasetName == datasetName;
-                });
+                var apiViewer = [];
 
-                var getChildrenForAPIViewer = function (apiViewer) {
-                    var arr=[];
-
-                    for (var i = 0; i < apiViewer.properties.length; i++)
-                        arr.push(apiViewer.properties[i]);
-                    return arr;
-                };
-
+                if ((viewer == null) || (viewer.length == 0))
+                    viewer = ko.utils.arrayFirst(self.apiViewers, function (item) {
+                        return item.ddpDatasetName == datasetName;
+                    });
+                
                 if (viewer == null)
                     return;
+
                 for (var i = 0; i < viewer.properties.length; i++) {                    
                     node = $.extend({}, viewer.properties[i]);
-                    if ((levelDeep == 0) && (node.shortname.dataType == "resource") && (node.itemEndpoint != null))
-                        if (node.itemEndpoint.ddpDatasetName == datasetName) {
-                            var apiViewer = apiViewerUnit.convertViewerToAPIViewer(node.shortname.name, node.itemEndpoint.defaultViewer);
-                            node.children = getChildrenForAPIViewer(apiViewer);
-                        }
+                    if ((levelDeep < 2) && (node.shortname.dataType == "resource") && (node.itemEndpoint != null)) {
+                        if (node.itemEndpoint.ddpDatasetName == datasetName)
+                            apiViewer = apiViewerUnit.convertViewerToAPIViewer(node.shortname.name, node.itemEndpoint.defaultViewer);
                         else
-                            node.children = self.getDatasetStructure(node.itemEndpoint.ddpDatasetName, 1);
+                            apiViewer = [];
+                        node.children = self.getDatasetStructure(node.itemEndpoint.ddpDatasetName, levelDeep + 1, apiViewer);
+                        self.totalNumberOfNodes += node.children.length;
+                    }
                     arr.push(node);
                 }
                 return arr;
             };
 
             self.renderDatasetTree = function () {
-                var margin = { top: 20, right: 20, bottom: 20, left: 20 };
-                var width = d3.select("#datasetStructure").node().getBoundingClientRect().width - margin.left - margin.right;
-                var height = 900 - margin.top - margin.bottom;
+                var width = d3.select("#datasetStructure").node().getBoundingClientRect().width - 40;
+                var height = self.totalNumberOfNodes * 15;
 
                 var tree = d3.layout.tree()
-                    .size([height-20, width-20]);
+                    .size([height, width]);
 
                 var diagonal = d3.svg.diagonal()
-                    .projection(function (d) { return [d.y, d.x]; });
-
-                var svg = d3.select("#datasetStructure")
-                    .attr("width", width)
-                    .attr("height", height)
-                    .append("g")
-                    .attr("transform", "translate(120,20)");
+                    .projection(function (d) { return [d.y, d.x]; });                
 
                 var root = {
                     name: self.ddpDatasetName,
@@ -68,15 +59,21 @@
                     },
                     legend: null,
                     children: self.viewer,
-                    x0: height / 2,
-                    y0: 0
+                    x0: 0,
+                    y0: height/2
                 };
                 
                 var nodes = tree.nodes(root).reverse();
 
                 var links = tree.links(nodes);
 
-                nodes.forEach(function (d) { d.y = d.depth * 250; });
+                nodes.forEach(function (d) { d.y = d.depth * 250; });                
+
+                var svg = d3.select("#datasetStructure")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .append("g")
+                    .attr("transform", "translate(10,10)");
 
                 var index = 0;
 
@@ -126,7 +123,7 @@
                 var endpoints = endpointUnit.getAllEndpoints();
 
                 apiViewerUnit = new apiViewerClass(shortnames, endpoints);
-                self.viewer = self.getDatasetStructure(self.ddpDatasetName, 0);                
+                self.viewer = self.getDatasetStructure(self.ddpDatasetName, 0, []);
                 self.renderDatasetTree();
             };
 
