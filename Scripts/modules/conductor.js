@@ -76,7 +76,7 @@
         };
 
         self.getDataForEndpoints = function (data) {
-            if (self.genericUnit.host != "http://lda.data.parliament.uk")
+            if (self.genericUnit.host.indexOf("http://lda.data.parliament.uk")!=0)
                 releasedDatasets = "[]";
             var arr = endpointUnit.readEndpoints(data, JSON.parse(releasedDatasets));
             self.endpoints(arr);
