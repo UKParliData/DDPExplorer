@@ -85,6 +85,10 @@ svg{
   margin-bottom: 10px !important;
 }
 
+.margin-bottom-20{
+  margin-bottom: 20px !important;
+}
+
 .margin-bottom-40{
   margin-bottom: 40px !important;
 }
@@ -121,6 +125,14 @@ svg{
     padding-right: 0px !important;
 }
 
+.padding-right-2 {
+    padding-right: 2px !important;
+}
+
+.padding-right-5 {
+    padding-right: 5px !important;
+}
+
 .padding-left-5{
     padding-left: 5px !important;
 }
@@ -132,12 +144,13 @@ svg{
 .padding-left-2{
     padding-left: 2px !important;    
 }
-.padding-right-2 {
-    padding-right: 2px !important;
-}
 
 .padding-top-0{
     padding-top: 0px !important;
+}
+
+.padding-bottom-0{
+    padding-bottom: 0px !important;
 }
 
 .full-height{
@@ -146,11 +159,6 @@ svg{
 
 .vertical-center{
     margin-top: 25%;
-}
-
-.text-header {
-    color: #dedede;
-    text-shadow: 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
 }
 
 .text-title {
@@ -179,15 +187,12 @@ svg{
     opacity: 1 !important;
 }
 
-.search-background{
-    background: url("/Content/images/search-background.jpg") no-repeat fixed center center / cover rgba(0, 0, 0, 0);
-    height: 300px;
-    margin-left: -40px;
-    margin-right: -40px;
-}
-
 .cursor-pointer{
     cursor:pointer;
+}
+
+input[type='text'] {
+    -moz-appearance:textfield;
 }
 
 input[type='number'] {
@@ -208,6 +213,10 @@ input::-webkit-inner-spin-button {
     text-shadow: none !important;
 }
 
+.nav-tabs li a{
+    border-color: #ddd!important;
+}
+
 .no-left-border{
     border-left: 0px none transparent !important;
 }
@@ -220,26 +229,6 @@ input::-webkit-inner-spin-button {
     width: 50% !important;
 }
 
-.tab-menu{
-    padding-bottom: 2px;
-    border-bottom: 1px solid #dedede;
-    cursor: pointer;
-}
-
-.tab-menu:hover{
-    padding-bottom: 0px;
-    border-bottom: 3px solid #ababab;
-}
-
-.tab-menu.active{
-    padding-bottom: 0px;
-    border-bottom: 3px solid #333;
-}
-
-.tab-menu.active a{
-    color: #333 !important;
-    background-color: transparent !important;
-}
 .axis path, .axis line{
     shape-rendering: crispEdges;
 }
@@ -307,6 +296,14 @@ input::-webkit-inner-spin-button {
 
 .no-shadow{
     box-shadow: none !important;
+}
+
+.font-size-h1 {
+  font-size: 36px;
+}
+
+.font-size-h2 {
+  font-size: 30px;
 }
 
 .font-size-h4 {

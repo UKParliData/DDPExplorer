@@ -19,6 +19,18 @@
             self.allPages = ko.observableArray([]);
             self.sortShortname = ko.observable(null);
             self.allSortShortname = ko.observable(null);
+            self.isResultOfSearchShown = ko.observable(null);
+            self.isAllShown = ko.observable(null);
+
+            self.showResultOfSearchTab = function () {
+                self.isAllShown(false);
+                self.isResultOfSearchShown(true);
+            };
+
+            self.showAllTab = function () {
+                self.isResultOfSearchShown(false);
+                self.isAllShown(true);
+            };
 
             self.downloadResult = function (page) {
                 var url = genericUnit.host
@@ -26,12 +38,13 @@
 
                 $.extend(querystring, self.querystring);                
                 querystring._pageSize = self.endpoint.maxPageSize;
-                querystring._page = page;
+                querystring._page = page.pageIndex;
 
                 url += self.endpoint.uriTemplate.fullUri;
                 url += ".csv";
                 url += "?" + $.param(querystring);
-                
+                page.isDownloaded(true);
+
                 window.open(url, "formatOutput");
             };
 
@@ -40,11 +53,12 @@
                 var querystring = {};
 
                 querystring._pageSize = self.endpoint.maxPageSize;
-                querystring._page = page;
+                querystring._page = page.pageIndex;
 
                 url += self.endpoint.uriTemplate.fullUri;
                 url += ".csv";
                 url += "?" + $.param(querystring);
+                page.isDownloaded(true);
 
                 window.open(url, "formatOutput");
             };
@@ -63,9 +77,10 @@
 
                 while ((page * self.endpoint.maxPageSize) < size) {
                     arr.push({
-                        page: page,
+                        pageIndex: page,
                         start: (page * self.endpoint.maxPageSize) + 1,
-                        end: (page + 1) * self.endpoint.maxPageSize > size ? size : (page + 1) * self.endpoint.maxPageSize
+                        end: (page + 1) * self.endpoint.maxPageSize > size ? size : (page + 1) * self.endpoint.maxPageSize,
+                        isDownloaded: ko.observable(false)
                     });
                     page++;
                 }
@@ -110,8 +125,13 @@
                         return item.name == self.querystring._view;
                     });
                 doneLoad(data, self.resourceNumber);
-                generateDownloadItems(self.resourceNumber(), self.pages);
-                getSortShortname(viewer, self.sortShortname, sortField);
+                if (self.resourceNumber() < self.allResourceNumber()) {
+                    generateDownloadItems(self.resourceNumber(), self.pages);
+                    getSortShortname(viewer, self.sortShortname, sortField);
+                    self.showResultOfSearchTab();
+                }
+                else
+                    self.showAllTab();
                 window.conductorVM.isPageLoading(false);
             };
 
@@ -126,6 +146,7 @@
                 }
                 else {
                     self.resourceNumber(self.allResourceNumber());
+                    self.showAllTab();
                     window.conductorVM.isPageLoading(false);
                 }
             };            

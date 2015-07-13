@@ -1,4 +1,4 @@
-﻿<search-header params="name: endpoint.name, isSearchBoxShown: false, totalItemIndex: null, textQuery: null, isSubmitForm: false, placeholder: null"></search-header>
+﻿<search-header params="name: endpoint.ddpDatasetName, isSearchBoxShown: false, totalItemIndex: null, textQuery: null, isSubmitForm: false, placeholder: null"></search-header>
 
 <article>
 
@@ -10,42 +10,60 @@
     </div>
 
     <!-- ko if: pages().length>0 -->
+        <section class="margin-bottom-10 margin-top-20">
+            <ul class="nav nav-pills nav-tabs">
+                <li class="cursor-pointer" data-bind="css: {'active': isResultOfSearchShown()==true}"><a data-bind="click: showResultOfSearchTab"><h3 class="margin-0">Result of search</h3></a></li>
+                <li class="cursor-pointer" data-bind="css: {'active': isAllShown()==true}"><a data-bind="click: showAllTab"><h3 class="margin-0">All</h3></a></li>
+            </ul>
+        </section>
+    <!-- /ko -->
 
-        <h3>Result of search (<span data-bind="text: resourceNumber"></span>)</h3>
+    <section class="margin-bottom-40" data-bind="visible: isResultOfSearchShown">
         <!-- ko if: sortShortname()!=null -->
             <p>Sorted by <strong><shortname-name params="label: sortShortname().shortname"></shortname-name> <span data-bind="text: sortShortname().isAscending==true?'ascending':'descending'"></span></strong></p>
         <!-- /ko -->
+        <p>Number of records: <strong><span data-bind="text: resourceNumber"></span></strong></p>
 
         <ul class="list-unstyled" data-bind="foreach: pages">
-            <li class="margin-bottom-10">
-                <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){ $parent.downloadResult(page);}">
-                    <div class="pull-left">
-                        <span class="glyphicon glyphicon-download"></span>
-                    </div>
-                    <span data-bind="text: start"></span> to <span data-bind="text: end"></span>
+            <li class="margin-bottom-10 col-md-6 padding-top-0 padding-bottom-0 padding-left-5 padding-right-5">
+                <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){ $parent.downloadResult($data);}">
+                    <p class="text-left font-size-h2">
+                        <span class="glyphicon glyphicon-save-file"></span>CSV
+                    </p>
+                    <p class="font-size-h4">
+                        Records from <span data-bind="text: start"></span> to <span data-bind="text: end"></span>
+                    </p>
+                    <p class="text-right font-size-h4">
+                        <span>&nbsp;</span><span class="glyphicon glyphicon-ok" data-bind="visible: isDownloaded"></span>
+                    </p>
                 </button>
             </li>
         </ul>
-    <!-- /ko -->
+    </section>
 
-    <!-- ko if: pages().length>0 -->
-        <h3>All (<span data-bind="text: allResourceNumber"></span>)</h3>
-    <!-- /ko -->
-    <!-- ko if: allSortShortname()!=null -->
+    <section class="margin-bottom-40" data-bind="visible: isAllShown">
+        <!-- ko if: allSortShortname()!=null -->
         <p>Sorted by <strong><shortname-name params="label: allSortShortname().shortname"></shortname-name> <span data-bind="text: allSortShortname().isAscending==true?'ascending':'descending'"></span></strong></p>
-    <!-- /ko -->
+        <!-- /ko -->
+        <p>Number of records: <strong><span data-bind="text: allResourceNumber"></span></strong></p>
 
-    <ul class="list-unstyled" data-bind="foreach: allPages">
-        <li class="margin-bottom-10">
-            <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){ $parent.downloadAll(page);}">
-                <div class="pull-left">
-                    <span class="glyphicon glyphicon-download"></span>
-                </div>
-                <span data-bind="text: start"></span> to <span data-bind="text: end"></span>
-            </button>
+        <ul class="list-unstyled" data-bind="foreach: allPages">
+            <li class="margin-bottom-10 col-md-6 padding-top-0 padding-bottom-0 padding-left-5 padding-right-5" >
+                <button type="button" class="btn btn-block btn-lg btn-primary" data-bind="click: function(){ $parent.downloadAll($data);}">
+                    <p class="text-left font-size-h2">
+                        <span class="glyphicon glyphicon-save-file"></span>CSV
+                    </p>
+                    <p class="font-size-h4">
+                        Records from <span data-bind="text: start"></span> to <span data-bind="text: end"></span>
+                    </p>
+                    <p class="text-right font-size-h4">
+                        <span>&nbsp;</span><span class="glyphicon glyphicon-ok" data-bind="visible: isDownloaded"></span>
+                    </p>
+                </button>
+            </li>
+        </ul>
 
-        </li>
-    </ul>
+    </section>
 
     <div class="clearfix margin-bottom-40"></div>
 

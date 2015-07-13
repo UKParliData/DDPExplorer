@@ -1,13 +1,13 @@
-﻿<search-header params="name: endpoint().name, isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, isSubmitForm: false, placeholder: 'Search text'"></search-header>
+﻿<search-header params="name: endpoint().ddpDatasetName, isSearchBoxShown: true, totalItemIndex: null, textQuery: textQuery, isSubmitForm: false, placeholder: 'Search text'"></search-header>
 
 <article>
     
     <h2>Advanced Search Options</h2>
 
-    <section class="margin-bottom-10">
-        <ul class="nav nav-pills nav-justified">
-            <li class="tab-menu" data-bind="css: {'active': isFiltersShown()==true}"><a data-bind="click: showFiltersTab"><h3>Filters</h3></a></li>
-            <li class="tab-menu" data-bind="css: {'active': isFieldsShown()==true}"><a data-bind="click: showFieldsTab"><h3>Fields</h3></a></li>
+    <section class="margin-bottom-10 margin-top-20">
+        <ul class="nav nav-pills nav-tabs">
+            <li class="cursor-pointer" data-bind="css: {'active': isFiltersShown()==true}"><a data-bind="click: showFiltersTab"><h3 class="margin-0">Filters</h3></a></li>
+            <li class="cursor-pointer" data-bind="css: {'active': isFieldsShown()==true}"><a data-bind="click: showFieldsTab"><h3 class="margin-0">Fields</h3></a></li>
         </ul>            
     </section>
 

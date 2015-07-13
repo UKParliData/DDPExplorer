@@ -68,7 +68,6 @@
     <Content Include="Content\images\ddp-logo.png" />
     <Content Include="Content\images\github-logo.png" />
     <Content Include="Content\images\portcullis_black.png" />
-    <Content Include="Content\images\search-background.jpg" />
     <Content Include="Content\images\twitter-logo.png" />
     <Content Include="Content\spinkit.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

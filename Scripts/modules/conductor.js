@@ -76,6 +76,8 @@
         };
 
         self.getDataForEndpoints = function (data) {
+            if (self.genericUnit.host != "http://lda.data.parliament.uk")
+                releasedDatasets = "[]";
             var arr = endpointUnit.readEndpoints(data, JSON.parse(releasedDatasets));
             self.endpoints(arr);
         };
