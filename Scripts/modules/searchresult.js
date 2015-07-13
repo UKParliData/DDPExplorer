@@ -249,7 +249,8 @@
                 $.extend(querystring, self.querystring());
                 if (self.isLoadingMore() == false)
                     window.conductorVM.isAppBusy(true);
-                if ((self.querystring()._properties != null) && (self.querystring()._properties != ""))
+                if (((self.querystring()._properties != null) && (self.querystring()._properties != "")) ||
+                    ((self.querystring()._view!=null) &&(self.querystring()._view=="basic")))
                     querystring._view = "basic";
                 else
                     querystring._view = self.viewerName;
