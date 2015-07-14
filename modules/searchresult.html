@@ -122,7 +122,7 @@
             <busy-indicator></busy-indicator>
         <!-- /ko -->
         <!-- ko if: ((isLoadingMore()==false) && (endpoint().endpointType=='ListEndpoint') && (firstItemIndex()!=null) && (firstItemIndex()<lastItemIndex()) && (totalItemIndex()>lastItemIndex())) -->
-            <button type="button" class="btn btn-lg btn-default" data-bind="click: loadMore">Load <text data-bind="text: nextPageSize"></text> items more</button>
+            <button type="button" class="btn btn-lg btn-default" data-bind="click: loadMore">Load next <text data-bind="text: nextPageSize"></text> items</button>
         <!-- /ko -->
         <!-- ko if: (endpoint().endpointType=='ItemEndpoint') && (endpoint().listEndpointUri!=null) -->
             <button type="button" class="btn btn-lg btn-default" data-bind="click: fullList">Go to full list</button>
