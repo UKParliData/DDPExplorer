@@ -30,20 +30,22 @@
             <section class="margin-bottom-40">
                 <h4 id="apis">APIs</h4>
                 <p class="bottom-border"></p>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr class="active">
-                            <th>API</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="foreach: datasetEndpoints">
-                        <tr>
-                            <td><code data-bind="text: uriTemplate.fullUri"></code></td>
-                            <td data-bind="text: name"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="active">
+                                <th>API</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: datasetEndpoints">
+                            <tr>
+                                <td><code data-bind="text: uriTemplate.fullUri"></code></td>
+                                <td data-bind="text: name"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <section class="margin-bottom-40">
@@ -72,70 +74,72 @@
             <section class="margin-bottom-40">
                 <h4 id="commonquerystringoptions">Common query string options</h4>
                 <p class="bottom-border"></p>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr class="active">
-                            <th>Query string options</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="2"><strong>Filter options</strong></td>
-                        </tr>
-                        <tr>
-                            <td><code>[qsName]=value</code></td>
-                            <td>Selects only records where <var>qsName</var> equals <var>value</var></td>
-                        </tr>
-                        <tr>
-                            <td><code>min-[qsName]=value</code>*</td>
-                            <td>Selects only records where <var>qsName</var> is greater than or eqaul <var>value</var></td>
-                        </tr>
-                        <tr>
-                            <td><code>max-[qsName]=value</code>*</td>
-                            <td>Selects only records where <var>qsName</var> is less than or eqaul <var>value</var></td>
-                        </tr>
-                        <tr>
-                            <td><code>minEx-[qsName]=value</code>*</td>
-                            <td>Selects only records where <var>qsName</var> is greater than <var>value</var></td>
-                        </tr>
-                        <tr>
-                            <td><code>maxEx-[qsName]=value</code>*</td>
-                            <td>Selects only records where <var>qsName</var> is less than <var>value</var></td>
-                        </tr>
-                        <tr>
-                            <td><code>exists-[qsName]=[true|false]</code></td>
-                            <td>Selects only records where <var>qsName</var> is present (true) or not (false)</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><strong>Additional options</strong></td>
-                        </tr>
-                        <tr>
-                            <td><code>_pageSize=value</code></td>
-                            <td>Brings back maximum of <var>value</var> or <text data-bind="text: endpoint.maxPageSize"></text> records - whichever is less</td>
-                        </tr>
-                        <tr>
-                            <td><code>_page=value</code></td>
-                            <td>Brings back page number <var>value</var></td>
-                        </tr>
-                        <tr>
-                            <td><code>_sort=uriName1,uriName2...</code></td>
-                            <td>Orders data by specified field(s). Use -(minus) in front of <var>qsName</var> to sort in ascending order</td>
-                        </tr>
-                        <tr>
-                            <td><code>_search=value</code></td>
-                            <td>Text search where <var>value</var> is a <a href="http://lucene.apache.org/core/4_1_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description" target="_blank">lucene query</a></td>
-                        </tr>
-                        <tr>
-                            <td><code>_view=value</code></td>
-                            <td>Uses specified view to render data. When use <var>basic</var> it rely on properties listed in <code>_properties</code> option</td>
-                        </tr>
-                        <tr>
-                            <td><code>_properties=value1,value2...</code></td>
-                            <td>Use with <code>_view=basic</code> to bring back data for specified field(s) only</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="active">
+                                <th>Query string options</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="2"><strong>Filter options</strong></td>
+                            </tr>
+                            <tr>
+                                <td><code>[qsName]=value</code></td>
+                                <td>Selects only records where <var>qsName</var> equals <var>value</var></td>
+                            </tr>
+                            <tr>
+                                <td><code>min-[qsName]=value</code>*</td>
+                                <td>Selects only records where <var>qsName</var> is greater than or eqaul <var>value</var></td>
+                            </tr>
+                            <tr>
+                                <td><code>max-[qsName]=value</code>*</td>
+                                <td>Selects only records where <var>qsName</var> is less than or eqaul <var>value</var></td>
+                            </tr>
+                            <tr>
+                                <td><code>minEx-[qsName]=value</code>*</td>
+                                <td>Selects only records where <var>qsName</var> is greater than <var>value</var></td>
+                            </tr>
+                            <tr>
+                                <td><code>maxEx-[qsName]=value</code>*</td>
+                                <td>Selects only records where <var>qsName</var> is less than <var>value</var></td>
+                            </tr>
+                            <tr>
+                                <td><code>exists-[qsName]=[true|false]</code></td>
+                                <td>Selects only records where <var>qsName</var> is present (true) or not (false)</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><strong>Additional options</strong></td>
+                            </tr>
+                            <tr>
+                                <td><code>_pageSize=value</code></td>
+                                <td>Brings back maximum of <var>value</var> or <text data-bind="text: endpoint.maxPageSize"></text> records - whichever is less</td>
+                            </tr>
+                            <tr>
+                                <td><code>_page=value</code></td>
+                                <td>Brings back page number <var>value</var></td>
+                            </tr>
+                            <tr>
+                                <td><code>_sort=uriName1,uriName2...</code></td>
+                                <td>Orders data by specified field(s). Use -(minus) in front of <var>qsName</var> to sort in ascending order</td>
+                            </tr>
+                            <tr>
+                                <td><code>_search=value</code></td>
+                                <td>Text search where <var>value</var> is a <a href="http://lucene.apache.org/core/4_1_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description" target="_blank">lucene query</a></td>
+                            </tr>
+                            <tr>
+                                <td><code>_view=value</code></td>
+                                <td>Uses specified view to render data. When use <var>basic</var> it rely on properties listed in <code>_properties</code> option</td>
+                            </tr>
+                            <tr>
+                                <td><code>_properties=value1,value2...</code></td>
+                                <td>Use with <code>_view=basic</code> to bring back data for specified field(s) only</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <p>* Only applicable for date, datetime, integer or decimal type fields</p>
             </section>
 
