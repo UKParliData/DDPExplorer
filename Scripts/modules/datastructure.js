@@ -36,6 +36,7 @@
                         node.children = self.getDatasetStructure(node.itemEndpoint.ddpDatasetName, levelDeep + 1, apiViewer);
                         self.totalNumberOfNodes += node.children.length;
                     }
+                    self.totalNumberOfNodes += 1;
                     arr.push(node);
                 }
                 return arr;
@@ -45,6 +46,8 @@
                 var width = d3.select("#datasetStructure").node().getBoundingClientRect().width - 40;
                 var height = self.totalNumberOfNodes * 15;
 
+                if (height < 500)
+                    height = 500;
                 var tree = d3.layout.tree()
                     .size([height, width]);
 
