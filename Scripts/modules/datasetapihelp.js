@@ -33,6 +33,10 @@
                 routingUnit.searchResult(false, self.endpoint.uriTemplate.fullUri, self.endpoint.defaultViewer.name, null, null);
             };
 
+            self.scrollTo = function (id) {
+                document.getElementById(id).scrollIntoView();
+            };
+
             self.showDataDistribution = function () {
                 self.isShowDataDistribution(true);
             };
