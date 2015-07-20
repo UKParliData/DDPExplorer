@@ -14,19 +14,27 @@
 <body data-bind="click: genericUnit.closeAllPopups">
     <div class="container-fluid padding-0">
         <nav class="navbar padding-5 border-bottom-header margin-0 side-paddings">
-            <hgroup class="navbar-header">
-                <a href="http://data.parliament.uk"><img src="Content/images/ddp-logo.png" alt="Data.Parliament Logo" title="Data.Parliament Logo" /></a>
-            </hgroup>
-            <div class="navbar-right">
-                <ul class="nav navbar-nav font-size-h4">
-                    <li><a href="http://www.data.parliament.uk">Home</a></li>
-                    <li><a href="http://www.data.parliament.uk/dataset">Datasets</a></li>
-                    <li><a href="http://www.data.parliament.uk/developers">Developer</a></li>
-                    <li><a href="http://www.data.parliament.uk/blog">Blog</a></li>
-                    <li><a href="http://www.data.parliament.uk/about">About</a></li>
-                </ul>
-                <kbd>beta</kbd>
+            <div class="navbar-header">                
+                <a href="http://data.parliament.uk">
+                    <img src="Content/images/ddp-logo.png" alt="Data.Parliament Logo" title="Data.Parliament Logo" />
+                </a>
+                <button type="button" class="navbar-toggle collapsed margin-0 padding-right-0" data-bind="click: toggleMenu">
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>                    
+                </button>
             </div>
+            <div id="menu-nav" class="collapse navbar-collapse">
+                <div class="navbar-right">
+                    <ul class="nav navbar-nav font-size-h4">
+                        <li><a href="http://www.data.parliament.uk">Home</a></li>
+                        <li><a href="http://www.data.parliament.uk/dataset">Datasets</a></li>
+                        <li><a href="http://www.data.parliament.uk/developers">Developer</a></li>
+                        <li><a href="http://www.data.parliament.uk/blog">Blog</a></li>
+                        <li><a href="http://www.data.parliament.uk/about">About</a></li>
+                        <li><kbd>beta</kbd></li>
+                    </ul>
+                </div>
+            </div>
+            
         </nav>
     </div>    
     <main class="container-fluid internal-margins">

@@ -24,13 +24,8 @@
             self.isPageLoading(true);
         });
 
-        self.toggleNavbar = function (vm, e) {
-            var isShown = $(e.target).parent().next(".navbar-collapse").hasClass("in");
-
-            if (isShown)
-                $(e.target).parent().next(".navbar-collapse").removeClass("in");
-            else
-                $(e.target).parent().next(".navbar-collapse").addClass("in");
+        self.toggleMenu = function () {
+            $("#menu-nav").toggle();
         };
 
         self.showError = function (message) {
