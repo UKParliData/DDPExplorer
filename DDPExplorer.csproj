@@ -21,6 +21,7 @@
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -83,6 +84,7 @@
     <Content Include="modules\datasetstats.html" />
     <Content Include="modules\datastructure.html" />
     <Content Include="modules\downloadlist.html" />
+    <Content Include="modules\statuslist.html" />
     <Content Include="modules\viewerfieldlist.html" />
     <Content Include="Scripts\d3\d3.js" />
     <Content Include="Scripts\d3\d3.min.js" />
@@ -145,6 +147,7 @@
     <Content Include="Scripts\modules\searchresult.js" />
     <Content Include="Scripts\modules\shortnamename.js" />
     <Content Include="Scripts\modules\shortnamevalue.js" />
+    <Content Include="Scripts\modules\statuslist.js" />
     <Content Include="Scripts\modules\viewerfieldlist.js" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\r.js" />

@@ -323,3 +323,27 @@ input::-webkit-inner-spin-button {
   padding-left: 40px !important;
   padding-right: 40px !important;
 }
+
+.rotating{
+    -webkit-animation: spin 1.2s infinite linear;
+    animation: spin 1.2s infinite linear;
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+

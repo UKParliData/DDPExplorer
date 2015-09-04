@@ -8,11 +8,8 @@
             var endpointUnit = new endpointClass();
             var apiViewerUnit = new apiViewerClass([], []);
 
-            self.allEndpoints = endpointUnit.getAllEndpoints();
             self.apiViewers = apiViewerUnit.getAllAPIViewers();
-            self.endpoints = ko.utils.arrayFilter(self.allEndpoints, function (item) {
-                return (item.ddpDatasetName != null) && (item.ddpIsMainEndpoint == true) && (item.endpointType == "ListEndpoint") && (item.isDatasetReleased == true);
-            });
+            self.endpoints = endpointUnit.getAllDatasets();
             self.endpoints = ko.utils.arrayMap(self.endpoints, function (item, ix) {
                 item.sortIndex = ix;
                 return item;

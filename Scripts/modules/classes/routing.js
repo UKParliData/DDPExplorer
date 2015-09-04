@@ -49,29 +49,39 @@
             window.conductorVM.selectedComponent("download-list");
         };
 
+        self.statusList = function (isRedirect) {
+            if (isRedirect == false)
+                history.pushState({}, "", "/#status-list");
+            window.conductorVM.parameters({});
+            window.conductorVM.selectedComponent("status-list");
+        };
+
         self.loadComponentOnPageLoad = function (e) {
             var parameters = genericUnit.parseUrl();
 
             if (parameters.learnMore != null)
                 self.datasetAPIHelp(true, null);
             else
-                if (parameters.endpoint == null)
-                    self.endpointList(true);
+                if ((parameters.hash != null) && (parameters.hash.toUpperCase() == "#STATUS-LIST"))
+                    self.statusList(true);
                 else
-                    if (parameters.endpoint != null) {
-                        if (parameters.hash == "#advanced-search")
-                            self.advancedSearch(true, null, null, null, null);
-                        else
-                            if (parameters.hash == "#download-list") {
-                                var querystring = null;
-                                if ((e != null) && (e.state != null) && (e.state.querystring != null))
-                                    querystring = e.state.querystring;
-                                self.downloadList(true, null, querystring);
-                            }
+                    if (parameters.endpoint == null)
+                        self.endpointList(true);
+                    else
+                        if (parameters.endpoint != null) {
+                            if (parameters.hash == "#advanced-search")
+                                self.advancedSearch(true, null, null, null, null);
                             else
-                                self.searchResult(true, null, null, null, null);
-                    }
-        };        
+                                if (parameters.hash == "#download-list") {
+                                    var querystring = null;
+                                    if ((e != null) && (e.state != null) && (e.state.querystring != null))
+                                        querystring = e.state.querystring;
+                                    self.downloadList(true, null, querystring);
+                                }
+                                else
+                                    self.searchResult(true, null, null, null, null);
+                        }
+        };
 
     }
     return routingClass;

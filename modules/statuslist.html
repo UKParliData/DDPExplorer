@@ -1,0 +1,26 @@
+﻿<article>
+    <div class="panel panel-default no-shadow">
+        <div class="panel-body">
+            <div data-bind="foreach: datasets">
+                <div>
+                    <ul class="list-inline">
+                        <li class="h2">
+                            <span class="text-muted rotating glyphicon glyphicon-refresh" data-bind="visible: status()==$parent.statusType.waiting"></span>
+                            <span class="text-success glyphicon glyphicon-ok-sign" data-bind="visible: status()==$parent.statusType.normal"></span>
+                            <span class="text-warning glyphicon glyphicon-alert" data-bind="visible: status()==$parent.statusType.warning"></span>
+                            <span class="text-danger glyphicon glyphicon-exclamation-sign" data-bind="visible: status()==$parent.statusType.error"></span>
+                            <span class="text-info glyphicon glyphicon-question-sign" data-bind="visible: status()==$parent.statusType.unknown"></span>
+                        </li>
+                        <li>                            
+                            <div class="h4" data-bind="text: ddpDatasetName"></div>
+                            <div class="h6">
+                                <span class="text-muted">Last updated: </span>
+                                <span data-bind="text: lastUpdatedResourceText"></span>
+                            </div>
+                        </li>
+                    </ul>                                        
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
