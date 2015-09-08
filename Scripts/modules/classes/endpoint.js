@@ -38,8 +38,8 @@
             }
         };
 
-        self.endpointItem = function (id, name, comment, ddpDatasetName, ddpIsMainEndpoint, uriTemplate,
-            uriExample, endpointType, textQueryProperty, maxPageSize, defaultViewer, viewers, selector, isDatasetReleased) {
+        self.endpointItem = function (id, name, comment, ddpDatasetName, ddpIsMainEndpoint, ddpDatasetRefreshUpdateTimeSpan,
+            uriTemplate, uriExample, endpointType, textQueryProperty, maxPageSize, defaultViewer, viewers, selector, isDatasetReleased) {
             var arr = [];
 
             if ((viewers != null) && (viewers.length > 0))
@@ -66,6 +66,7 @@
                 viewers: arr,
                 sparqlWhere: selector.sparqlWhere || selector.where,
                 sparqlSort: selector.sparqlSort || selector.sort,
+                ddpDatasetRefreshUpdateTimeSpan: ddpDatasetRefreshUpdateTimeSpan,
                 itemEndpointUri: null,
                 listEndpointUri: null
             }
@@ -141,6 +142,7 @@
                             items[i].note || items[i].comment,
                             items[i].ddpDatasetName,
                             items[i].ddpIsMainEndpoint,
+                            items[i].ddpDatasetRefreshUpdateTimeSpan,
                             items[i].uriTemplate,
                             items[i].exampleUri || items[i].exampleRequestPath,
                             items[i].type,

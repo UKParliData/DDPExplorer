@@ -1,19 +1,25 @@
-﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/endpoint", "Scripts/text!modules/statuslist.html"], function (ko, $, genericClass, endpointClass, htmlText) {
+﻿define(["knockout", "jquery", "Scripts/modules/classes/generic", "Scripts/modules/classes/routing", "Scripts/modules/classes/endpoint", "Scripts/text!modules/statuslist.html"], function (ko, $, genericClass, routingClass, endpointClass, htmlText) {
     return {
         viewModel: function (params) {
             var self = this;
 
             var genericUnit = new genericClass;
+            var routingUnit = new routingClass;
             var endpointUnit = new endpointClass;
 
             self.datasets = ko.observableArray([]);
             self.statusType = {
-                waiting: 5,
+                waiting: 6,
                 error: 1,
-                warning: 3,
-                normal: 4,
-                unknown: 2
-            };            
+                warning: 2,
+                normal: 3,
+                unknown: 4,
+                manual: 5
+            };
+
+            self.goExplore = function (endpoint) {
+                routingUnit.searchResult(false, endpoint.uriTemplate.fullUri, endpoint.defaultViewer.name, null, null);
+            };
 
             var retriveDate = function (data) {
                 if ((data != null) && (data.result != null))
@@ -55,16 +61,23 @@
                         updated.getUTCHours(), updated.getUTCMinutes(), updated.getUTCSeconds()));
                     var nowUtc = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate(),
                         new Date().getUTCHours(), new Date().getUTCMinutes(), new Date().getUTCSeconds()));
-                    if (((nowUtc - updated) / (1000 * 3600)) >= 24 * 7)
-                        return self.statusType.error;
+
+                    if (isNaN(updated.getFullYear()))
+                        return self.statusType.unknown;
                     else
-                        if (((nowUtc - updated) / (1000 * 3600)) >= 24)
-                            return self.statusType.warning;
-                        else
-                            if (isNaN(updated.getFullYear()))
-                                return self.statusType.unknown;
+                        if (item.isUpdateManual)
+                            return self.statusType.manual;
+                        else {
+                            var totalHours = item.ddpDatasetRefreshUpdateTimeSpan * 1;
+
+                            if (((nowUtc - updatedUtc) / (1000 * 3600)) >= totalHours * 2)
+                                return self.statusType.error;
                             else
-                                return self.statusType.normal;
+                                if (((nowUtc - updatedUtc) / (1000 * 3600)) > totalHours)
+                                    return self.statusType.warning;
+                                else
+                                    return self.statusType.normal;
+                        }
                 }
             };
 
@@ -88,14 +101,37 @@
                 }
             };
 
+            var getTextForTimeSpanUpdate = function (ddpDatasetRefreshUpdateTimeSpan) {
+                if (ddpDatasetRefreshUpdateTimeSpan == null)
+                    return "Manual update";
+                else {
+                    var totalHours = ddpDatasetRefreshUpdateTimeSpan * 1;
+                    if (totalHours < 0.017)
+                        return (60 * totalHours).toFixed(0) + " second(s)";
+                    else
+                        if (totalHours < 1)
+                            return (60 * totalHours).toFixed(0) + " minute(s)";
+                        else
+                            if (totalHours < 24)
+                                return totalHours + " hour(s)";
+                            else
+                                if (totalHours < 168)
+                                    return (totalHours / 24.0).toFixed(1) + " day(s)";
+                                else
+                                    return (totalHours / 168.0).toFixed(1) + " week(s)";
+                }
+            };
+
             var init = function () {
                 var datasets = endpointUnit.getAllDatasets();
 
                 ko.utils.arrayForEach(datasets, function (item, ix) {
                     item.lastUpdatedResource = ko.observable(null);
+                    item.isUpdateManual = item.ddpDatasetRefreshUpdateTimeSpan == null;
                     item.status = ko.pureComputed(assignDatasetStatus, item);
                     item.sortIndex = ix;
                     item.lastUpdatedResourceText = ko.pureComputed(convertDateToText, item);
+                    item.refreshUpdateText = getTextForTimeSpanUpdate(item.ddpDatasetRefreshUpdateTimeSpan);                    
                 });
                 self.datasets(datasets);
                 checkAllDatasets();

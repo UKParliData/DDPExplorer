@@ -9,13 +9,22 @@
                             <span class="text-success glyphicon glyphicon-ok-sign" data-bind="visible: status()==$parent.statusType.normal"></span>
                             <span class="text-warning glyphicon glyphicon-alert" data-bind="visible: status()==$parent.statusType.warning"></span>
                             <span class="text-danger glyphicon glyphicon-exclamation-sign" data-bind="visible: status()==$parent.statusType.error"></span>
+                            <span class="glyphicon glyphicon-wrench" data-bind="visible: status()==$parent.statusType.manual"></span>
                             <span class="text-info glyphicon glyphicon-question-sign" data-bind="visible: status()==$parent.statusType.unknown"></span>
                         </li>
                         <li>                            
-                            <div class="h4" data-bind="text: ddpDatasetName"></div>
+                            <div class="h4"><a data-bind="text: ddpDatasetName, click: function(){ $parent.goExplore($data); }" href=""></a></div>
                             <div class="h6">
-                                <span class="text-muted">Last updated: </span>
-                                <span data-bind="text: lastUpdatedResourceText"></span>
+                                <ul class="list-inline">
+                                    <li>
+                                        <span class="text-muted">Last updated on </span>
+                                        <span data-bind="text: lastUpdatedResourceText"></span>
+                                    </li>
+                                    <li>
+                                        <span class="text-muted" data-bind="visible: isUpdateManual==false">Update every </span>
+                                        <span data-bind="text: refreshUpdateText"></span>
+                                    </li>
+                                </ul>
                             </div>
                         </li>
                     </ul>                                        
