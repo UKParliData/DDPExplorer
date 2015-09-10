@@ -9,12 +9,13 @@
 
             self.datasets = ko.observableArray([]);
             self.statusType = {
-                waiting: 6,
+                waiting: 7,
                 error: 1,
                 warning: 2,
                 normal: 3,
                 unknown: 4,
-                manual: 5
+                manual: 5,
+                automatic: 6
             };
 
             self.goExplore = function (endpoint) {
@@ -65,8 +66,12 @@
                     if (isNaN(updated.getFullYear()))
                         return self.statusType.unknown;
                     else
-                        if (item.isUpdateManual)
-                            return self.statusType.manual;
+                        if (item.isUpdateNotScheduled) {
+                            if (item.ddpDatasetRefreshUpdateTimeSpan == null)
+                                return self.statusType.manual;
+                            else
+                                return self.statusType.automatic;
+                        }
                         else {
                             var totalHours = item.ddpDatasetRefreshUpdateTimeSpan * 1;
 
@@ -104,22 +109,25 @@
             var getTextForTimeSpanUpdate = function (ddpDatasetRefreshUpdateTimeSpan) {
                 if (ddpDatasetRefreshUpdateTimeSpan == null)
                     return "Manual update";
-                else {
-                    var totalHours = ddpDatasetRefreshUpdateTimeSpan * 1;
-                    if (totalHours < 0.017)
-                        return (60 * totalHours).toFixed(0) + " second(s)";
-                    else
-                        if (totalHours < 1)
-                            return (60 * totalHours).toFixed(0) + " minute(s)";
+                else
+                    if (ddpDatasetRefreshUpdateTimeSpan == 0)
+                        return "Automatic update";
+                    else {
+                        var totalHours = ddpDatasetRefreshUpdateTimeSpan * 1;
+                        if (totalHours < 0.017)
+                            return (60 * totalHours).toFixed(0) + " second(s)";
                         else
-                            if (totalHours < 24)
-                                return totalHours + " hour(s)";
+                            if (totalHours < 1)
+                                return (60 * totalHours).toFixed(0) + " minute(s)";
                             else
-                                if (totalHours < 168)
-                                    return (totalHours / 24.0).toFixed(1) + " day(s)";
+                                if (totalHours < 24)
+                                    return totalHours + " hour(s)";
                                 else
-                                    return (totalHours / 168.0).toFixed(1) + " week(s)";
-                }
+                                    if (totalHours < 168)
+                                        return (totalHours / 24.0).toFixed(1) + " day(s)";
+                                    else
+                                        return (totalHours / 168.0).toFixed(1) + " week(s)";
+                    }
             };
 
             var init = function () {
@@ -127,7 +135,7 @@
 
                 ko.utils.arrayForEach(datasets, function (item, ix) {
                     item.lastUpdatedResource = ko.observable(null);
-                    item.isUpdateManual = item.ddpDatasetRefreshUpdateTimeSpan == null;
+                    item.isUpdateNotScheduled = (item.ddpDatasetRefreshUpdateTimeSpan == null) || (item.ddpDatasetRefreshUpdateTimeSpan == 0);
                     item.status = ko.pureComputed(assignDatasetStatus, item);
                     item.sortIndex = ix;
                     item.lastUpdatedResourceText = ko.pureComputed(convertDateToText, item);

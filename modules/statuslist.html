@@ -10,6 +10,7 @@
                             <span class="text-warning glyphicon glyphicon-alert" data-bind="visible: status()==$parent.statusType.warning"></span>
                             <span class="text-danger glyphicon glyphicon-exclamation-sign" data-bind="visible: status()==$parent.statusType.error"></span>
                             <span class="glyphicon glyphicon-wrench" data-bind="visible: status()==$parent.statusType.manual"></span>
+                            <span class="glyphicon glyphicon-import" data-bind="visible: status()==$parent.statusType.automatic"></span>
                             <span class="text-info glyphicon glyphicon-question-sign" data-bind="visible: status()==$parent.statusType.unknown"></span>
                         </li>
                         <li>                            
@@ -21,7 +22,7 @@
                                         <span data-bind="text: lastUpdatedResourceText"></span>
                                     </li>
                                     <li>
-                                        <span class="text-muted" data-bind="visible: isUpdateManual==false">Update every </span>
+                                        <span class="text-muted" data-bind="visible: isUpdateNotScheduled==false">Update every </span>
                                         <span data-bind="text: refreshUpdateText"></span>
                                     </li>
                                 </ul>
