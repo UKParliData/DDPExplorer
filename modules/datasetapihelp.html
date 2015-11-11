@@ -3,7 +3,18 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-8">
-                    <h3 data-bind="text: endpoint.ddpDatasetName" class="margin-top-0"></h3>
+                    <ul class="list-inline">
+                        <li>
+                            <h3 data-bind="text: endpoint.ddpDatasetName" class="margin-top-0"></h3>
+                        </li>
+                        <!-- ko if: endpoint.isDatasetReleased==false -->
+                            <li class="top-vertical-align">
+                                <div class="label label-warning">
+                                    <span class="glyphicon glyphicon-hourglass"></span> Release TBC
+                                </div>
+                            </li>
+                        <!-- /ko -->
+                    </ul>                    
                     <h3><small data-bind="text: endpoint.comment"></small></h3>
                 </div>
                 <div class="col-md-4">
@@ -11,9 +22,13 @@
                         <div class="panel panel-default no-shadow">
                             <div class="panel-body">
                                 <ul class="list-unstyled">
-                                    <li><button type="button" class="btn btn-link padding-0" data-bind="click: download"><strong>Download</strong></button></li>
-                                    <li><button type="button" class="btn btn-link padding-0" data-bind="click: goHome">Full list of APIs</button></li>
-                                    <li class="margin-bottom-10 bottom-border"><button type="button" class="btn btn-link padding-0" data-bind="click: goExplore">Explore data</button></li>
+                                    <!-- ko if: endpoint.isDatasetReleased==true -->
+                                        <li><button type="button" class="btn btn-link padding-0" data-bind="click: download"><strong>Download</strong></button></li>
+                                    <!-- /ko -->
+                                        <li data-bind="css: {'margin-bottom-10 bottom-border': endpoint.isDatasetReleased==false}"><button type="button" class="btn btn-link padding-0" data-bind="click: goHome">Full list of APIs</button></li>
+                                    <!-- ko if: endpoint.isDatasetReleased==true -->
+                                        <li class="margin-bottom-10 bottom-border"><button type="button" class="btn btn-link padding-0" data-bind="click: goExplore">Explore data</button></li>
+                                    <!-- /ko -->
                                     <li><button class="btn btn-link padding-0" data-bind="click: function(){ scrollTo('apis'); }">APIs</button></li>
                                     <li><button class="btn btn-link padding-0" data-bind="click: function(){ scrollTo('dataformats'); }">Data formats</button></li>
                                     <li><button class="btn btn-link padding-0" data-bind="click: function(){ scrollTo('datasetstructure'); }">Dataset structure</button></li>

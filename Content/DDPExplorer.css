@@ -61,6 +61,10 @@ svg{
   margin-top: 0px !important;
 }
 
+.margin-top-5{
+  margin-top: 5px !important;
+}
+
 .margin-top-10{
   margin-top: 10px !important;
 }
@@ -347,3 +351,6 @@ input::-webkit-inner-spin-button {
   }
 }
 
+.top-vertical-align{
+    vertical-align: top;
+}

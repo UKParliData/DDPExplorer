@@ -173,7 +173,7 @@
             
             if (endpoints != null)
                 return ko.utils.arrayFilter(JSON.parse(endpoints), function (item) {
-                    return (item.ddpDatasetName != null) && (item.ddpIsMainEndpoint == true) && (item.endpointType == "ListEndpoint") && (item.isDatasetReleased == true);
+                    return (item.ddpDatasetName != null) && (item.ddpIsMainEndpoint == true) && (item.endpointType == "ListEndpoint");
                 });
             else
                 return null;            

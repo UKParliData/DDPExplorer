@@ -7,19 +7,34 @@
                 <li class="margin-bottom-10">
                     <div class="row margin-bottom-10">
                         <div class="col-md-6">
-                            <h4 data-bind="text: ddpDatasetName" class="margin-top-0"></h4>
+                            <ul class="list-inline">
+                                <li>
+                                    <h4 data-bind="text: ddpDatasetName" class="margin-top-5"></h4>
+                                </li>
+                                <!-- ko if: isDatasetReleased==false -->
+                                    <li class="top-vertical-align">
+                                        <div class="label label-warning">
+                                            <span class="glyphicon glyphicon-hourglass"></span> Release TBC
+                                        </div>
+                                    </li>
+                                <!-- /ko -->
+                            </ul>
                         </div>
                         <div class="col-md-6">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-primary" data-bind="click:function(){ $parent.download($data);}">
-                                    Download
-                                </button>
+                                <!-- ko if: isDatasetReleased==true -->
+                                    <button type="button" class="btn btn-primary" data-bind="click:function(){ $parent.download($data);}">
+                                        Download
+                                    </button>
+                                <!-- /ko -->
                                 <button type="button" class="btn btn-default" data-bind="click: function(){ $parent.learnMore($data);}">
                                     <span class="glyphicon glyphicon-cog"></span> Learn more
                                 </button>
-                                <button type="button" class="btn btn-default" data-bind="click:function(){ $parent.goExplore($data);}">
-                                    <span class="glyphicon glyphicon-list"></span> Explore data
-                                </button>                                
+                                <!-- ko if: isDatasetReleased==true -->
+                                    <button type="button" class="btn btn-default" data-bind="click:function(){ $parent.goExplore($data);}">
+                                        <span class="glyphicon glyphicon-list"></span> Explore data
+                                    </button>                                
+                                <!-- /ko -->                                
                             </div>
                         </div>
                     </div>

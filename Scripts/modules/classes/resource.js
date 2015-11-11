@@ -41,7 +41,9 @@
             return result;
         };
 
-        self.parseUri = function (shortname, uri) {            
+        self.parseUri = function (shortname, uri) {
+            var endpointQS = "?" + genericUnit.endpointQueryString + "=";
+
             if ((uri != null) && (uri.indexOf("http://data.parliament.uk/") == 0)) {
                 uri = uri.replace("http://data.parliament.uk/", "");
                 if (uri.indexOf("resources/") == 0) {
@@ -50,19 +52,27 @@
                     });
                     if (property == null)
                         property = findEndpointForShortname(shortname);
-                    if ((property!=null) &&
+                    if ((property != null) &&
                         (property.itemEndpoint != null) &&
                         (property.itemEndpoint.uriTemplate != null) &&
                         (property.itemEndpoint.uriTemplate.restUri != null) &&
                         (property.itemEndpoint.uriTemplate.restUri.length > 1))
-                        uri = "?" + genericUnit.endpointQueryString+"=" + uri.replace("resources", self.giveMeItemEndpoint(property.itemEndpoint.uriTemplate.restUri));
+                        uri = "?" + genericUnit.endpointQueryString + "=" + uri.replace("resources", self.giveMeItemEndpoint(property.itemEndpoint.uriTemplate.restUri));
                     else
-                        if ((shortname.dataType == "headresource") && (resourceEndpoint.itemEndpointUri != null))
-                            uri = "?" + genericUnit.endpointQueryString+"="+ uri.replace("resources", self.giveMeItemEndpoint(resourceEndpoint.itemEndpointUri.restUri));
+                        if ((shortname.dataType == "headresource") && (resourceEndpoint.itemEndpointUri != null)) {
+                            if (resourceEndpoint.ddpIsMainEndpoint == true)
+                                uri = endpointQS + uri.replace("resources", self.giveMeItemEndpoint(resourceEndpoint.itemEndpointUri.restUri));
+                            else {
+                                if (isNaN(uri.replace("resources/", "")) == false)
+                                    uri = endpointQS + uri.replace("resources", resourceEndpoint.uriTemplate.fullUri);
+                                else
+                                    uri = endpointQS + uri;
+                            }
+                        }
                 }
                 else
                     if ((uri.indexOf("members/") == 0) || (uri.indexOf("terms/") == 0))
-                        uri = "?" + genericUnit.endpointQueryString + "=" + uri;
+                        uri = endpointQS + uri;
             }
             return uri;
         };
