@@ -47,9 +47,11 @@
             if ((uri != null) && (uri.indexOf("http://data.parliament.uk/") == 0)) {
                 uri = uri.replace("http://data.parliament.uk/", "");
                 if (uri.indexOf("resources/") == 0) {
-                    var property = ko.utils.arrayFirst(apiViewer.properties, function (item) {
-                        return item.name == shortname.name;
-                    });
+                    var property = null;
+                    if ((apiViewer != null) && (apiViewer.properties != null))
+                        property = ko.utils.arrayFirst(apiViewer.properties, function (item) {
+                            return item.name == shortname.name;
+                        });
                     if (property == null)
                         property = findEndpointForShortname(shortname);
                     if ((property != null) &&
