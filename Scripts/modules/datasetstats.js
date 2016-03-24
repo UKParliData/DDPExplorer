@@ -52,7 +52,7 @@
                 };
                 genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadNumber, genericUnit.errorOnLoad, "Dataset statistics");
                 querystring._properties = "ddpCreated";
-                querystring._sort = "-ddpCreated";
+                querystring._sort = "ddpCreated";
                 querystring["exists-ddpCreated"] = true;
                 genericUnit.getDataFromOwlim(self.endpoint.uriTemplate.fullUri, querystring, self.doneLoadCreated, genericUnit.errorOnLoad, "Dataset statistics");
                 querystring._properties = "ddpModified";
