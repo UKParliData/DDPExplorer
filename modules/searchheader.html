@@ -4,13 +4,13 @@
         <h4 data-bind="visible: (totalItemIndex!=null) && (totalItemIndex()>0)">Number of records: <strong data-bind="text: totalItemIndex"></strong></h4>        
     </section>
 
-    <section data-bind="visible: false">
+    <section data-bind="visible: isSearchBoxShown">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
 
                 <form class="form-horizontal" data-bind="submit: trySearchText">
 
-                    <div class="form-group-lg">
+                    <div class="form-group-lg" style="display:none">
                         <div data-bind="css: {'input-group': isSubmitForm==true}">
                             <input type="text" class="form-control no-focus" data-bind="textInput: textQuery, attr: {placeholder: placeholder}" />
                             <!-- ko if: isSubmitForm==true -->
